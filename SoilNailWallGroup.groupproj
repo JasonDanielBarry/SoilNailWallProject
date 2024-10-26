@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{4EF989DC-9BA7-4169-91DF-D2A937FC44A8}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="..\JDBDelphiLibrary\JDBDelphiLibrary.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="SoilNailWall.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="JDBDelphiLibrary">
+        <MSBuild Projects="..\JDBDelphiLibrary\JDBDelphiLibrary.dproj"/>
+    </Target>
+    <Target Name="JDBDelphiLibrary:Clean">
+        <MSBuild Projects="..\JDBDelphiLibrary\JDBDelphiLibrary.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="JDBDelphiLibrary:Make">
+        <MSBuild Projects="..\JDBDelphiLibrary\JDBDelphiLibrary.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SoilNailWall">
+        <MSBuild Projects="SoilNailWall.dproj"/>
+    </Target>
+    <Target Name="SoilNailWall:Clean">
+        <MSBuild Projects="SoilNailWall.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SoilNailWall:Make">
+        <MSBuild Projects="SoilNailWall.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="JDBDelphiLibrary;SoilNailWall"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="JDBDelphiLibrary:Clean;SoilNailWall:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="JDBDelphiLibrary:Make;SoilNailWall:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
