@@ -6,10 +6,13 @@
         <Projects Include="..\JDBDelphiLibrary\JDBDelphiLibrary.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="SoilNailWall.dproj">
+        <Projects Include="..\JDBDelphiLibrary\JDBDelphiPackage.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\JDBDelphiLibrary\JDBDelphiPackage.dproj">
+        <Projects Include="..\JDBDelphiLibrary\Graphic2DTestProject.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="SoilNailWall.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -29,15 +32,6 @@
     <Target Name="JDBDelphiLibrary:Make">
         <MSBuild Projects="..\JDBDelphiLibrary\JDBDelphiLibrary.dproj" Targets="Make"/>
     </Target>
-    <Target Name="SoilNailWall">
-        <MSBuild Projects="SoilNailWall.dproj"/>
-    </Target>
-    <Target Name="SoilNailWall:Clean">
-        <MSBuild Projects="SoilNailWall.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="SoilNailWall:Make">
-        <MSBuild Projects="SoilNailWall.dproj" Targets="Make"/>
-    </Target>
     <Target Name="JDBDelphiPackage">
         <MSBuild Projects="..\JDBDelphiLibrary\JDBDelphiPackage.dproj"/>
     </Target>
@@ -47,14 +41,32 @@
     <Target Name="JDBDelphiPackage:Make">
         <MSBuild Projects="..\JDBDelphiLibrary\JDBDelphiPackage.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Graphic2DTestProject">
+        <MSBuild Projects="..\JDBDelphiLibrary\Graphic2DTestProject.dproj"/>
+    </Target>
+    <Target Name="Graphic2DTestProject:Clean">
+        <MSBuild Projects="..\JDBDelphiLibrary\Graphic2DTestProject.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Graphic2DTestProject:Make">
+        <MSBuild Projects="..\JDBDelphiLibrary\Graphic2DTestProject.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="SoilNailWall">
+        <MSBuild Projects="SoilNailWall.dproj"/>
+    </Target>
+    <Target Name="SoilNailWall:Clean">
+        <MSBuild Projects="SoilNailWall.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="SoilNailWall:Make">
+        <MSBuild Projects="SoilNailWall.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="JDBDelphiLibrary;SoilNailWall;JDBDelphiPackage"/>
+        <CallTarget Targets="JDBDelphiLibrary;JDBDelphiPackage;Graphic2DTestProject;SoilNailWall"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="JDBDelphiLibrary:Clean;SoilNailWall:Clean;JDBDelphiPackage:Clean"/>
+        <CallTarget Targets="JDBDelphiLibrary:Clean;JDBDelphiPackage:Clean;Graphic2DTestProject:Clean;SoilNailWall:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="JDBDelphiLibrary:Make;SoilNailWall:Make;JDBDelphiPackage:Make"/>
+        <CallTarget Targets="JDBDelphiLibrary:Make;JDBDelphiPackage:Make;Graphic2DTestProject:Make;SoilNailWall:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
