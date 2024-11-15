@@ -8,7 +8,7 @@ interface
         //custom
             InterpolatorClass,
             GeneralMathMethods,
-            GeometryTypes, GeomLineClass, GeomPolyLineClass, GeomPolygonClass,
+            GeometryTypes, GeomBox, GeomLineClass, GeomPolyLineClass, GeomPolygonClass,
             SoilNailWallTypes,
             SoilNailWallBaseClass;
 

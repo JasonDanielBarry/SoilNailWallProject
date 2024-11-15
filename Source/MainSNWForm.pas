@@ -101,7 +101,7 @@ interface
             FMDarkTheme: TMenuItem;
             ActionDarkTheme: TAction;
             ActionLightTheme: TAction;
-    ActionNew: TAction;
+            ActionNew: TAction;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
@@ -152,19 +152,24 @@ interface
                 procedure ComboBoxThemeChange(Sender: TObject);
             //ribbon
                 procedure PageControlRibbonChange(Sender: TObject);
+    procedure FormResize(Sender: TObject);
         private
+            const
+                WM_USER_REDRAWGRAPHIC = WM_USER + 1;
             var
+                mustRedrawImage         : boolean;
                 activeInputPage         : EActiveInputPage;
                 activeComputationPage   : EActiveComputationPage;
                 activeRibbonTab         : EActiveRibbonTab;
                 activeUITheme           : EUITheme;
+                graphicImage            : ISkImage;
                 SoilNailWallDesign      : TSoilNailWall;
             //helper methods
                 //enter pressed on grid
                     procedure gridCellEnterPressed();
             //set up form
                 procedure setupForm();
-                procedure drawWall(canvasInOut : ISkCanvas);
+                procedure drawWall();
             //UI management
                 //popup menu
                     procedure showFilePopupMenu();
@@ -214,6 +219,11 @@ implementation
                         self.Refresh();
                     end;
 
+            procedure TSNWForm.FormResize(Sender: TObject);
+                begin
+                    PostMessage(self.Handle, WM_USER_REDRAWGRAPHIC, 0, 0);
+                end;
+
             //destruction
                 procedure TSNWForm.FormClose(Sender: TObject; var Action: TCloseAction);
                     begin
@@ -242,7 +252,8 @@ implementation
 
                         SoilNailWallDesign := TSoilNailWall.create();
 
-                        PBSNWDrawing.Redraw();
+//                        PBSNWDrawing.Redraw();
+                        PostMessage(self.Handle, WM_USER_REDRAWGRAPHIC, 0, 0);
                     end;
 
             //input tab
@@ -358,7 +369,9 @@ implementation
                                                     const ADest     : TRectF;
                                                     const AOpacity  : Single    );
                     begin
-                        drawWall(ACanvas);
+                        ACanvas.DrawImage( graphicImage, 0, 0 );
+
+                        mustRedrawImage := False;
                     end;
 
             //input
@@ -483,12 +496,22 @@ implementation
                     readFromAndWriteToInputGrids();
                 end;
 
-            procedure TSNWForm.drawWall(canvasInOut : ISkCanvas);
+            procedure TSNWForm.drawWall();
+                var
+                    skiaCanvas  : ISkCanvas;
+                    skiaSurface : ISkSurface;
                 begin
-                    canvasInOut.Clear(TAlphaColors.Null);
+                    skiaSurface := TSkSurface.MakeRaster(PBSNWDrawing.Width, PBSNWDrawing.Height);
+                    skiaCanvas  := skiaSurface.Canvas;
+
+                    skiaCanvas.Clear(TAlphaColors.Null);
 
                     SoilNailWallDesign.drawSoilNailWall(PBSNWDrawing.Height, PBSNWDrawing.Width,
-                                                        canvasInOut                             );
+                                                        skiaCanvas                              );
+
+                    graphicImage := skiaSurface.MakeImageSnapshot();
+
+                    mustRedrawImage := True;
                 end;
 
         //UI management
@@ -691,7 +714,8 @@ implementation
                     writeToWallGeomGrids( updateEmptyCellsIn, GridWallProperties, GridSlopeProperties, SoilNailWallDesign );
                     writeToNailPropGrids( updateEmptyCellsIn, GridNailProperties, GridNailLayout, SoilNailWallDesign );
 
-                    PBSNWDrawing.Redraw();
+//                    PBSNWDrawing.Redraw();
+                    PostMessage(self.Handle, WM_USER_REDRAWGRAPHIC, 0, 0);
                 end;
 
             function TSNWForm.readFromAndWriteToInputGrids() : boolean;
@@ -715,6 +739,12 @@ implementation
     //protected
         procedure TSNWForm.wndproc(var messageInOut : TMessage);
             begin
+                if (messageInOut.msg = WM_USER_REDRAWGRAPHIC) then
+                    drawWall();
+
+                if (mustRedrawImage) then
+                    PBSNWDrawing.Redraw();
+
                 inherited wndProc(messageInOut);
             end;
 

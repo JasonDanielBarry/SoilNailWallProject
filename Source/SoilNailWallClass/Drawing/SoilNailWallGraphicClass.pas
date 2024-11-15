@@ -8,7 +8,7 @@ interface
             System.Skia, Vcl.Skia,
         //custom
             GeneralMathMethods,
-            GeometryTypes, GeomLineClass, GeomPolyLineClass, GeomPolygonClass,
+            GeometryTypes, GeomBox, GeomLineClass, GeomPolyLineClass, GeomPolygonClass,
             DrawingAxisConversionClass, SkiaDrawingMethods,
             SoilNailWallTypes, SoilNailWallGeometryClass;
 
@@ -57,11 +57,11 @@ implementation
                         //establish drawing region
                             axisConverter.setGeometryBoundary(boundingBox);
 
-                            axisConverter.setCanvasRegion(canvasHeightIn, canvasWidthIn);
+                            axisConverter.setCanvasDimensions(canvasHeightIn, canvasWidthIn);
 
                             axisConverter.resetDrawingRegionToGeometryBoundary();
 
-                            axisConverter.setDrawingSpaceRatioOneToOne();
+                            axisConverter.setDrawingSpaceRatio(1);
                     end;
 
             //nails

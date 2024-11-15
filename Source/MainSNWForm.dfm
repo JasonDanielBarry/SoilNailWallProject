@@ -13,6 +13,7 @@ object SNWForm: TSNWForm
   Font.Style = []
   OnClose = FormClose
   OnCreate = FormCreate
+  OnResize = FormResize
   TextHeight = 15
   object PBSNWDrawing: TSkPaintBox
     Left = 857
