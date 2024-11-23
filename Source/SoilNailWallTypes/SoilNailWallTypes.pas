@@ -208,7 +208,7 @@ implementation
 
                 for nailHeight in arrNailHeights do
                     begin
-                        nailLength := nailLengthInterpolator.interpolate(nailHeight);
+                        nailLength := nailLengthInterpolator.interpolateX(nailHeight);
 
                         addNail(nailHeight, nailLength);
                     end;

@@ -397,7 +397,7 @@ implementation
                     for i := 0 to (nails.nailCount() - 1) do
                         begin
                             //nailX and nailY define where the nail line intersects the back of the wall
-                                nailX := interpolator.interpolate(nails.getArrHeight()[i]);
+                                nailX := interpolator.interpolateX(nails.getArrHeight()[i]);
                                 nailY := nails.getArrHeight()[i];
 
                             startPoint := TGeomPoint.create(
