@@ -13,6 +13,7 @@ object SNWForm: TSNWForm
   Font.Style = []
   OnClose = FormClose
   OnCreate = FormCreate
+  OnShow = FormShow
   TextHeight = 15
   object PageControlRibbon: TPageControl
     Left = 0
@@ -657,12 +658,14 @@ object SNWForm: TSNWForm
         object LabelComputationType: TLabel
           Left = 0
           Top = 75
-          Width = 99
-          Height = 15
+          Width = 149
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'Computation Type'
           Layout = tlCenter
+          ExplicitWidth = 99
+          ExplicitHeight = 15
         end
         object PanelComputationTypeSeparator: TPanel
           Left = 149
@@ -691,12 +694,15 @@ object SNWForm: TSNWForm
     Margins.Top = 5
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = PageInputParameters
+    ActivePage = PageNailProperties
     Align = alLeft
     TabOrder = 1
     object PageInputParameters: TTabSheet
       Caption = 'Material Parameters'
       ImageIndex = 2
+      DesignSize = (
+        849
+        649)
       object GridPanelInputHeadings: TGridPanel
         Left = 186
         Top = 0
@@ -921,9 +927,21 @@ object SNWForm: TSNWForm
         OnKeyPress = GridInputKeyPress
         OnSelectCell = GridInputSelectCell
       end
+      object ListBoxMaterialProperties: TListBox
+        Left = 5
+        Top = 494
+        Width = 250
+        Height = 150
+        Anchors = [akLeft, akBottom]
+        ItemHeight = 15
+        TabOrder = 4
+      end
     end
     object PageWallGeometry: TTabSheet
       Caption = 'Wall Geometry'
+      DesignSize = (
+        849
+        649)
       object GridSlopeProperties: TStringGrid
         Left = 7
         Top = 146
@@ -972,10 +990,22 @@ object SNWForm: TSNWForm
         OnKeyPress = GridInputKeyPress
         OnSelectCell = GridInputSelectCell
       end
+      object ListBoxWallGeom: TListBox
+        Left = 3
+        Top = 496
+        Width = 250
+        Height = 150
+        Anchors = [akLeft, akBottom]
+        ItemHeight = 15
+        TabOrder = 2
+      end
     end
     object PageNailProperties: TTabSheet
       Caption = 'Nail Properties'
       ImageIndex = 1
+      DesignSize = (
+        849
+        649)
       object GridNailLayout: TStringGrid
         AlignWithMargins = True
         Left = 6
@@ -1018,6 +1048,15 @@ object SNWForm: TSNWForm
         TabOrder = 1
         OnKeyPress = GridInputKeyPress
         OnSelectCell = GridInputSelectCell
+      end
+      object ListBoxNailProperties: TListBox
+        Left = 3
+        Top = 496
+        Width = 250
+        Height = 150
+        Anchors = [akLeft, akBottom]
+        ItemHeight = 15
+        TabOrder = 2
       end
     end
   end

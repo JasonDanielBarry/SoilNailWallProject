@@ -101,7 +101,10 @@ interface
             ActionDarkTheme: TAction;
             ActionLightTheme: TAction;
             ActionNew: TAction;
-    JDBGraphic2DDiagram: TJDBGraphic2D;
+            JDBGraphic2DDiagram: TJDBGraphic2D;
+    ListBoxMaterialProperties: TListBox;
+    ListBoxWallGeom: TListBox;
+    ListBoxNailProperties: TListBox;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
@@ -130,8 +133,6 @@ interface
                 procedure ActionLightThemeExecute(Sender: TObject);
                 procedure ActionDarkThemeExecute(Sender: TObject);
         //general events
-            //drawing
-                
             //input tab
                 //parameters
                     procedure GridInputSelectCell(  Sender          : TObject;
@@ -149,8 +150,11 @@ interface
                 procedure ComboBoxThemeChange(Sender: TObject);
             //ribbon
                 procedure PageControlRibbonChange(Sender: TObject);
-                procedure JDBGraphic2DDiagramUpdateGeometry(  ASender: TObject;
-                                                        var AGeomDrawer: TGraphicDrawerObjectAdder  );
+            //update geometry
+                procedure JDBGraphic2DDiagramUpdateGeometry(ASender         : TObject;
+                                                            var AGeomDrawer : TGraphicDrawerObjectAdder);
+            //show form
+                procedure FormShow(Sender: TObject);
         private
             var
                 mustRedrawImage         : boolean;
@@ -241,7 +245,7 @@ implementation
 
                         SoilNailWallDesign := TSoilNailWall.create();
 
-//                        PBSNWDrawing.Redraw();
+                        JDBGraphic2DDiagram.updateGeometry();
                     end;
 
             //input tab
@@ -330,6 +334,8 @@ implementation
                             loadExample( ESNWExample.seVerticalWallFlatSlope, SoilNailWallDesign );
 
                             writeToAndReadFromInputGrids();
+
+                            JDBGraphic2DDiagram.zoomAll();
                         end;
 
             //analysis & design tab
@@ -351,9 +357,6 @@ implementation
 
 
         //general events
-            //drawing
-                
-
             //input
                 //parameters
                     procedure TSNWForm.GridInputSelectCell( Sender          : TObject;
@@ -390,12 +393,6 @@ implementation
                         begin
                             readFromAndWriteToInputGrids()
                         end;
-
-            procedure TSNWForm.JDBGraphic2DDiagramUpdateGeometry(   ASender         : TObject;
-                                                                    var AGeomDrawer : TGraphicDrawerObjectAdder );
-                begin
-                    SoilNailWallDesign.updateSoilNailWallGeomtry( AGeomDrawer );
-                end;
 
             //theme
                 procedure TSNWForm.ComboBoxThemeChange(Sender: TObject);
@@ -434,6 +431,19 @@ implementation
                         end;
 
                         sortUI();
+                    end;
+
+            //update geometry
+                procedure TSNWForm.JDBGraphic2DDiagramUpdateGeometry(   ASender         : TObject;
+                                                                            var AGeomDrawer : TGraphicDrawerObjectAdder );
+                    begin
+                        SoilNailWallDesign.updateSoilNailWallGeomtry( AGeomDrawer );
+                    end;
+
+            //show form
+                procedure TSNWForm.FormShow(Sender: TObject);
+                    begin
+                        JDBGraphic2DDiagram.updateGeometry();
                     end;
 
     //private
@@ -682,7 +692,7 @@ implementation
                     writeToWallGeomGrids( updateEmptyCellsIn, GridWallProperties, GridSlopeProperties, SoilNailWallDesign );
                     writeToNailPropGrids( updateEmptyCellsIn, GridNailProperties, GridNailLayout, SoilNailWallDesign );
 
-//                    PBSNWDrawing.Redraw();
+                    JDBGraphic2DDiagram.updateGeometry();
                 end;
 
             function TSNWForm.readFromAndWriteToInputGrids() : boolean;
@@ -691,14 +701,14 @@ implementation
                 begin
                     inputIsPopulated := readFromAllInputGrids();
 
-                    writeToAllInputGrids(False);
+                    writeToAllInputGrids( False );
 
                     result := inputIsPopulated;
                 end;
 
             procedure TSNWForm.writeToAndReadFromInputGrids();
                 begin
-                    writeToAllInputGrids(True);
+                    writeToAllInputGrids( True );
 
                     readFromAllInputGrids();
                 end;
