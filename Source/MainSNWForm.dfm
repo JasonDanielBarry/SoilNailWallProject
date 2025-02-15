@@ -13,20 +13,7 @@ object SNWForm: TSNWForm
   Font.Style = []
   OnClose = FormClose
   OnCreate = FormCreate
-  OnResize = FormResize
   TextHeight = 15
-  object PBSNWDrawing: TSkPaintBox
-    Left = 857
-    Top = 125
-    Width = 894
-    Height = 679
-    Align = alClient
-    OnDraw = PBSNWDrawingDraw
-    ExplicitLeft = 859
-    ExplicitTop = 91
-    ExplicitWidth = 850
-    ExplicitHeight = 670
-  end
   object PageControlRibbon: TPageControl
     Left = 0
     Top = 0
@@ -670,12 +657,14 @@ object SNWForm: TSNWForm
         object LabelComputationType: TLabel
           Left = 0
           Top = 75
-          Width = 98
-          Height = 15
+          Width = 149
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'Computation Type'
           Layout = tlCenter
+          ExplicitWidth = 98
+          ExplicitHeight = 15
         end
         object PanelComputationTypeSeparator: TPanel
           Left = 149
@@ -1033,6 +1022,20 @@ object SNWForm: TSNWForm
         OnSelectCell = GridInputSelectCell
       end
     end
+  end
+  object JDBGraphic2D1: TJDBGraphic2D
+    Left = 857
+    Top = 125
+    Width = 894
+    Height = 679
+    Align = alClient
+    BevelEdges = []
+    BevelOuter = bvNone
+    Caption = 'JDBGraphic2D1'
+    ParentColor = True
+    ShowCaption = False
+    TabOrder = 2
+    OnUpdateGeometry = JDBGraphic2D1UpdateGeometry
   end
   object ActionManager1: TActionManager
     Left = 1248

@@ -7,19 +7,14 @@ interface
             System.SysUtils, System.Math, system.Types, system.UITypes,
             System.Skia, Vcl.Skia,
         //custom
-            GeneralMathMethods,
             GeometryTypes, GeomBox, GeomLineClass, GeomPolyLineClass, GeomPolygonClass,
-            DrawingAxisConversionClass, SkiaDrawingMethods,
-            SoilNailWallTypes, SoilNailWallGeometryClass;
+            SoilNailWallTypes, SoilNailWallGeometryClass,
+            GraphicDrawerObjectAdderClass;
 
     type
         TSoilNailWallGraphic = class(TSoilNailWallGeometry)
             private
-                //memberVariables
-                    axisConverter : TDrawingAxisConverter;
                 //drawing methods
-                    //bouding box
-                        procedure determineDrawingBoundaries(canvasHeightIn, canvasWidthIn : integer);
                     //nails
                         procedure drawNailGeometry( const nailColourIn      : TAlphaColor;
                                                     var arrNailGeomInOut    : TArray<TGeomLine>;
@@ -39,31 +34,14 @@ interface
                 //destructor
                     destructor destroy(); override;
                 //drawing
-                    procedure drawSoilNailWall( canvasHeightIn, canvasWidthIn   : integer;
-                                                var canvasInOut                 : ISkCanvas );
+                    procedure updateSoilNailWallGeomtry(
+                                                        var canvasInOut                 : ISkCanvas );
         end;
 
 implementation
 
     //private
         //drawing methods
-            //bouding box
-                procedure TSoilNailWallGraphic.determineDrawingBoundaries(canvasHeightIn, canvasWidthIn : integer);
-                    var
-                        boundingBox : TGeomBox;
-                    begin
-                        boundingBox := SNWboundingBox();
-
-                        //establish drawing region
-                            axisConverter.setGeometryBoundary(boundingBox);
-
-                            axisConverter.setCanvasDimensions(canvasHeightIn, canvasWidthIn);
-
-                            axisConverter.resetDrawingRegionToGeometryBoundary();
-
-                            axisConverter.setDrawingSpaceRatio(1);
-                    end;
-
             //nails
                 procedure TSoilNailWallGraphic.drawNailGeometry(const nailColourIn      : TAlphaColor;
                                                                 var arrNailGeomInOut    : TArray<TGeomLine>;
@@ -73,7 +51,7 @@ implementation
                                         const colourIn          : TAlphaColor;
                                         const nailIn            : TGeomLine );
                             begin
-                                if ( isAlmostZero(nailIn.lineLength()) ) then
+                                if ( IsZero(nailIn.calculateLength(), 1e-6) ) then
                                     exit();
 
                                 drawSkiaLine(   nailIn,

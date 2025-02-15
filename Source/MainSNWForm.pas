@@ -10,7 +10,6 @@ interface
             System.SysUtils, System.Variants, System.Classes, system.Types, system.UITypes,
             Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls,
             Vcl.StdCtrls, Vcl.Buttons,
-            System.Skia, Vcl.Skia,
             System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls,
             Vcl.ActnMan, Vcl.Themes, Vcl.WinXCtrls, Vcl.Menus, Vcl.TitleBarCtrls,
         //custom
@@ -21,7 +20,8 @@ interface
             UISetupMethods,
             SNWUITypes,
             InputParametersTabManagement, WallGeometryTabManagement, NailPropertiesTabManagement, NailLayoutGenerator,
-            SoilNailWallExampleMethods
+            SoilNailWallExampleMethods, CustomComponentPanelClass,
+            Graphic2DComponent, GraphicDrawerObjectAdderClass
             ;
 
     type
@@ -63,7 +63,6 @@ interface
             SpeedButtonGenerateLayout: TSpeedButton;
             PanelNailLayoutSeparator: TPanel;
             SpeedButtonClearLayout: TSpeedButton;
-            PBSNWDrawing: TSkPaintBox;
             ActionManager1: TActionManager;
             ActionWallGeometry: TAction;
             ActionNailProperties: TAction;
@@ -102,6 +101,7 @@ interface
             ActionDarkTheme: TAction;
             ActionLightTheme: TAction;
             ActionNew: TAction;
+    JDBGraphic2D1: TJDBGraphic2D;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
@@ -131,10 +131,7 @@ interface
                 procedure ActionDarkThemeExecute(Sender: TObject);
         //general events
             //drawing
-                procedure PBSNWDrawingDraw( ASender         : TObject;
-                                            const ACanvas   : ISkCanvas;
-                                            const ADest     : TRectF;
-                                            const AOpacity  : Single    );
+                
             //input tab
                 //parameters
                     procedure GridInputSelectCell(  Sender          : TObject;
@@ -152,24 +149,21 @@ interface
                 procedure ComboBoxThemeChange(Sender: TObject);
             //ribbon
                 procedure PageControlRibbonChange(Sender: TObject);
-    procedure FormResize(Sender: TObject);
+                procedure JDBGraphic2D1UpdateGeometry(  ASender: TObject;
+                                                        var AGeomDrawer: TGraphicDrawerObjectAdder  );
         private
-            const
-                WM_USER_REDRAWGRAPHIC = WM_USER + 1;
             var
                 mustRedrawImage         : boolean;
                 activeInputPage         : EActiveInputPage;
                 activeComputationPage   : EActiveComputationPage;
                 activeRibbonTab         : EActiveRibbonTab;
                 activeUITheme           : EUITheme;
-                graphicImage            : ISkImage;
                 SoilNailWallDesign      : TSoilNailWall;
             //helper methods
                 //enter pressed on grid
                     procedure gridCellEnterPressed();
             //set up form
                 procedure setupForm();
-                procedure drawWall();
             //UI management
                 //popup menu
                     procedure showFilePopupMenu();
@@ -219,11 +213,6 @@ implementation
                         self.Refresh();
                     end;
 
-            procedure TSNWForm.FormResize(Sender: TObject);
-                begin
-                    PostMessage(self.Handle, WM_USER_REDRAWGRAPHIC, 0, 0);
-                end;
-
             //destruction
                 procedure TSNWForm.FormClose(Sender: TObject; var Action: TCloseAction);
                     begin
@@ -253,7 +242,6 @@ implementation
                         SoilNailWallDesign := TSoilNailWall.create();
 
 //                        PBSNWDrawing.Redraw();
-                        PostMessage(self.Handle, WM_USER_REDRAWGRAPHIC, 0, 0);
                     end;
 
             //input tab
@@ -364,15 +352,7 @@ implementation
 
         //general events
             //drawing
-                procedure TSNWForm.PBSNWDrawingDraw(ASender         : TObject;
-                                                    const ACanvas   : ISkCanvas;
-                                                    const ADest     : TRectF;
-                                                    const AOpacity  : Single    );
-                    begin
-                        ACanvas.DrawImage( graphicImage, 0, 0 );
-
-                        mustRedrawImage := False;
-                    end;
+                
 
             //input
                 //parameters
@@ -410,6 +390,12 @@ implementation
                         begin
                             readFromAndWriteToInputGrids()
                         end;
+
+            procedure TSNWForm.JDBGraphic2D1UpdateGeometry( ASender         : TObject;
+                                                            var AGeomDrawer : TGraphicDrawerObjectAdder );
+                begin
+                    SoilNailWallDesign.drawSoilNailWall
+                end;
 
             //theme
                 procedure TSNWForm.ComboBoxThemeChange(Sender: TObject);
@@ -494,24 +480,6 @@ implementation
                     sortUI();
 
                     readFromAndWriteToInputGrids();
-                end;
-
-            procedure TSNWForm.drawWall();
-                var
-                    skiaCanvas  : ISkCanvas;
-                    skiaSurface : ISkSurface;
-                begin
-                    skiaSurface := TSkSurface.MakeRaster(PBSNWDrawing.Width, PBSNWDrawing.Height);
-                    skiaCanvas  := skiaSurface.Canvas;
-
-                    skiaCanvas.Clear(TAlphaColors.Null);
-
-                    SoilNailWallDesign.drawSoilNailWall(PBSNWDrawing.Height, PBSNWDrawing.Width,
-                                                        skiaCanvas                              );
-
-                    graphicImage := skiaSurface.MakeImageSnapshot();
-
-                    mustRedrawImage := True;
                 end;
 
         //UI management
@@ -715,7 +683,6 @@ implementation
                     writeToNailPropGrids( updateEmptyCellsIn, GridNailProperties, GridNailLayout, SoilNailWallDesign );
 
 //                    PBSNWDrawing.Redraw();
-                    PostMessage(self.Handle, WM_USER_REDRAWGRAPHIC, 0, 0);
                 end;
 
             function TSNWForm.readFromAndWriteToInputGrids() : boolean;
@@ -739,12 +706,6 @@ implementation
     //protected
         procedure TSNWForm.wndproc(var messageInOut : TMessage);
             begin
-                if (messageInOut.msg = WM_USER_REDRAWGRAPHIC) then
-                    drawWall();
-
-                if (mustRedrawImage) then
-                    PBSNWDrawing.Redraw();
-
                 inherited wndProc(messageInOut);
             end;
 
