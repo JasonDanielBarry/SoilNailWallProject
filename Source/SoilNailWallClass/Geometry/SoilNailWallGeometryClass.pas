@@ -7,7 +7,6 @@ interface
             System.SysUtils, System.Math,
         //custom
             InterpolatorClass,
-            GeneralMathMethods,
             GeometryTypes, GeomBox, GeomLineClass, GeomPolyLineClass, GeomPolygonClass,
             SoilNailWallTypes,
             SoilNailWallBaseClass;
@@ -158,6 +157,7 @@ implementation
 
                         function TSoilNailWallGeometry.slipWedgeTopRightPoint() : TGeomPoint;
                             var
+
                                 topRightPointOut            : TGeomPoint;
                                 slipTestLine, soilSlopeLine : TGeomLine;
                             function
@@ -176,23 +176,19 @@ implementation
                             begin
                                 //check that the slip wedge angle is valid
                                     if ( NOT(usableSlipWedgeAngle()) ) then
-                                        begin
-                                            result := TGeomPoint.create(0, 0);
-                                            exit();
-                                        end;
+                                        exit( TGeomPoint.create(0, 0) );
 
                                 //if the slip wedge right boundary is less than the slope-to-flat point x-ordinate then
                                 //find the intersection between the slip-test-line and the slope-line
-                                    if ( slipWedgeRightBoundary() < determineSlopeToFlatPoint().x ) then
-                                        begin
-                                            soilSlopeLine   := determineSlopeLine();
-                                            slipTestLine    := _determineSlipTestLine();
-
-                                            topRightPointOut := GeomLineIntersection(soilSlopeLine, slipTestLine).point;
-                                        end
                                 //otherwise the slip wedge top right point lies on the flat part of the soil
-                                    else
-                                        topRightPointOut := TGeomPoint.create(slipWedgeRightBoundary(), getSoil().slope.maxHeight);
+
+                                    if ( NOT( slipWedgeRightBoundary() < determineSlopeToFlatPoint().x ) ) then
+                                        exit( TGeomPoint.create( slipWedgeRightBoundary(), getSoil().slope.maxHeight ) );
+
+                                    soilSlopeLine   := determineSlopeLine();
+                                    slipTestLine    := _determineSlipTestLine();
+
+                                    topRightPointOut := TGeomLine.calculateLineIntersection( soilSlopeLine, slipTestLine, false ).point;
 
                                 result := topRightPointOut;
                             end;
@@ -231,11 +227,11 @@ implementation
                                     //wall height
                                         wallHeightLengthCriterion := wallTopRightPoint().x + getWall().height;
 
-                                result := max(
-                                                nailLengthCriterion,
-                                                slipWedgeAngleLengthCriterion,
-                                                wallHeightLengthCriterion
-                                             );
+                                result := MaxValue([
+                                                        nailLengthCriterion,
+                                                        slipWedgeAngleLengthCriterion,
+                                                        wallHeightLengthCriterion
+                                                  ]);
                             end;
 
                     //top
@@ -437,8 +433,8 @@ implementation
                         for i := 0 to (length(arrNailGeometry) - 1) do
                             begin
                                 //find the intersection of the nail and the slip line
-                                    intersectionPoint   := slipLine.intersection(arrNailGeometry[i], False).point;
-                                    nailEndPoint            := arrNailGeometry[i].getEndPoint();
+                                    intersectionPoint   := slipLine.calculateLineIntersection(arrNailGeometry[i], False).point;
+                                    nailEndPoint        := arrNailGeometry[i].getEndPoint();
 
                                 //create a line representing nail anchored section
                                     nailBeyondSlipLine := ( intersectionPoint.x < nailEndPoint.x );
@@ -499,7 +495,7 @@ implementation
                             slipWedgeGeometry.addVertex(wallTopRightPoint());
 
                     //assign the slip wedge its weight
-                        setslipWedgeWeight( slipWedgeGeometry.polygonArea() * getSoil().unitWeight.designValue() );
+                        setslipWedgeWeight( slipWedgeGeometry.calculatePolygonArea() * getSoil().unitWeight.designValue() );
 
                     result := slipWedgeGeometry;
                 end;
@@ -517,7 +513,7 @@ implementation
                         soilGeometry.addVertex(determineSoilBottomLeftPoint()           );  //soil bottom left
                         soilGeometry.addVertex(soilRightBoundary(), soilBottomBoundary());  //soil bottom right
                         soilGeometry.addVertex(determineSoilTopRightPoint()             );  //soil top right
-                        soilGeometry.addVertex(determineSlopeEndPoint()              );  //slope end
+                        soilGeometry.addVertex(determineSlopeEndPoint()                 );  //slope end
                         soilGeometry.addVertex(wallTopRightPoint()                      );  //wall top
 
                     result := soilGeometry;

@@ -310,7 +310,7 @@ object SNWForm: TSNWForm
           Alignment = taCenter
           Caption = 'Input Type'
           Layout = tlCenter
-          ExplicitWidth = 55
+          ExplicitWidth = 56
           ExplicitHeight = 15
         end
       end
@@ -505,7 +505,7 @@ object SNWForm: TSNWForm
           Alignment = taCenter
           Caption = 'Examples'
           Layout = tlCenter
-          ExplicitWidth = 50
+          ExplicitWidth = 49
           ExplicitHeight = 15
         end
       end
@@ -552,7 +552,7 @@ object SNWForm: TSNWForm
           Margins.Bottom = 0
           Align = alClient
           Caption = 'Theme'
-          ExplicitWidth = 36
+          ExplicitWidth = 37
           ExplicitHeight = 15
         end
         object ComboBoxTheme: TComboBox
@@ -657,14 +657,12 @@ object SNWForm: TSNWForm
         object LabelComputationType: TLabel
           Left = 0
           Top = 75
-          Width = 149
-          Height = 20
+          Width = 99
+          Height = 15
           Align = alClient
           Alignment = taCenter
           Caption = 'Computation Type'
           Layout = tlCenter
-          ExplicitWidth = 98
-          ExplicitHeight = 15
         end
         object PanelComputationTypeSeparator: TPanel
           Left = 149
@@ -1023,7 +1021,7 @@ object SNWForm: TSNWForm
       end
     end
   end
-  object JDBGraphic2D1: TJDBGraphic2D
+  object JDBGraphic2DDiagram: TJDBGraphic2D
     Left = 857
     Top = 125
     Width = 894
@@ -1031,11 +1029,10 @@ object SNWForm: TSNWForm
     Align = alClient
     BevelEdges = []
     BevelOuter = bvNone
-    Caption = 'JDBGraphic2D1'
     ParentColor = True
     ShowCaption = False
     TabOrder = 2
-    OnUpdateGeometry = JDBGraphic2D1UpdateGeometry
+    OnUpdateGeometry = JDBGraphic2DDiagramUpdateGeometry
   end
   object ActionManager1: TActionManager
     Left = 1248

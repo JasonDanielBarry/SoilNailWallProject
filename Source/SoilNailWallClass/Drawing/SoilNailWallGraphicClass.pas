@@ -5,7 +5,7 @@ interface
     uses
         //Delphi
             System.SysUtils, System.Math, system.Types, system.UITypes,
-            System.Skia, Vcl.Skia,
+            VCL.Graphics,
         //custom
             GeometryTypes, GeomBox, GeomLineClass, GeomPolyLineClass, GeomPolygonClass,
             SoilNailWallTypes, SoilNailWallGeometryClass,
@@ -16,26 +16,25 @@ interface
             private
                 //drawing methods
                     //nails
-                        procedure drawNailGeometry( const nailColourIn      : TAlphaColor;
-                                                    var arrNailGeomInOut    : TArray<TGeomLine>;
-                                                    var canvasInOut         : ISkCanvas         );
-                        procedure drawNails(var canvasInOut : ISkCanvas);
-                        procedure drawAnchoredNails(var canvasInOut : ISkCanvas);
+                        procedure updateNailGeometry(   const nailColourIn      : TAlphaColor;
+                                                        var arrNailGeomInOut    : TArray<TGeomLine>;
+                                                        var graphicDrawerInOut  : TGraphicDrawerObjectAdder );
+                        procedure updateNails(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                        procedure updateAnchoredNails(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
                     //slip wedge
-                        procedure drawSlipWedge(var canvasInOut : ISkCanvas);
-                        procedure drawSlipLine(var canvasInOut : ISkCanvas);
+                        procedure updateSlipWedge(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                        procedure updateSlipLine(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
                     //soil
-                        procedure drawSoil(var canvasInOut : ISkCanvas);
+                        procedure updateSoil(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
                     //wall
-                        procedure drawWall(var canvasInOut : ISkCanvas);
+                        procedure updateWall(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
             public
                 //constructor
                     constructor create();
                 //destructor
                     destructor destroy(); override;
                 //drawing
-                    procedure updateSoilNailWallGeomtry(
-                                                        var canvasInOut                 : ISkCanvas );
+                    procedure updateSoilNailWallGeomtry(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
         end;
 
 implementation
@@ -43,109 +42,120 @@ implementation
     //private
         //drawing methods
             //nails
-                procedure TSoilNailWallGraphic.drawNailGeometry(const nailColourIn      : TAlphaColor;
-                                                                var arrNailGeomInOut    : TArray<TGeomLine>;
-                                                                var canvasInOut         : ISkCanvas         );
-                    procedure
-                        _drawSingleNail(const lineThicknessIn   : integer;
-                                        const colourIn          : TAlphaColor;
-                                        const nailIn            : TGeomLine );
-                            begin
-                                if ( IsZero(nailIn.calculateLength(), 1e-6) ) then
-                                    exit();
-
-                                drawSkiaLine(   nailIn,
-                                                colourIn,
-                                                axisConverter,
-                                                canvasInOut,
-                                                False,
-                                                lineThicknessIn       );
-                            end;
-                    procedure
-                        _drawNails( const lineThicknessIn   : integer;
-                                    const colourIn          : TAlphaColor);
-                            var
-                                i : integer;
-                            begin
-                                for i := 0 to (length(arrNailGeomInOut) - 1) do
-                                    _drawSingleNail(
-                                                        lineThicknessIn,
-                                                        colourIn,
-                                                        arrNailGeomInOut[i]
-                                                   );
-                            end;
+                procedure TSoilNailWallGraphic.updateNailGeometry(  const nailColourIn      : TAlphaColor;
+                                                                    var arrNailGeomInOut    : TArray<TGeomLine>;
+                                                                    var graphicDrawerInOut  : TGraphicDrawerObjectAdder );
+                    var
+                        i, nailCount : integer;
                     begin
-                        _drawNails(16,  nailColourIn);
-                        _drawNails(4,   TAlphaColors.Black);
+                        nailCount := length( arrNailGeomInOut );
+
+                        for i := 0 to (nailCount - 1) do
+                            begin
+                                graphicDrawerInOut.addLine( arrNailGeomInOut[i], 16, nailColourIn );
+
+                                graphicDrawerInOut.addLine( arrNailGeomInOut[i], 4 );
+                            end;
 
                         freeNailGeometry(arrNailGeomInOut);
                     end;
 
-                procedure TSoilNailWallGraphic.drawNails(var canvasInOut : ISkCanvas);
+                procedure TSoilNailWallGraphic.updateNails(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
                     var
                         arrNailGeom : TArray<TGeomLine>;
                     begin
+                        graphicDrawerInOut.setCurrentDrawingLayer('Soil Nails');
+
                         arrNailGeom := determineNailGeometry();
 
-                        drawNailGeometry(TAlphaColors.Grey, arrNailGeom, canvasInOut);
+                        updateNailGeometry( TColors.Grey, arrNailGeom, graphicDrawerInOut );
                     end;
 
-                procedure TSoilNailWallGraphic.drawAnchoredNails(var canvasInOut : ISkCanvas);
+                procedure TSoilNailWallGraphic.updateAnchoredNails(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
                     var
                         arrAnchoredNailGeom : TArray<TGeomLine>;
                     begin
                         if ( NOT(getSlipWedge().visible) ) then
                             exit();
 
+                        graphicDrawerInOut.setCurrentDrawingLayer('Anchored Length');
+
                         arrAnchoredNailGeom := determineAnchoredNailGeometry();
 
-                        drawNailGeometry(TAlphaColors.Darkred, arrAnchoredNailGeom, canvasInOut);
+                        updateNailGeometry( TColors.Darkred, arrAnchoredNailGeom, graphicDrawerInOut );
                     end;
 
             //slip wedge
-                procedure TSoilNailWallGraphic.drawSlipWedge(var canvasInOut : ISkCanvas);
+                procedure TSoilNailWallGraphic.updateSlipWedge(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                    var
+                        slipWedgePolygon : TGeomPolygon;
                     begin
                         if (getSlipWedge().visible = False) then
                             exit();
 
-                        drawSkiaPolygon(determineSlipWedgeGeometry(),
-                                        TAlphaColors.Orangered,
-                                        TAlphaColors.Black,
-                                        axisConverter,
-                                        canvasInOut                 );
+                        graphicDrawerInOut.setCurrentDrawingLayer('Slip Wedge');
+
+                        slipWedgePolygon := determineSlipWedgeGeometry();
+
+                        graphicDrawerInOut.addPolygon(  slipWedgePolygon,
+                                                        True,
+                                                        2,
+                                                        TColors.Orangered  );
+
+                        FreeAndNil( slipWedgePolygon );
                     end;
 
-                procedure TSoilNailWallGraphic.drawSlipLine(var canvasInOut : ISkCanvas);
+                procedure TSoilNailWallGraphic.updateSlipLine(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                    var
+                        slipLine : TGeomLine;
                     begin
                         if (getSlipWedge().visible = False) then
                             exit();
 
-                        drawSkiaLine(   determineSlipLine(),
-                                        TAlphaColors.Darkred,
-                                        axisConverter,
-                                        canvasInOut,
-                                        True,
-                                        5                       );
+                        slipLine := determineSlipLine();
+
+                        graphicDrawerInOut.setCurrentDrawingLayer('Slip Wedge');
+
+                        graphicDrawerInOut.addLine( slipLine,
+                                                    5,
+                                                    TColors.Darkred );
+
+                        FreeAndNil( slipLine );
                     end;
 
             //soil
-                procedure TSoilNailWallGraphic.drawSoil(var canvasInOut : ISkCanvas);
+                procedure TSoilNailWallGraphic.updateSoil(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                    var
+                        soilPolygon : TGeomPolygon;
                     begin
-                        drawSkiaPolygon(determineSoilGeometry(),
-                                        TAlphaColors.Lightgreen,
-                                        TAlphaColors.Black,
-                                        axisConverter,
-                                        canvasInOut             );
+                        graphicDrawerInOut.setCurrentDrawingLayer('Soil');
+
+                        soilPolygon := determineSoilGeometry();
+
+                        graphicDrawerInOut.addPolygon(  soilPolygon,
+                                                        True,
+                                                        2,
+                                                        TColors.Lightgreen
+                                                        );
+
+                        FreeAndNil( soilPolygon );
                     end;
 
             //wall
-                procedure TSoilNailWallGraphic.drawWall(var canvasInOut : ISkCanvas);
+                procedure TSoilNailWallGraphic.updateWall(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                    var
+                        wallPolygon : TGeomPolygon;
                     begin
-                        drawSkiaPolygon(determineWallGeometry(),
-                                        TAlphaColors.Yellow,
-                                        TAlphaColors.Black,
-                                        axisConverter,
-                                        canvasInOut             );
+                        graphicDrawerInOut.setCurrentDrawingLayer('Wall');
+
+                        wallPolygon := determineWallGeometry();
+
+                        graphicDrawerInOut.addPolygon( wallPolygon,
+                                                       True,
+                                                       2,
+                                                       TColors.Yellow );
+
+                        FreeAndNil( wallPolygon );
                     end;
 
     //public
@@ -153,39 +163,52 @@ implementation
             constructor TSoilNailWallGraphic.create();
                 begin
                     inherited create();
-
-                    axisConverter := TDrawingAxisConverter.create();
                 end;
 
         //destructor
             destructor TSoilNailWallGraphic.destroy();
                 begin
-                    FreeAndNil(axisConverter);
-
                     inherited destroy();
                 end;
 
         //drawing
-            procedure TSoilNailWallGraphic.drawSoilNailWall(canvasHeightIn, canvasWidthIn   : integer;
-                                                            var canvasInOut                 : ISkCanvas);
+            procedure TSoilNailWallGraphic.updateSoilNailWallGeomtry(var graphicDrawerInOut: TGraphicDrawerObjectAdder);
                 begin
-                    determineDrawingBoundaries(canvasHeightIn, canvasWidthIn);
-
                     //for now set a value of 50 to the wedge angle for testing
                         setSlipWedgeAngle(45);
                         setslipWedgevisible(False);
 
-                    drawSoil(canvasInOut);
+                    updateSoil( graphicDrawerInOut );
 
-                    drawSlipWedge(canvasInOut);
+                    updateSlipWedge( graphicDrawerInOut );
 
-                    drawNails(canvasInOut);
-                    drawAnchoredNails(canvasInOut);
+                    updateNails( graphicDrawerInOut );
+                    updateAnchoredNails( graphicDrawerInOut );
 
-                    drawSlipLine(canvasInOut);
+                    updateSlipLine( graphicDrawerInOut );
 
-                    drawWall(canvasInOut);
+                    updateWall( graphicDrawerInOut );
                 end;
+
+        //drawing
+//            procedure TSoilNailWallGraphic.drawSoilNailWall(canvasHeightIn, canvasWidthIn   : integer;
+//                                                            var canvasInOut                 : ISkCanvas);
+//                begin
+//                    //for now set a value of 50 to the wedge angle for testing
+//                        setSlipWedgeAngle(45);
+//                        setslipWedgevisible(False);
+//
+//                    updateSoil(canvasInOut);
+//
+//                    updateSlipWedge(canvasInOut);
+//
+//                    updateNails(canvasInOut);
+//                    updateAnchoredNails(canvasInOut);
+//
+//                    updateSlipLine(canvasInOut);
+//
+//                    updateWall(canvasInOut);
+//                end;
 
 
 end.

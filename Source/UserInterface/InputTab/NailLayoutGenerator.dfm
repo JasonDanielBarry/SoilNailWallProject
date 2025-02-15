@@ -14,18 +14,6 @@ object NailLayoutGenForm: TNailLayoutGenForm
   Position = poMainFormCenter
   OnCreate = FormCreate
   TextHeight = 15
-  object PBWallDrawing: TSkPaintBox
-    Left = 175
-    Top = 0
-    Width = 1225
-    Height = 665
-    Align = alClient
-    OnDraw = PBWallDrawingDraw
-    ExplicitLeft = 256
-    ExplicitTop = 416
-    ExplicitWidth = 50
-    ExplicitHeight = 50
-  end
   object PanelLeft: TPanel
     Left = 0
     Top = 0
@@ -35,7 +23,6 @@ object NailLayoutGenForm: TNailLayoutGenForm
     BevelOuter = bvNone
     ParentBackground = False
     TabOrder = 0
-    ExplicitHeight = 638
     object GridPanelInputs: TGridPanel
       AlignWithMargins = True
       Left = 5
@@ -118,7 +105,7 @@ object NailLayoutGenForm: TNailLayoutGenForm
         Height = 38
         Align = alClient
         Caption = 'Top Space (m)'
-        ExplicitWidth = 75
+        ExplicitWidth = 76
         ExplicitHeight = 15
       end
       object LabelNailSpacing: TLabel
@@ -138,7 +125,7 @@ object NailLayoutGenForm: TNailLayoutGenForm
         Height = 38
         Align = alClient
         Caption = 'Top Length (m)'
-        ExplicitWidth = 81
+        ExplicitWidth = 82
         ExplicitHeight = 15
       end
       object LabelBottomLength: TLabel
@@ -236,8 +223,6 @@ object NailLayoutGenForm: TNailLayoutGenForm
         Value = 100.000000000000000000
       end>
     TabOrder = 1
-    ExplicitTop = 638
-    ExplicitWidth = 1303
     object ButtonCancel: TButton
       AlignWithMargins = True
       Left = 1320
@@ -252,7 +237,6 @@ object NailLayoutGenForm: TNailLayoutGenForm
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 0
-      ExplicitLeft = 1223
     end
     object ButtonOK: TButton
       AlignWithMargins = True
@@ -268,7 +252,19 @@ object NailLayoutGenForm: TNailLayoutGenForm
       Caption = 'OK'
       ModalResult = 1
       TabOrder = 1
-      ExplicitLeft = 1138
     end
+  end
+  object JDBGraphic2DDrawing: TJDBGraphic2D
+    Left = 175
+    Top = 0
+    Width = 1225
+    Height = 665
+    Align = alClient
+    BevelEdges = []
+    BevelOuter = bvNone
+    ParentColor = True
+    ShowCaption = False
+    TabOrder = 2
+    OnUpdateGeometry = JDBGraphic2DDrawingUpdateGeometry
   end
 end

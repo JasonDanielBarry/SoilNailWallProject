@@ -4,7 +4,6 @@ interface
 
     uses
         System.SysUtils, system.Math,
-        GeneralMathMethods,
         InterpolatorClass,
         LimitStateMaterialClass;
 
@@ -101,7 +100,7 @@ implementation
                 var
                     isNotZero, isPositive : boolean;
                 begin
-                    isNotZero   := NOT( isAlmostZero(heightIn) );
+                    isNotZero   := NOT( isZero(heightIn, 1e-3) );
                     isPositive  := heightIn > 0;
 
                     _isValidHeight := (isNotZero AND isPositive);
@@ -118,7 +117,7 @@ implementation
                     begin
                         testHeight := arrHeights[i];
 
-                        nailHeightIsTaken := (isAlmostEqual( heightIn, testHeight ));
+                        nailHeightIsTaken := ( SameValue( heightIn, testHeight ) );
 
                         if (nailHeightIsTaken) then
                             exit();
@@ -174,7 +173,7 @@ implementation
             //check for valid initial nail height
                 nailHeight := wallHeightIn - topSpaceIn;
 
-                if ( isAlmostZero(nailHeight) OR (nailHeight < 0) ) then
+                if ( isZero(nailHeight, 1e-3) OR (nailHeight < 0) ) then
                     exit();
 
             //fill the array with nail heights

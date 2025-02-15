@@ -101,7 +101,7 @@ interface
             ActionDarkTheme: TAction;
             ActionLightTheme: TAction;
             ActionNew: TAction;
-    JDBGraphic2D1: TJDBGraphic2D;
+    JDBGraphic2DDiagram: TJDBGraphic2D;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
@@ -149,7 +149,7 @@ interface
                 procedure ComboBoxThemeChange(Sender: TObject);
             //ribbon
                 procedure PageControlRibbonChange(Sender: TObject);
-                procedure JDBGraphic2D1UpdateGeometry(  ASender: TObject;
+                procedure JDBGraphic2DDiagramUpdateGeometry(  ASender: TObject;
                                                         var AGeomDrawer: TGraphicDrawerObjectAdder  );
         private
             var
@@ -391,10 +391,10 @@ implementation
                             readFromAndWriteToInputGrids()
                         end;
 
-            procedure TSNWForm.JDBGraphic2D1UpdateGeometry( ASender         : TObject;
-                                                            var AGeomDrawer : TGraphicDrawerObjectAdder );
+            procedure TSNWForm.JDBGraphic2DDiagramUpdateGeometry(   ASender         : TObject;
+                                                                    var AGeomDrawer : TGraphicDrawerObjectAdder );
                 begin
-                    SoilNailWallDesign.drawSoilNailWall
+                    SoilNailWallDesign.updateSoilNailWallGeomtry( AGeomDrawer );
                 end;
 
             //theme

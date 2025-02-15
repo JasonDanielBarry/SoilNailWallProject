@@ -3,13 +3,13 @@ unit NailLayoutGenerator;
 interface
 
     uses
-        Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, system.Types,
+        Winapi.Windows, Winapi.Messages,
+        System.SysUtils, System.Math, System.Variants, System.Classes, system.Types,
         Vcl.Graphics,
         Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
         System.Skia, Vcl.Skia,
-
-        GeneralMathMethods,
-        SoilNailWallMasterClass
+        SoilNailWallMasterClass, CustomComponentPanelClass,
+        Graphic2DComponent, GraphicDrawerObjectAdderClass
         ;
 
     type
@@ -27,17 +27,14 @@ interface
         GridPanelCancelOK: TGridPanel;
         ButtonCancel: TButton;
         ButtonOK: TButton;
-    PBWallDrawing: TSkPaintBox;
-    procedure PBWallDrawingDraw(ASender         : TObject;
-                                const ACanvas   : ISkCanvas;
-                                const ADest     : TRectF;
-                                const AOpacity  : Single    );
+    JDBGraphic2DDrawing: TJDBGraphic2D;
     procedure ComboBoxChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure JDBGraphic2DDrawingUpdateGeometry(ASender: TObject;
+      var AGeomDrawer: TGraphicDrawerObjectAdder);
       private
         { Private declarations }
         soilNailWallDesign : TSoilNailWall;
-        procedure drawWall(canvasIn : ISkCanvas);
         procedure generateLayout();
       public
         constructor create(const soilNailWallIn : TSoilNailWall);
@@ -51,14 +48,6 @@ interface
 implementation
 
 {$R *.dfm}
-
-    procedure TNailLayoutGenForm.PBWallDrawingDraw( ASender         : TObject;
-                                                    const ACanvas   : ISkCanvas;
-                                                    const ADest     : TRectF;
-                                                    const AOpacity  : Single    );
-        begin
-            drawWall(ACanvas);
-        end;
 
     procedure TNailLayoutGenForm.ComboBoxChange(Sender: TObject);
         begin
@@ -80,12 +69,13 @@ implementation
                     end;
         end;
 
-    //private
-        procedure TNailLayoutGenForm.drawWall(canvasIn : ISkCanvas);
-            begin
-                soilNailWallDesign.drawSoilNailWall(PBWallDrawing.Height, PBWallDrawing.Width, canvasIn)
-            end;
+    procedure TNailLayoutGenForm.JDBGraphic2DDrawingUpdateGeometry(   ASender         : TObject;
+                                                                var AGeomDrawer : TGraphicDrawerObjectAdder );
+        begin
+            soilNailWallDesign.updateSoilNailWallGeomtry( AGeomDrawer );
+        end;
 
+    //private
         procedure TNailLayoutGenForm.generateLayout();
             var
                 validLengths,   validSpaces,
@@ -96,16 +86,16 @@ implementation
                 try
                     //get inputs from UI
                         //spacing
-                            topSpace        := strToFloat( trim(ComboBoxTopSpace.Text) );
-                            nailToNailSpace := strToFloat( trim(ComboBoxNailSpacing.Text) );
+                            validSpaces := TryStrToFloat( trim(ComboBoxTopSpace.Text), topSpace );
+                            validSpaces := validSpaces AND TryStrToFloat( trim(ComboBoxNailSpacing.Text), nailToNailSpace );
 
                         //lengths
-                            topLength       := strToFloat( trim(ComboBoxTopLength.Text) );
-                            bottomLength    := strToFloat( trim(ComboBoxBottomLength.Text) );
+                            validLengths := TryStrToFloat( trim(ComboBoxTopLength.Text), topLength );
+                            validLengths := validLengths AND TryStrToFloat( trim(ComboBoxBottomLength.Text), bottomLength );
 
                     //check the inputs make sense for the calculation to be run
-                        validLengths    := (topLength >= 0.5) AND (bottomLength >= 0.5);
-                        validSpaces     := (topSpace > 1e-3) AND (nailToNailSpace >= 0.5);
+                        validLengths    := validLengths AND ( (topLength >= 0.5) AND (bottomLength >= 0.5) );
+                        validSpaces     := validSpaces  AND ( (topSpace > 1e-3) AND (nailToNailSpace >= 0.5) );
                         validInputs     := (validLengths AND validSpaces);
 
                         if ( NOT(validInputs) ) then
@@ -117,7 +107,7 @@ implementation
                     SoilNailWallDesign.generateSoilNailLayout(  topSpace,   nailToNailSpace,
                                                                 topLength,  bottomLength    );
 
-                    PBWallDrawing.Redraw();
+                    JDBGraphic2DDrawing.updateGeometry();
                 except
                     //do nothing
                 end;
@@ -139,7 +129,7 @@ implementation
                 soilNailWallDesign.getNailLayout(   topSpace,   nailToNailSpace,
                                                     topLength,  bottomLength    );
 
-                if isAlmostZero(nailToNailSpace) then
+                if ( IsZero( nailToNailSpace, 1e-3) ) then
                     exit();
 
                 ComboBoxTopSpace.Text       := FloatToStrF(topSpace,        ffFixed, 5, 2);
@@ -159,7 +149,6 @@ implementation
             begin
                 result := soilNailWallDesign;
             end;
-
 
 
 end.

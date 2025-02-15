@@ -8,7 +8,6 @@ interface
             System.SysUtils, system.Math, system.UITypes,
             Vcl.Forms, vcl.Graphics, Vcl.Grids,
         //custom
-            GeneralMathMethods,
             InterpolatorClass,
             StringGridHelperClass,
             SoilNailWallTypes,
@@ -79,8 +78,8 @@ implementation
                                 nailSpace   := strGrdNailLayoutInOut.cellToDouble(2, i);
                                 nailLength  := strGrdNailLayoutInOut.cellToDouble(3, i);
 
-                                isValidSpace    := NOT(isAlmostZero(nailSpace));
-                                isValidLength   := NOT(isAlmostZero(nailLength));
+                                isValidSpace    := NOT(isZero( nailSpace, 1e-3 ));
+                                isValidLength   := NOT(isZero( nailLength, 1e-3 ));
                                 isValidNail     := (isValidSpace OR isValidLength);
 
                                 if (isValidNail) then
