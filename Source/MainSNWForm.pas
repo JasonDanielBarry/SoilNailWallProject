@@ -102,9 +102,9 @@ interface
             ActionLightTheme: TAction;
             ActionNew: TAction;
             JDBGraphic2DDiagram: TJDBGraphic2D;
-    ListBoxMaterialProperties: TListBox;
-    ListBoxWallGeom: TListBox;
-    ListBoxNailProperties: TListBox;
+            ListBoxMaterialProperties: TListBox;
+            ListBoxWallGeom: TListBox;
+            ListBoxNailProperties: TListBox;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
