@@ -1074,8 +1074,8 @@ object SNWForm: TSNWForm
     OnUpdateGeometry = JDBGraphic2DDiagramUpdateGeometry
   end
   object ActionManager1: TActionManager
-    Left = 1248
-    Top = 162
+    Left = 1344
+    Top = 170
     StyleName = 'Platform Default'
     object ActionWallGeometry: TAction
       Category = 'Input'
@@ -1137,25 +1137,39 @@ object SNWForm: TSNWForm
       OnExecute = ActionLightThemeExecute
     end
     object ActionNew: TAction
-      Category = 'FileMenu'
-      Caption = 'New'
+      Category = 'File'
+      Caption = '&New'
       OnExecute = ActionNewExecute
+    end
+    object ActionOpen: TAction
+      Category = 'File'
+      Caption = '&Open'
+      OnExecute = ActionOpenExecute
+    end
+    object ActionSave: TAction
+      Category = 'File'
+      Caption = '&Save'
+    end
+    object ActionSaveAs: TAction
+      Category = 'File'
+      Caption = 'Save &As'
+      OnExecute = ActionSaveAsExecute
     end
   end
   object PopupMenuFile: TPopupMenu
-    Left = 1040
+    Left = 1248
     Top = 168
     object FMNew: TMenuItem
       Action = ActionNew
     end
     object FMOpen: TMenuItem
-      Caption = 'Open'
+      Action = ActionOpen
     end
     object FMSave: TMenuItem
-      Caption = 'Save'
+      Action = ActionSave
     end
     object FMSaveAs: TMenuItem
-      Caption = 'Save As'
+      Action = ActionSaveAs
     end
     object N1: TMenuItem
       Caption = '-'
@@ -1169,5 +1183,30 @@ object SNWForm: TSNWForm
         Action = ActionDarkTheme
       end
     end
+  end
+  object OpenFileDialog: TFileOpenDialog
+    FavoriteLinks = <>
+    FileName = 
+      'C:\Users\jason\Documents\Embarcadero\Studio\Projects\DummyFile.s' +
+      'nw'
+    FileTypes = <
+      item
+        DisplayName = 'Soil Nail Wall File'
+        FileMask = '*.snw'
+      end>
+    Options = []
+    Left = 1249
+    Top = 229
+  end
+  object SaveFileDialog: TFileSaveDialog
+    FavoriteLinks = <>
+    FileTypes = <
+      item
+        DisplayName = 'Soil Nail Wall File'
+        FileMask = '*.snw'
+      end>
+    Options = []
+    Left = 1337
+    Top = 229
   end
 end

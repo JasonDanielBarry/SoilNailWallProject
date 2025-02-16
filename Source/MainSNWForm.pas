@@ -11,7 +11,8 @@ interface
             Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls,
             Vcl.StdCtrls, Vcl.Buttons,
             System.Actions, Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls,
-            Vcl.ActnMan, Vcl.Themes, Vcl.WinXCtrls, Vcl.Menus, Vcl.TitleBarCtrls,
+            Vcl.ActnMan, Vcl.Themes, Vcl.WinXCtrls, Vcl.Menus, Vcl.TitleBarCtrls, Vcl.StdActns,
+            Vcl.ExtDlgs,
         //custom
             GeneralComponentHelperMethods,
             StringGridHelperClass,
@@ -21,7 +22,7 @@ interface
             SNWUITypes,
             InputParametersTabManagement, WallGeometryTabManagement, NailPropertiesTabManagement, NailLayoutGenerator,
             SoilNailWallExampleMethods, CustomComponentPanelClass,
-            Graphic2DComponent, GraphicDrawerObjectAdderClass
+            Graphic2DComponent, GraphicDrawerObjectAdderClass, FileReaderWriterClass
             ;
 
     type
@@ -105,6 +106,11 @@ interface
             ListBoxMaterialProperties: TListBox;
             ListBoxWallGeom: TListBox;
             ListBoxNailProperties: TListBox;
+    ActionOpen: TAction;
+    ActionSave: TAction;
+    ActionSaveAs: TAction;
+    OpenFileDialog: TFileOpenDialog;
+    SaveFileDialog: TFileSaveDialog;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
@@ -113,6 +119,7 @@ interface
         //actions
             //file menu
                 procedure ActionNewExecute(Sender: TObject);
+                procedure ActionOpenExecute(Sender: TObject);
             //input tab
                 //input parameters
                     procedure ActionInputParametersExecute(Sender: TObject);
@@ -155,6 +162,8 @@ interface
                                                             var AGeomDrawer : TGraphicDrawerObjectAdder);
             //show form
                 procedure FormShow(Sender: TObject);
+    procedure ActionSaveAsExecute(Sender: TObject);
+
         private
             var
                 mustRedrawImage         : boolean;
@@ -246,6 +255,52 @@ implementation
                         SoilNailWallDesign := TSoilNailWall.create();
 
                         JDBGraphic2DDiagram.updateGeometry();
+                    end;
+
+                procedure TSNWForm.ActionOpenExecute(Sender: TObject);
+                    var
+                        openFileName    : string;
+                        fileReadWrite   : TFileReaderWriter;
+                    begin
+                        if (NOT(OpenFileDialog.Execute())) then
+                            exit();
+
+                        openFileName := OpenFileDialog.FileName;
+
+                        fileReadWrite := TFileReaderWriter.create( openFileName );
+
+                        fileReadWrite.loadFile();
+
+                        FreeAndNil( fileReadWrite );
+                    end;
+
+                procedure TSNWForm.ActionSaveAsExecute(Sender: TObject);
+                    var
+                        saveFileName    : string;
+                        fileReadWrite   : TFileReaderWriter;
+                    begin
+                        if (NOT(SaveFileDialog.Execute())) then
+                            exit();
+
+                        saveFileName := SaveFileDialog.FileName;
+
+                        fileReadWrite := TFileReaderWriter.create( saveFileName );
+
+                        fileReadWrite.writeBool( 'boolean1', True );
+                        fileReadWrite.writeBool( 'boolean2', False );
+
+                        fileReadWrite.writeInteger( 'integer1', 1 );
+                        fileReadWrite.writeInteger( 'integer2', 256 );
+
+                        fileReadWrite.writeDouble( 'double1', 1.0156 );
+                        fileReadWrite.writeDouble( 'double2', 654.132987 );
+
+                        fileReadWrite.writeString( 'string1', 'Soil Nail Wall File' );
+                        fileReadWrite.writeString( 'string2', 'Hello World!' );
+
+                        fileReadWrite.saveFile();
+
+                        FreeAndNil( fileReadWrite );
                     end;
 
             //input tab
