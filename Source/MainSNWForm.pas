@@ -275,6 +275,8 @@ implementation
                     end;
 
                 procedure TSNWForm.ActionSaveAsExecute(Sender: TObject);
+                    const
+                        FILE_EXTENSION : string = '.snw';
                     var
                         saveFileName    : string;
                         fileReadWrite   : TFileReaderWriter;
@@ -283,6 +285,9 @@ implementation
                             exit();
 
                         saveFileName := SaveFileDialog.FileName;
+
+                        if (NOT( Pos( FILE_EXTENSION, saveFileName ) > 0 )) then
+                            saveFileName := saveFileName + FILE_EXTENSION;
 
                         fileReadWrite := TFileReaderWriter.create( saveFileName );
 

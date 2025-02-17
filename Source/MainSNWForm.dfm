@@ -311,7 +311,7 @@ object SNWForm: TSNWForm
           Alignment = taCenter
           Caption = 'Input Type'
           Layout = tlCenter
-          ExplicitWidth = 56
+          ExplicitWidth = 55
           ExplicitHeight = 15
         end
       end
@@ -506,7 +506,7 @@ object SNWForm: TSNWForm
           Alignment = taCenter
           Caption = 'Examples'
           Layout = tlCenter
-          ExplicitWidth = 49
+          ExplicitWidth = 50
           ExplicitHeight = 15
         end
       end
@@ -553,7 +553,7 @@ object SNWForm: TSNWForm
           Margins.Bottom = 0
           Align = alClient
           Caption = 'Theme'
-          ExplicitWidth = 37
+          ExplicitWidth = 36
           ExplicitHeight = 15
         end
         object ComboBoxTheme: TComboBox
@@ -658,14 +658,12 @@ object SNWForm: TSNWForm
         object LabelComputationType: TLabel
           Left = 0
           Top = 75
-          Width = 149
-          Height = 20
+          Width = 98
+          Height = 15
           Align = alClient
           Alignment = taCenter
           Caption = 'Computation Type'
           Layout = tlCenter
-          ExplicitWidth = 99
-          ExplicitHeight = 15
         end
         object PanelComputationTypeSeparator: TPanel
           Left = 149
@@ -773,8 +771,8 @@ object SNWForm: TSNWForm
         object LabelAveVal: TLabel
           Left = 0
           Top = 0
-          Width = 75
-          Height = 41
+          Width = 43
+          Height = 30
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -784,14 +782,12 @@ object SNWForm: TSNWForm
           Caption = 'Average'#13#10'Value'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 43
-          ExplicitHeight = 30
         end
         object LabelVarCoef: TLabel
           Left = 75
           Top = 0
-          Width = 75
-          Height = 41
+          Width = 58
+          Height = 30
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -801,14 +797,12 @@ object SNWForm: TSNWForm
           Caption = 'Variation Coefficient'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 58
-          ExplicitHeight = 30
         end
         object LabelDowngFact: TLabel
           Left = 150
           Top = 0
-          Width = 75
-          Height = 41
+          Width = 64
+          Height = 30
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -818,14 +812,12 @@ object SNWForm: TSNWForm
           Caption = 'Downgrade Factor'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 64
-          ExplicitHeight = 30
         end
         object LabelCauEst: TLabel
           Left = 225
           Top = 0
-          Width = 75
-          Height = 41
+          Width = 50
+          Height = 30
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -835,14 +827,12 @@ object SNWForm: TSNWForm
           Caption = 'Cautious Estimate'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 50
-          ExplicitHeight = 30
         end
         object LabelParFac: TLabel
           Left = 300
           Top = 0
-          Width = 75
-          Height = 41
+          Width = 69
+          Height = 15
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -852,14 +842,12 @@ object SNWForm: TSNWForm
           Caption = 'Partial Factor'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 69
-          ExplicitHeight = 15
         end
         object LabelDesVal: TLabel
           Left = 375
           Top = 0
-          Width = 75
-          Height = 41
+          Width = 67
+          Height = 15
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -869,8 +857,6 @@ object SNWForm: TSNWForm
           Caption = 'Design Value'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 67
-          ExplicitHeight = 15
         end
       end
       object GridSoilParInput: TStringGrid
