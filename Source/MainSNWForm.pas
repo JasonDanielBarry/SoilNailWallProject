@@ -259,8 +259,15 @@ implementation
 
                 procedure TSNWForm.ActionOpenExecute(Sender: TObject);
                     var
-                        openFileName    : string;
-                        fileReadWrite   : TFileReaderWriter;
+                        testBool,
+                        bool1, bool2        : boolean;
+                        int1, int2          : integer;
+                        double1, double2    : double;
+                        char1, char2,
+                        char3, char4        : char;
+                        string1, string2,
+                        openFileName        : string;
+                        fileReadWrite       : TFileReaderWriter;
                     begin
                         if (NOT(OpenFileDialog.Execute())) then
                             exit();
@@ -270,6 +277,23 @@ implementation
                         fileReadWrite := TFileReaderWriter.create( openFileName );
 
                         fileReadWrite.loadFile();
+
+                        testBool := fileReadWrite.tryReadBool( 'boolean1', bool1 );
+                        testBool := fileReadWrite.tryReadBool( 'boolean2', bool2 );
+
+                        testBool := fileReadWrite.tryReadInteger( 'integer1', int1 );
+                        testBool := fileReadWrite.tryReadInteger( 'integer2', int2 );
+
+                        testBool := fileReadWrite.tryReadDouble( 'double1', double1 );
+                        testBool := fileReadWrite.tryReadDouble( 'double2', double2 );
+
+                        testBool := fileReadWrite.tryReadChar( 'char1', char1 );
+                        testBool := fileReadWrite.tryReadChar( 'char2', char2 );
+                        testBool := fileReadWrite.tryReadChar( 'char3', char3 );
+                        testBool := fileReadWrite.tryReadChar( 'char4', char4 );
+
+                        testBool := fileReadWrite.tryReadString( 'string1', string1 );
+                        testBool := fileReadWrite.tryReadString( 'string2', string2 );
 
                         FreeAndNil( fileReadWrite );
                     end;
@@ -299,6 +323,11 @@ implementation
 
                         fileReadWrite.writeDouble( 'double1', 1.0156 );
                         fileReadWrite.writeDouble( 'double2', 654.132987 );
+
+                        fileReadWrite.writeChar( 'char1', '#' );
+                        fileReadWrite.writeChar( 'char2', 'B' );
+                        fileReadWrite.writeChar( 'char3', '5' );
+                        fileReadWrite.writeChar( 'char4', '$' );
 
                         fileReadWrite.writeString( 'string1', 'Soil Nail Wall File' );
                         fileReadWrite.writeString( 'string2', 'Hello World!' );
