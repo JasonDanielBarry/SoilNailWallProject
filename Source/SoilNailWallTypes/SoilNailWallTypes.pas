@@ -4,16 +4,18 @@ interface
 
     uses
         System.SysUtils, system.Math,
+        FileReaderWriterClass,
         InterpolatorClass,
         LimitStateMaterialClass;
 
     type
         //failure slip wedge
             TSlipWedge = record
-                visible     : boolean;
-                angle,
-                length,
-                selfWeight  : double;
+                var
+                    visible     : boolean;
+                    angle,
+                    length,
+                    selfWeight  : double;
             end;
 
         //soil behind wall
@@ -25,10 +27,13 @@ interface
                             maxHeight : double;
                         end;
                 public
-                    cohesion,
-                    frictionAngle,
-                    unitWeight      : TLimitStateMaterial;
-                    slope           : TSlope;
+                    var
+                        cohesion,
+                        frictionAngle,
+                        unitWeight      : TLimitStateMaterial;
+                        slope           : TSlope;
+                    function loadFromFile(var fileReadWriteInOut : TFileReaderWriter) : boolean;
+                    procedure saveToFile(var fileReadWriteInOut : TFileReaderWriter);
             end;
 
         //soil wall nails
@@ -65,6 +70,8 @@ interface
                     function longestNailLength()    : double;
                     function getArrHeight()         : TArray<double>;
                     function getArrLengths()        : TArray<double>;
+                    function loadFromFile(var fileReadWriteInOut : TFileReaderWriter) : boolean;
+                    procedure saveToFile(var fileReadWriteInOut : TFileReaderWriter);
             end;
 
         //wall in front of soil
@@ -82,13 +89,30 @@ interface
                                 strength : TConcreteStrength;
                         end;
                 public
-                    angle,
-                    height,
-                    thickness   : double;
-                    concrete    : TConcrete;
+                    var
+                        angle,
+                        height,
+                        thickness   : double;
+                        concrete    : TConcrete;
+                    function loadFromFile(var fileReadWriteInOut : TFileReaderWriter) : boolean;
+                    procedure saveToFile(var fileReadWriteInOut : TFileReaderWriter);
             end;
 
 implementation
+
+    //TSoil----------------------------------------------------------------------------------------------------
+        function TSoil.loadFromFile(var fileReadWriteInOut : TFileReaderWriter) : boolean;
+            var
+                successfulRead : boolean;
+            begin
+//                successfulRead := fileReadWriteInOut.tryReadDouble
+            end;
+
+        procedure TSoil.saveToFile(var fileReadWriteInOut : TFileReaderWriter);
+            begin
+
+            end;
+    //--------------------------------------------------------------------------------------------------------------
 
     procedure TSoilNails.addNail(const heightIn, lengthIn: double);
         var

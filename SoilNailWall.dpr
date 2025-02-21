@@ -20,7 +20,9 @@ uses
   SoilNailWallGraphicClass in 'Source\SoilNailWallClass\Drawing\SoilNailWallGraphicClass.pas',
   SoilNailWallGeometryClass in 'Source\SoilNailWallClass\Geometry\SoilNailWallGeometryClass.pas',
   Vcl.Themes,
-  Vcl.Styles;
+  Vcl.Styles,
+  SoilNailWallFileManagementClass in 'Source\SoilNailWallClass\FileManagement\SoilNailWallFileManagementClass.pas',
+  SoilNailWallFileReaderWriterClass in 'Source\SoilNailWallTypes\SoilNailWallFileReaderWriterClass.pas';
 
 {$R *.res}
 

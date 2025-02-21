@@ -4,7 +4,7 @@
         <ProjectVersion>20.2</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <ProjectName Condition="'$(ProjectName)'==''">SoilNailWall</ProjectName>
         <TargetedPlatforms>3</TargetedPlatforms>
@@ -165,6 +165,8 @@
         <DCCReference Include="Source\SoilNailWallClass\Computation\Analysis\SoilNailWallComputationMethods.pas"/>
         <DCCReference Include="Source\SoilNailWallClass\Drawing\SoilNailWallGraphicClass.pas"/>
         <DCCReference Include="Source\SoilNailWallClass\Geometry\SoilNailWallGeometryClass.pas"/>
+        <DCCReference Include="Source\SoilNailWallClass\FileManagement\SoilNailWallFileManagementClass.pas"/>
+        <DCCReference Include="Source\SoilNailWallTypes\SoilNailWallFileReaderWriterClass.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -188,6 +190,18 @@
                 <Excluded_Packages/>
             </Delphi.Personality>
             <Deployment Version="5">
+                <DeployFile LocalName="..\BuildOutput\SoilNailWall.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win64">
+                        <RemoteName>SoilNailWall.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\BuildOutput\SoilNailWall.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win64">
+                        <RemoteName>SoilNailWall.rsm</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Win32\Debug\SoilNailWall.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>SoilNailWall.exe</RemoteName>

@@ -74,7 +74,7 @@ interface
                         function getWall() : TWall;
                 //modifiers
                     //load
-                        procedure setLoad(loadIn : double);
+                        procedure setLoad(const loadIn : double);
                     //nails
                         procedure addNail(const heightIn, lengthIn : double);
                         procedure clearNailLayout();
@@ -86,7 +86,7 @@ interface
                     //wall
                         procedure setWall(const wallIn : TWall);
                 //copy other soil nail wall
-                    procedure copySNW(otherSoilNailWallIn : TSoilNailWallBase);
+                    procedure copySNW(const otherSoilNailWallIn : TSoilNailWallBase);
                 //generate soil nail layout
                     procedure generateSoilNailLayout(const  topSpaceIn,  verticalSpacingIn,
                                                             topLengthIn, bottomLengthIn     : double);
@@ -351,7 +351,7 @@ implementation
 
         //modifiers
             //load
-                procedure TSoilNailWallBase.setLoad(loadIn : double);
+                procedure TSoilNailWallBase.setLoad(const loadIn : double);
                     begin
                         load := max(0, loadIn);
                     end;
@@ -410,16 +410,16 @@ implementation
             //wall
                 procedure TSoilNailWallBase.setWall(const wallIn : TWall);
                     begin
-                        setWallAngle(wallIn.angle);
-                        setWallHeight(wallIn.height);
-                        setWallThickness(wallIn.thickness);
+                        setWallAngle( wallIn.angle );
+                        setWallHeight( wallIn.height );
+                        setWallThickness( wallIn.thickness );
 
-                        wall.concrete.strength.compressive.copyOther(wallIn.concrete.strength.compressive);
-                        wall.concrete.strength.reinforcement.copyOther(wallIn.concrete.strength.reinforcement);
+                        wall.concrete.strength.compressive.copyOther( wallIn.concrete.strength.compressive );
+                        wall.concrete.strength.reinforcement.copyOther( wallIn.concrete.strength.reinforcement );
                     end;
 
         //copy other soil nail wall
-            procedure TSoilNailWallBase.copySNW(otherSoilNailWallIn : TSoilNailWallBase);
+            procedure TSoilNailWallBase.copySNW(const otherSoilNailWallIn : TSoilNailWallBase);
                 begin
                     self.deepCopy( otherSoilNailWallIn );
                 end;

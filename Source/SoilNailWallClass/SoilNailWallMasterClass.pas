@@ -3,10 +3,10 @@ unit SoilNailWallMasterClass;
 interface
 
     uses
-        SoilNailWallGraphicClass;
+        SoilNailWallFileManagementClass;
 
     type
-        TSoilNailWall = class(TSoilNailWallGraphic)
+        TSoilNailWall = class(TSoilNailWallFileManager)
             public
                 //constructor
                     constructor create();
