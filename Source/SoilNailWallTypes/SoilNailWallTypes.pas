@@ -4,7 +4,8 @@ interface
 
     uses
         System.SysUtils, system.Math,
-        FileReaderWriterClass,
+        Xml.XMLDoc, Xml.XMLIntf, Xml.xmldom,
+        XMLDocumentMethods,
         InterpolatorClass,
         LimitStateMaterialClass;
 
@@ -21,6 +22,12 @@ interface
         //soil behind wall
             TSoil = record
                 strict private
+                    const
+                        SLOPE_ANGLE         : string = 'SlopeAngle';
+                        SLOPE_MAX_HEIGHT    : string = 'SlopeMaxHeight';
+                        SOIL_COHESION       : string = 'SoilCohesion';
+                        SOIL_FRICTION_ANGLE : string = 'SoilFrictionAngle';
+                        SOIL_UNIT_WEIGHT    : string = 'SoilUnitWeight';
                     type
                         TSlope = record
                             angle,
@@ -32,8 +39,8 @@ interface
                         frictionAngle,
                         unitWeight      : TLimitStateMaterial;
                         slope           : TSlope;
-                    function loadFromFile(var fileReadWriteInOut : TFileReaderWriter) : boolean;
-                    procedure saveToFile(var fileReadWriteInOut : TFileReaderWriter);
+                    function readFromXMLNode(const XMLNodeIn : IXMLNode) : boolean;
+                    procedure writeToXMLNode(var XMLNodeInOut : IXMLNode);
             end;
 
         //soil wall nails
@@ -70,8 +77,8 @@ interface
                     function longestNailLength()    : double;
                     function getArrHeight()         : TArray<double>;
                     function getArrLengths()        : TArray<double>;
-                    function loadFromFile(var fileReadWriteInOut : TFileReaderWriter) : boolean;
-                    procedure saveToFile(var fileReadWriteInOut : TFileReaderWriter);
+//                    function readFromXMLNode(var XMLNodeIn : IXMLNode) : boolean;
+//                    procedure writeToXMLNode(var XMLNodeIn : IXMLNode);
             end;
 
         //wall in front of soil
@@ -94,23 +101,35 @@ interface
                         height,
                         thickness   : double;
                         concrete    : TConcrete;
-                    function loadFromFile(var fileReadWriteInOut : TFileReaderWriter) : boolean;
-                    procedure saveToFile(var fileReadWriteInOut : TFileReaderWriter);
+//                    function readFromXMLNode(var XMLNodeIn : IXMLNode) : boolean;
+//                    procedure writeToXMLNode(var XMLNodeIn : IXMLNode);
             end;
 
 implementation
 
     //TSoil----------------------------------------------------------------------------------------------------
-        function TSoil.loadFromFile(var fileReadWriteInOut : TFileReaderWriter) : boolean;
+        function TSoil.readFromXMLNode(const XMLNodeIn : IXMLNode) : boolean;
             var
                 successfulRead : boolean;
             begin
-//                successfulRead := fileReadWriteInOut.tryReadDouble
+//                successfulRead := XMLNodeIn.tryReadDouble
             end;
 
-        procedure TSoil.saveToFile(var fileReadWriteInOut : TFileReaderWriter);
+        procedure TSoil.writeToXMLNode(var XMLNodeInOut : IXMLNode);
+            var
+                limitStateNode : IXMLNode;
             begin
+                writeDoubleToXMLNode( XMLNodeInOut, SLOPE_ANGLE, slope.angle );
+                writeDoubleToXMLNode( XMLNodeInOut, SLOPE_MAX_HEIGHT, slope.maxHeight );
 
+                tryCreateNewXMLChildNode( XMLNodeInOut, SOIL_COHESION, cohesion.LIMIT_STATE_MATERIAL_TYPE , limitStateNode );
+                cohesion.writeToXMLNode( limitStateNode );
+
+                tryCreateNewXMLChildNode( XMLNodeInOut, SOIL_FRICTION_ANGLE, frictionAngle.LIMIT_STATE_MATERIAL_TYPE, limitStateNode );
+                frictionAngle.writeToXMLNode( limitStateNode );
+
+                tryCreateNewXMLChildNode( XMLNodeInOut, SOIL_UNIT_WEIGHT, unitWeight.LIMIT_STATE_MATERIAL_TYPE, limitStateNode );
+                unitWeight.writeToXMLNode( limitStateNode );
             end;
     //--------------------------------------------------------------------------------------------------------------
 

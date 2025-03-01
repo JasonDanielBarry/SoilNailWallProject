@@ -32,7 +32,7 @@ implementation
                     nails.strength.groutSoilInterface.setValues(150, 0.4, 1.0, 1.4);
                     nails.strength.tensile.setValues(500, 0.05, 1.0, 1.8);
 
-                    soilNailWallDesignInOut.setNails(nails);
+                    soilNailWallDesignInOut.setNails( nails );
 
                 //set up soil
                     soil := soilNailWallDesignInOut.getSoil();
@@ -44,7 +44,7 @@ implementation
                     soil.slope.angle := 0;
                     soil.slope.maxHeight := 10;
 
-                    soilNailWallDesignInOut.setSoil(soil);
+                    soilNailWallDesignInOut.setSoil( soil );
 
                 //set up wall
                     wall := soilNailWallDesignInOut.getWall();
@@ -55,7 +55,7 @@ implementation
                     wall.concrete.strength.compressive.setValues(30, 0.15, 1.0, 1.5);
                     wall.concrete.strength.reinforcement.setValues(450, 0.05, 1.0, 1.15);
 
-                    soilNailWallDesignInOut.setWall(wall);
+                    soilNailWallDesignInOut.setWall( wall );
 
                 //layout
                     soilNailWallDesignInOut.generateSoilNailLayout(0.5, 1.5, 20, 10);

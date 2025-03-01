@@ -22,7 +22,7 @@ interface
             SNWUITypes,
             InputParametersTabManagement, WallGeometryTabManagement, NailPropertiesTabManagement, NailLayoutGenerator,
             SoilNailWallExampleMethods, CustomComponentPanelClass,
-            Graphic2DComponent, GraphicDrawerObjectAdderClass, FileReaderWriterClass
+            Graphic2DComponent, GraphicDrawerObjectAdderClass, SoilNailWallFileReaderWriterClass
             ;
 
     type
@@ -267,14 +267,14 @@ implementation
                         char3, char4        : char;
                         string1, string2,
                         openFileName        : string;
-                        fileReadWrite       : TFileReaderWriter;
+                        fileReadWrite       : TSoilNailWallFileReaderWriter;
                     begin
                         if (NOT(OpenFileDialog.Execute())) then
                             exit();
 
                         openFileName := OpenFileDialog.FileName;
 
-                        fileReadWrite := TFileReaderWriter.create( openFileName );
+                        fileReadWrite := TSoilNailWallFileReaderWriter.create( openFileName );
 
                         fileReadWrite.loadFile();
 
@@ -287,13 +287,10 @@ implementation
                         testBool := fileReadWrite.tryReadDouble( 'double1', double1 );
                         testBool := fileReadWrite.tryReadDouble( 'double2', double2 );
 
-                        testBool := fileReadWrite.tryReadChar( 'char1', char1 );
-                        testBool := fileReadWrite.tryReadChar( 'char2', char2 );
-                        testBool := fileReadWrite.tryReadChar( 'char3', char3 );
-                        testBool := fileReadWrite.tryReadChar( 'char4', char4 );
-
                         testBool := fileReadWrite.tryReadString( 'string1', string1 );
                         testBool := fileReadWrite.tryReadString( 'string2', string2 );
+
+                        SoilNailWallDesign.readFromFile( fileReadWrite );
 
                         FreeAndNil( fileReadWrite );
                     end;
@@ -303,7 +300,7 @@ implementation
                         FILE_EXTENSION : string = '.snw';
                     var
                         saveFileName    : string;
-                        fileReadWrite   : TFileReaderWriter;
+                        fileReadWrite   : TSoilNailWallFileReaderWriter;
                     begin
                         if (NOT(SaveFileDialog.Execute())) then
                             exit();
@@ -313,7 +310,7 @@ implementation
                         if (NOT( Pos( FILE_EXTENSION, saveFileName ) > 0 )) then
                             saveFileName := saveFileName + FILE_EXTENSION;
 
-                        fileReadWrite := TFileReaderWriter.create( saveFileName );
+                        fileReadWrite := TSoilNailWallFileReaderWriter.create( saveFileName );
 
                         fileReadWrite.writeBool( 'boolean1', True );
                         fileReadWrite.writeBool( 'boolean2', False );
@@ -324,13 +321,10 @@ implementation
                         fileReadWrite.writeDouble( 'double1', 1.0156 );
                         fileReadWrite.writeDouble( 'double2', 654.132987 );
 
-                        fileReadWrite.writeChar( 'char1', '#' );
-                        fileReadWrite.writeChar( 'char2', 'B' );
-                        fileReadWrite.writeChar( 'char3', '5' );
-                        fileReadWrite.writeChar( 'char4', '$' );
-
                         fileReadWrite.writeString( 'string1', 'Soil Nail Wall File' );
                         fileReadWrite.writeString( 'string2', 'Hello World!' );
+
+                        SoilNailWallDesign.writeToFile( fileReadWrite );
 
                         fileReadWrite.saveFile();
 

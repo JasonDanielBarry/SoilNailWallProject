@@ -168,14 +168,12 @@ object SNWForm: TSNWForm
         object LabelFactorOptions: TLabel
           Left = 0
           Top = 75
-          Width = 224
-          Height = 20
+          Width = 124
+          Height = 15
           Align = alClient
           Alignment = taCenter
           Caption = 'Material Factor Options'
           Layout = tlCenter
-          ExplicitWidth = 124
-          ExplicitHeight = 15
         end
       end
       object GridPanelInputType: TGridPanel
@@ -305,14 +303,12 @@ object SNWForm: TSNWForm
         object LabelInputType: TLabel
           Left = 0
           Top = 75
-          Width = 224
-          Height = 20
+          Width = 55
+          Height = 15
           Align = alClient
           Alignment = taCenter
           Caption = 'Input Type'
           Layout = tlCenter
-          ExplicitWidth = 55
-          ExplicitHeight = 15
         end
       end
       object GridPanelNailLayoutOptions: TGridPanel
@@ -416,14 +412,12 @@ object SNWForm: TSNWForm
         object LabelNailLayoutOptions: TLabel
           Left = 0
           Top = 75
-          Width = 149
-          Height = 20
+          Width = 81
+          Height = 15
           Align = alClient
           Alignment = taCenter
           Caption = 'Layout Options'
           Layout = tlCenter
-          ExplicitWidth = 81
-          ExplicitHeight = 15
         end
       end
       object GridPanelExamples: TGridPanel
@@ -500,14 +494,12 @@ object SNWForm: TSNWForm
         object LabelExamples: TLabel
           Left = 0
           Top = 75
-          Width = 74
-          Height = 20
+          Width = 50
+          Height = 15
           Align = alClient
           Alignment = taCenter
           Caption = 'Examples'
           Layout = tlCenter
-          ExplicitWidth = 50
-          ExplicitHeight = 15
         end
       end
       object GridPanelTheme: TGridPanel
@@ -658,14 +650,12 @@ object SNWForm: TSNWForm
         object LabelComputationType: TLabel
           Left = 0
           Top = 75
-          Width = 149
-          Height = 20
+          Width = 98
+          Height = 15
           Align = alClient
           Alignment = taCenter
           Caption = 'Computation Type'
           Layout = tlCenter
-          ExplicitWidth = 98
-          ExplicitHeight = 15
         end
         object PanelComputationTypeSeparator: TPanel
           Left = 149
@@ -773,8 +763,8 @@ object SNWForm: TSNWForm
         object LabelAveVal: TLabel
           Left = 0
           Top = 0
-          Width = 75
-          Height = 41
+          Width = 43
+          Height = 30
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -784,14 +774,12 @@ object SNWForm: TSNWForm
           Caption = 'Average'#13#10'Value'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 43
-          ExplicitHeight = 30
         end
         object LabelVarCoef: TLabel
           Left = 75
           Top = 0
-          Width = 75
-          Height = 41
+          Width = 58
+          Height = 30
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -801,14 +789,12 @@ object SNWForm: TSNWForm
           Caption = 'Variation Coefficient'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 58
-          ExplicitHeight = 30
         end
         object LabelDowngFact: TLabel
           Left = 150
           Top = 0
-          Width = 75
-          Height = 41
+          Width = 64
+          Height = 30
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -818,14 +804,12 @@ object SNWForm: TSNWForm
           Caption = 'Downgrade Factor'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 64
-          ExplicitHeight = 30
         end
         object LabelCauEst: TLabel
           Left = 225
           Top = 0
-          Width = 75
-          Height = 41
+          Width = 50
+          Height = 30
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -835,14 +819,12 @@ object SNWForm: TSNWForm
           Caption = 'Cautious Estimate'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 50
-          ExplicitHeight = 30
         end
         object LabelParFac: TLabel
           Left = 300
           Top = 0
-          Width = 75
-          Height = 41
+          Width = 69
+          Height = 15
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -852,14 +834,12 @@ object SNWForm: TSNWForm
           Caption = 'Partial Factor'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 69
-          ExplicitHeight = 15
         end
         object LabelDesVal: TLabel
           Left = 375
           Top = 0
-          Width = 75
-          Height = 41
+          Width = 67
+          Height = 15
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -869,8 +849,6 @@ object SNWForm: TSNWForm
           Caption = 'Design Value'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 67
-          ExplicitHeight = 15
         end
       end
       object GridSoilParInput: TStringGrid
@@ -1069,7 +1047,9 @@ object SNWForm: TSNWForm
     BevelEdges = []
     BevelOuter = bvNone
     ParentColor = True
+    ParentShowHint = False
     ShowCaption = False
+    ShowHint = True
     TabOrder = 2
     OnUpdateGeometry = JDBGraphic2DDiagramUpdateGeometry
   end

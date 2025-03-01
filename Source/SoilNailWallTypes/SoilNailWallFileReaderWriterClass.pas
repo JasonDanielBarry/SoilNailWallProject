@@ -6,11 +6,15 @@ interface
         system.SysUtils, system.Classes, system.Generics.Collections, system.StrUtils,
         Xml.XMLDoc, Xml.XMLIntf,
         FileReaderWriterClass,
-        LimitStateMaterialClass
+        LimitStateMaterialClass,
+        SoilNailWallTypes
         ;
 
     type
         TSoilNailWallFileReaderWriter = class(TFileReaderWriter)
+            private
+                const
+                    LIMIT_STATE_MATERIAL_TYPE : string = 'TLimitStateMaterial';
             public
                 //constructor
                     constructor create(const fileNameIn : string); override;
@@ -20,8 +24,8 @@ interface
                     function tryReadLimitStateMaterial(const identifierIn : string; out valueOut : TLimitStateMaterial) : boolean;
                 //write
                     procedure writeLimitStateMaterial(const identifierIn : string; const valueIn : TlimitStateMaterial);
+                    procedure writeSoil(const identifierIn : string; const valueIn : TSoil);
         end;
-
 
 implementation
 
@@ -41,39 +45,45 @@ implementation
         //read
             function TSoilNailWallFileReaderWriter.tryReadLimitStateMaterial(const identifierIn : string; out valueOut : TLimitStateMaterial) : boolean;
                 var
-                    aveVal : string;
-                    readXMLNode : IXMLNode;
+                    nodeDataType    : string;
+                    itemNode        : IXMLNode;
                 begin
+                    //initialise the value of the material
+                        valueOut.setValues( 0, 0, 0, 1 );
 
-                    aveVal := tryRead( readXMLNode.ChildNodes.FindNode('AverageValue').text );
+                    //check the node exists
+                        if NOT( tryGetNode( identifierIn, itemNode ) ) then
+                            exit( False );
 
+                    //check the node is limit state material type
+                        nodeDataType := getNodeType( identifierIn );
 
+                        if NOT( nodeDataType = LIMIT_STATE_MATERIAL_TYPE ) then
+                            exit( False );
 
+                    //read from XML node
+                        result := valueOut.tryReadFromXMLNode( itemNode );
                 end;
 
         //write
             procedure TSoilNailWallFileReaderWriter.writeLimitStateMaterial(const identifierIn : string; const valueIn : TlimitStateMaterial);
                 var
-                    newXMLNode : IXMLNode;
-                    limitStateValuesArray : TArray<double>;
+                    itemNode : IXMLNode;
                 begin
-                    //place data into a double array
-                        SetLength( limitStateValuesArray, 4 );
+                    if NOT( tryCreateNewNode( identifierIn, LIMIT_STATE_MATERIAL_TYPE, itemNode ) ) then
+                        exit();
 
-//                        limitStateValuesArray[0] := valueIn.averageValue;
-//                        limitStateValuesArray[1] := valueIn.variationCoefficient;
-//                        limitStateValuesArray[2] := valueIn.downgradeFactor;
-//                        limitStateValuesArray[3] := valueIn.partialFactor;
+                    valueIn.writeToXMLNode( itemNode );
+                end;
 
+            procedure TSoilNailWallFileReaderWriter.writeSoil(const identifierIn : string; const valueIn : TSoil);
+                var
+                    itemNode : IXMLNode;
+                begin
+                    if NOT( tryCreateNewNode( identifierIn, LIMIT_STATE_MATERIAL_TYPE, itemNode ) ) then
+                        exit();
 
-                    newXMLNode := createNewNode( identifierIn, 'LIMITSTATETYPE' );
-
-                    newXMLNode.AddChild('AverageValue').text := FloatToStr( valueIn.averageValue );
-                    newXMLNode.AddChild('VariationCoeff').text := FloatToStr( valueIn.variationCoefficient );
-
-
-                    //write double array
-                        writeDoubleArray( identifierIn, limitStateValuesArray );
+                    valueIn.writeToXMLNode( itemNode );
                 end;
 
 end.

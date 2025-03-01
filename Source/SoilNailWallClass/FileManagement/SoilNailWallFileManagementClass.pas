@@ -3,8 +3,11 @@ unit SoilNailWallFileManagementClass;
 interface
 
     uses
-        FileReaderWriterClass,
-        SoilNailWallGraphicClass;
+        SoilNailWallFileReaderWriterClass,
+        LimitStateMaterialClass,
+        SoilNailWallTypes,
+        SoilNailWallGraphicClass
+        ;
 
     type
         TSoilNailWallFileManager = class(TSoilNailWallGraphic)
@@ -15,9 +18,9 @@ interface
                     destructor destroy(); override;
                 //file management
                     //load from file
-                        function loadFromFile(var fileReadWriteInOut : TFileReaderWriter) : boolean;
+                        function readFromFile(var fileReadWriteInOut : TSoilNailWallFileReaderWriter) : boolean;
                     //save to file
-                        procedure saveToFile(var fileReadWriteInOut : TFileReaderWriter);
+                        procedure writeToFile(var fileReadWriteInOut : TSoilNailWallFileReaderWriter);
         end;
 
 implementation
@@ -37,15 +40,23 @@ implementation
 
         //file management
             //load from file
-                function TSoilNailWallFileManager.loadFromFile(var fileReadWriteInOut : TFileReaderWriter) : boolean;
+                function TSoilNailWallFileManager.readFromFile(var fileReadWriteInOut : TSoilNailWallFileReaderWriter) : boolean;
+                    var
+                        soil : TSoil;
                     begin
+                        soil := getSoil();
 
+                        fileReadWriteInOut.tryReadLimitStateMaterial('SoilFrictionAngle', soil.frictionAngle);
                     end;
 
             //save to file
-                procedure TSoilNailWallFileManager.saveToFile(var fileReadWriteInOut : TFileReaderWriter);
+                procedure TSoilNailWallFileManager.writeToFile(var fileReadWriteInOut : TSoilNailWallFileReaderWriter);
+                    var
+                        soil : TSoil;
                     begin
+                        soil := getSoil();
 
+                        fileReadWriteInOut.writeSoil( 'SoilFrictionAngle', soil );
                     end;
 
 end.
