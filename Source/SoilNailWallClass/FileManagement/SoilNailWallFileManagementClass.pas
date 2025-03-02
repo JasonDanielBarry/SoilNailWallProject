@@ -46,7 +46,9 @@ implementation
                     begin
                         soil := getSoil();
 
-                        fileReadWriteInOut.tryReadLimitStateMaterial('SoilFrictionAngle', soil.frictionAngle);
+                        result := fileReadWriteInOut.tryReadSoil('SoilProperties', soil );
+
+                        setSoil( soil );
                     end;
 
             //save to file
@@ -56,7 +58,7 @@ implementation
                     begin
                         soil := getSoil();
 
-                        fileReadWriteInOut.writeSoil( 'SoilFrictionAngle', soil );
+                        fileReadWriteInOut.writeSoil( 'SoilProperties', soil );
                     end;
 
 end.

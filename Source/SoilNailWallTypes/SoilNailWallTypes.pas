@@ -23,6 +23,7 @@ interface
             TSoil = record
                 strict private
                     const
+                        DT_SOIL             : string = 'TSoil';
                         SLOPE_ANGLE         : string = 'SlopeAngle';
                         SLOPE_MAX_HEIGHT    : string = 'SlopeMaxHeight';
                         SOIL_COHESION       : string = 'SoilCohesion';
@@ -39,7 +40,7 @@ interface
                         frictionAngle,
                         unitWeight      : TLimitStateMaterial;
                         slope           : TSlope;
-                    function readFromXMLNode(const XMLNodeIn : IXMLNode) : boolean;
+                    function tryReadFromXMLNode(const XMLNodeIn : IXMLNode) : boolean;
                     procedure writeToXMLNode(var XMLNodeInOut : IXMLNode);
             end;
 
@@ -77,7 +78,7 @@ interface
                     function longestNailLength()    : double;
                     function getArrHeight()         : TArray<double>;
                     function getArrLengths()        : TArray<double>;
-//                    function readFromXMLNode(var XMLNodeIn : IXMLNode) : boolean;
+//                    function tryReadFromXMLNode(var XMLNodeIn : IXMLNode) : boolean;
 //                    procedure writeToXMLNode(var XMLNodeIn : IXMLNode);
             end;
 
@@ -101,34 +102,61 @@ interface
                         height,
                         thickness   : double;
                         concrete    : TConcrete;
-//                    function readFromXMLNode(var XMLNodeIn : IXMLNode) : boolean;
+//                    function tryReadFromXMLNode(var XMLNodeIn : IXMLNode) : boolean;
 //                    procedure writeToXMLNode(var XMLNodeIn : IXMLNode);
             end;
 
 implementation
 
     //TSoil----------------------------------------------------------------------------------------------------
-        function TSoil.readFromXMLNode(const XMLNodeIn : IXMLNode) : boolean;
+        function TSoil.tryReadFromXMLNode(const XMLNodeIn : IXMLNode) : boolean;
             var
                 successfulRead : boolean;
+                limitStateNode : IXMLNode;
             begin
-//                successfulRead := XMLNodeIn.tryReadDouble
+                //test node
+                    if NOT( Assigned( XMLNodeIn ) ) then
+                        exit( False );
+
+                    if NOT( XMLNodeIsDataType( XMLNodeIn, DT_SOIL ) ) then
+                        exit( False );
+
+                //read data
+                    //slope
+                        successfulRead := tryReadDoubleFromXMLNode( XMLNodeIn, SLOPE_ANGLE, slope.angle );
+                        successfulRead := successfulRead AND tryReadDoubleFromXMLNode( XMLNodeIn, SLOPE_MAX_HEIGHT, slope.maxHeight );
+
+                    //cohesion
+                        tryGetXMLChildNode( XMLNodeIn, SOIL_COHESION, limitStateNode );
+                        successfulRead := successfulRead AND cohesion.tryReadFromXMLNode( limitStateNode );
+
+                    //friction angle
+                        tryGetXMLChildNode( XMLNodeIn, SOIL_FRICTION_ANGLE, limitStateNode );
+                        successfulRead := successfulRead AND frictionAngle.tryReadFromXMLNode( limitStateNode );
+
+                    //unit weight
+                        tryGetXMLChildNode( XMLNodeIn, SOIL_UNIT_WEIGHT, limitStateNode );
+                        successfulRead := successfulRead AND unitWeight.tryReadFromXMLNode( limitStateNode );
+
+                result := successfulRead;
             end;
 
         procedure TSoil.writeToXMLNode(var XMLNodeInOut : IXMLNode);
             var
                 limitStateNode : IXMLNode;
             begin
+                setXMLNodeDataType( XMLNodeInOut, DT_SOIL );
+
                 writeDoubleToXMLNode( XMLNodeInOut, SLOPE_ANGLE, slope.angle );
                 writeDoubleToXMLNode( XMLNodeInOut, SLOPE_MAX_HEIGHT, slope.maxHeight );
 
-                tryCreateNewXMLChildNode( XMLNodeInOut, SOIL_COHESION, cohesion.LIMIT_STATE_MATERIAL_TYPE , limitStateNode );
+                tryCreateNewXMLChildNode( XMLNodeInOut, SOIL_COHESION, limitStateNode );
                 cohesion.writeToXMLNode( limitStateNode );
 
-                tryCreateNewXMLChildNode( XMLNodeInOut, SOIL_FRICTION_ANGLE, frictionAngle.LIMIT_STATE_MATERIAL_TYPE, limitStateNode );
+                tryCreateNewXMLChildNode( XMLNodeInOut, SOIL_FRICTION_ANGLE, limitStateNode );
                 frictionAngle.writeToXMLNode( limitStateNode );
 
-                tryCreateNewXMLChildNode( XMLNodeInOut, SOIL_UNIT_WEIGHT, unitWeight.LIMIT_STATE_MATERIAL_TYPE, limitStateNode );
+                tryCreateNewXMLChildNode( XMLNodeInOut, SOIL_UNIT_WEIGHT, limitStateNode );
                 unitWeight.writeToXMLNode( limitStateNode );
             end;
     //--------------------------------------------------------------------------------------------------------------

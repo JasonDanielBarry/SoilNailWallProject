@@ -12,9 +12,6 @@ interface
 
     type
         TSoilNailWallFileReaderWriter = class(TFileReaderWriter)
-            private
-                const
-                    LIMIT_STATE_MATERIAL_TYPE : string = 'TLimitStateMaterial';
             public
                 //constructor
                     constructor create(const fileNameIn : string); override;
@@ -22,6 +19,7 @@ interface
                     destructor destroy(); override;
                 //read
                     function tryReadLimitStateMaterial(const identifierIn : string; out valueOut : TLimitStateMaterial) : boolean;
+                    function tryReadSoil(const identifierIn : string; out valueOut : TSoil) : boolean;
                 //write
                     procedure writeLimitStateMaterial(const identifierIn : string; const valueIn : TlimitStateMaterial);
                     procedure writeSoil(const identifierIn : string; const valueIn : TSoil);
@@ -55,10 +53,16 @@ implementation
                         if NOT( tryGetNode( identifierIn, itemNode ) ) then
                             exit( False );
 
-                    //check the node is limit state material type
-                        nodeDataType := getNodeType( identifierIn );
+                    //read from XML node
+                        result := valueOut.tryReadFromXMLNode( itemNode );
+                end;
 
-                        if NOT( nodeDataType = LIMIT_STATE_MATERIAL_TYPE ) then
+            function TSoilNailWallFileReaderWriter.tryReadSoil(const identifierIn : string; out valueOut : TSoil) : boolean;
+                var
+                    itemNode : IXMLNode;
+                begin
+                    //check node exists
+                        if NOT( tryGetNode( identifierIn, itemNode ) ) then
                             exit( False );
 
                     //read from XML node
@@ -70,7 +74,7 @@ implementation
                 var
                     itemNode : IXMLNode;
                 begin
-                    if NOT( tryCreateNewNode( identifierIn, LIMIT_STATE_MATERIAL_TYPE, itemNode ) ) then
+                    if NOT( tryCreateNewNode( identifierIn, itemNode ) ) then
                         exit();
 
                     valueIn.writeToXMLNode( itemNode );
@@ -80,7 +84,7 @@ implementation
                 var
                     itemNode : IXMLNode;
                 begin
-                    if NOT( tryCreateNewNode( identifierIn, LIMIT_STATE_MATERIAL_TYPE, itemNode ) ) then
+                    if NOT( tryCreateNewNode( identifierIn, itemNode ) ) then
                         exit();
 
                     valueIn.writeToXMLNode( itemNode );
