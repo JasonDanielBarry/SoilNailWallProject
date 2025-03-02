@@ -11,6 +11,11 @@ interface
 
     type
         TSoilNailWallFileManager = class(TSoilNailWallGraphic)
+            private
+                const
+                    SOIL_PROPERTIES         : string = 'SoilProperties';
+                    SOIL_NAIL_PROPERTIES    : string = 'SoilNailProperties';
+                    WALL_PROPERTIES         : string = 'WallProperties';
             public
                 //constructor
                     constructor create();
@@ -42,23 +47,53 @@ implementation
             //load from file
                 function TSoilNailWallFileManager.readFromFile(var fileReadWriteInOut : TSoilNailWallFileReaderWriter) : boolean;
                     var
-                        soil : TSoil;
+                        readSuccessful  : boolean;
+                        soil            : TSoil;
+                        soilNails       : TSoilNails;
+                        wall            : TWall;
                     begin
-                        soil := getSoil();
+                        //soil
+                            soil := getSoil();
 
-                        result := fileReadWriteInOut.tryReadSoil('SoilProperties', soil );
+                            readSuccessful := fileReadWriteInOut.tryReadSoil( SOIL_PROPERTIES, soil );
 
-                        setSoil( soil );
+                            setSoil( soil );
+
+                        //soil nails
+                            soilNails := getNails();
+
+                            readSuccessful := readSuccessful AND fileReadWriteInOut.tryReadSoilNails( SOIL_NAIL_PROPERTIES, soilNails );
+
+                            setNails( soilNails );
+
+                        //wall
+                            wall := getWall();
+
+                            readSuccessful := readSuccessful AND fileReadWriteInOut.tryReadWall( WALL_PROPERTIES, wall );
+
+                            setWall( wall );
+
+                        result := readSuccessful
                     end;
 
             //save to file
                 procedure TSoilNailWallFileManager.writeToFile(var fileReadWriteInOut : TSoilNailWallFileReaderWriter);
                     var
-                        soil : TSoil;
+                        soil        : TSoil;
+                        soilNails   : TSoilNails;
+                        wall        : TWall;
                     begin
                         soil := getSoil();
 
-                        fileReadWriteInOut.writeSoil( 'SoilProperties', soil );
+                        fileReadWriteInOut.writeSoil( SOIL_PROPERTIES, soil );
+
+                        soilNails := getNails();
+
+                        fileReadWriteInOut.writeSoilNails( SOIL_NAIL_PROPERTIES, soilNails );
+
+                        wall := getWall();
+
+                        fileReadWriteInOut.writeWall( WALL_PROPERTIES, wall );
                     end;
 
 end.
