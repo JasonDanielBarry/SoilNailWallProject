@@ -40,8 +40,8 @@ interface
                         frictionAngle,
                         unitWeight      : TLimitStateMaterial;
                         slope           : TSlope;
-                    function tryReadFromXMLNode(const XMLNodeIn : IXMLNode) : boolean;
-                    procedure writeToXMLNode(var XMLNodeInOut : IXMLNode);
+                    function tryReadFromXMLNode(const XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
+                    procedure writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
             end;
 
         //soil wall nails
@@ -88,8 +88,8 @@ interface
                     function longestNailLength()    : double;
                     function getArrHeight()         : TArray<double>;
                     function getArrLengths()        : TArray<double>;
-                    function tryReadFromXMLNode(var XMLNodeIn : IXMLNode) : boolean;
-                    procedure writeToXMLNode(var XMLNodeInOut : IXMLNode);
+                    function tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
+                    procedure writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
             end;
 
         //wall in front of soil
@@ -119,59 +119,54 @@ interface
                         height,
                         thickness   : double;
                         concrete    : TConcrete;
-                    function tryReadFromXMLNode(var XMLNodeIn : IXMLNode) : boolean;
-                    procedure writeToXMLNode(var XMLNodeInOut : IXMLNode);
+                    function tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
+                    procedure writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
             end;
 
 implementation
 
     //TSoil----------------------------------------------------------------------------------------------------
-        function TSoil.tryReadFromXMLNode(const XMLNodeIn : IXMLNode) : boolean;
+        function TSoil.tryReadFromXMLNode(const XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
             var
-                readSuccessful : boolean;
-                limitStateNode : IXMLNode;
+                readSuccessful  : boolean;
+                soilNode        : IXMLNode;
             begin
                 //test node type
-                    if NOT( XMLNodeIsDataType( XMLNodeIn, DT_SOIL ) ) then
+                    if NOT( tryGetXMLChildNode( XMLNodeIn, identifierIn, DT_SOIL, soilNode ) ) then
                         exit( False );
 
                 //read data
                     //slope
-                        readSuccessful := tryReadDoubleFromXMLNode( XMLNodeIn, SLOPE_ANGLE, slope.angle );
-                        readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( XMLNodeIn, SLOPE_MAX_HEIGHT, slope.maxHeight );
+                        readSuccessful := tryReadDoubleFromXMLNode( soilNode, SLOPE_ANGLE, slope.angle );
+                        readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( soilNode, SLOPE_MAX_HEIGHT, slope.maxHeight );
 
                     //cohesion
-                        tryGetXMLChildNode( XMLNodeIn, SOIL_COHESION, limitStateNode );
-                        readSuccessful := readSuccessful AND cohesion.tryReadFromXMLNode( limitStateNode );
+                        readSuccessful := readSuccessful AND cohesion.tryReadFromXMLNode( soilNode, SOIL_COHESION );
 
                     //friction angle
-                        tryGetXMLChildNode( XMLNodeIn, SOIL_FRICTION_ANGLE, limitStateNode );
-                        readSuccessful := readSuccessful AND frictionAngle.tryReadFromXMLNode( limitStateNode );
+                        readSuccessful := readSuccessful AND frictionAngle.tryReadFromXMLNode( soilNode, SOIL_FRICTION_ANGLE );
 
                     //unit weight
-                        tryGetXMLChildNode( XMLNodeIn, SOIL_UNIT_WEIGHT, limitStateNode );
-                        readSuccessful := readSuccessful AND unitWeight.tryReadFromXMLNode( limitStateNode );
+                        readSuccessful := readSuccessful AND unitWeight.tryReadFromXMLNode( soilNode, SOIL_UNIT_WEIGHT );
 
                 result := readSuccessful;
             end;
 
-        procedure TSoil.writeToXMLNode(var XMLNodeInOut : IXMLNode);
+        procedure TSoil.writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
             var
-                limitStateNode : IXMLNode;
+                soilNode : IXMLNode;
             begin
-                setXMLNodeDataType( XMLNodeInOut, DT_SOIL );
+                if NOT( tryCreateNewXMLChildNode( XMLNodeInOut, identifierIn, DT_SOIL, soilNode ) ) then
+                    exit();
 
-                writeDoubleToXMLNode( XMLNodeInOut, SLOPE_ANGLE, slope.angle );
-                writeDoubleToXMLNode( XMLNodeInOut, SLOPE_MAX_HEIGHT, slope.maxHeight );
+                writeDoubleToXMLNode( soilNode, SLOPE_ANGLE, slope.angle );
+                writeDoubleToXMLNode( soilNode, SLOPE_MAX_HEIGHT, slope.maxHeight );
 
-                tryCreateNewXMLChildNode( XMLNodeInOut, SOIL_COHESION, limitStateNode );
-                cohesion.writeToXMLNode( limitStateNode );
+                cohesion.writeToXMLNode( soilNode, SOIL_COHESION );
 
-                tryCreateNewXMLChildNode( XMLNodeInOut, SOIL_FRICTION_ANGLE, limitStateNode );
-                frictionAngle.writeToXMLNode( limitStateNode );
+                frictionAngle.writeToXMLNode( soilNode, SOIL_FRICTION_ANGLE );
 
-                tryCreateNewXMLChildNode( XMLNodeInOut, SOIL_UNIT_WEIGHT, limitStateNode );
-                unitWeight.writeToXMLNode( limitStateNode );
+                unitWeight.writeToXMLNode( soilNode, SOIL_UNIT_WEIGHT );
             end;
     //--------------------------------------------------------------------------------------------------------------
 
@@ -349,92 +344,85 @@ implementation
                 result := arrLengths;
             end;
 
-        function TSoilNails.tryReadFromXMLNode(var XMLNodeIn : IXMLNode) : boolean;
+        function TSoilNails.tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
             var
-                readSuccessful : boolean;
-                limitStateNode : IXMLNode;
+                readSuccessful  : boolean;
+                soilNailsNode   : IXMLNode;
             begin
-                if NOT( XMLNodeIsDataType( XMLNodeIn, DT_SOIL_NAILS ) ) then
+                if NOT( tryGetXMLChildNode( XMLNodeIn, identifierIn, DT_SOIL_NAILS, soilNailsNode ) ) then
                     exit( False );
 
-                tryGetXMLChildNode( XMLNodeIn, GROUT_SOIL_INTERFACE, limitStateNode );
-                readSuccessful := strength.groutSoilInterface.tryReadFromXMLNode( limitStateNode );
+                readSuccessful := strength.groutSoilInterface.tryReadFromXMLNode( soilNailsNode, GROUT_SOIL_INTERFACE );
+                readSuccessful := readSuccessful AND strength.tensile.tryReadFromXMLNode( soilNailsNode, NAIL_TENSILE_STRENGTH );
 
-                tryGetXMLChildNode( XMLNodeIn, NAIL_TENSILE_STRENGTH, limitStateNode );
-                readSuccessful := readSuccessful AND strength.tensile.tryReadFromXMLNode( limitStateNode );
+                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( soilNailsNode, GROUT_HOLE_DIAMETER, diameter.groutHole );
+                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( soilNailsNode, NAIL_DIAMETER, diameter.steel );
 
-                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( XMLNodeIn, GROUT_HOLE_DIAMETER, diameter.groutHole );
-                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( XMLNodeIn, NAIL_DIAMETER, diameter.steel );
+                readSuccessful := readSuccessful AND TryReadDoubleArrayFromXMLNode( soilNailsNode, NAIL_HEIGHTS, arrHeights );
+                readSuccessful := readSuccessful AND TryReadDoubleArrayFromXMLNode( soilNailsNode, NAIL_LENGTHS, arrLengths );
 
-                readSuccessful := readSuccessful AND TryReadDoubleArrayFromXMLNode( XMLNodeIn, NAIL_HEIGHTS, arrHeights );
-                readSuccessful := readSuccessful AND TryReadDoubleArrayFromXMLNode( XMLNodeIn, NAIL_LENGTHS, arrLengths );
-
-                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( XMLNodeIn, NAIL_ANGLE, angle );
-                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( XMLNodeIn, NAIL_HORIZONTAL_SPACING, horizontalSpacing );
+                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( soilNailsNode, NAIL_ANGLE, angle );
+                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( soilNailsNode, NAIL_HORIZONTAL_SPACING, horizontalSpacing );
 
                 result := readSuccessful;
             end;
 
-        procedure TSoilNails.writeToXMLNode(var XMLNodeInOut : IXMLNode);
+        procedure TSoilNails.writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
             var
-                limitStateNode : IXMLNode;
+                soilNailsNode : IXMLNode;
             begin
-                setXMLNodeDataType( XMLNodeInOut, DT_SOIL_NAILS );
+                if NOT( tryCreateNewXMLChildNode( XMLNodeInOut, identifierIn, DT_SOIL_NAILS, soilNailsNode ) ) then
+                    exit();
 
-                tryCreateNewXMLChildNode( XMLNodeInOut, GROUT_SOIL_INTERFACE, limitStateNode);
-                strength.groutSoilInterface.writeToXMLNode( limitStateNode );
+                strength.groutSoilInterface.writeToXMLNode( soilNailsNode, GROUT_SOIL_INTERFACE );
 
-                tryCreateNewXMLChildNode( XMLNodeInOut, NAIL_TENSILE_STRENGTH, limitStateNode );
-                strength.tensile.writeToXMLNode( limitStateNode );
+                strength.tensile.writeToXMLNode( soilNailsNode, NAIL_TENSILE_STRENGTH );
 
-                writeDoubleToXMLNode( XMLNodeInOut, GROUT_HOLE_DIAMETER, diameter.groutHole );
-                writeDoubleToXMLNode( XMLNodeInOut, NAIL_DIAMETER, diameter.steel );
+                writeDoubleToXMLNode( soilNailsNode, GROUT_HOLE_DIAMETER, diameter.groutHole );
+                writeDoubleToXMLNode( soilNailsNode, NAIL_DIAMETER, diameter.steel );
 
-                writeDoubleArrayToXMLNode( XMLNodeInOut, NAIL_HEIGHTS, arrHeights );
-                writeDoubleArrayToXMLNode( XMLNodeInOut, NAIL_LENGTHS, arrLengths );
+                writeDoubleArrayToXMLNode( soilNailsNode, NAIL_HEIGHTS, arrHeights );
+                writeDoubleArrayToXMLNode( soilNailsNode, NAIL_LENGTHS, arrLengths );
 
-                writeDoubleToXMLNode( XMLNodeInOut, NAIL_ANGLE, angle );
-                writeDoubleToXMLNode( XMLNodeInOut, NAIL_HORIZONTAL_SPACING, horizontalSpacing );
+                writeDoubleToXMLNode( soilNailsNode, NAIL_ANGLE, angle );
+                writeDoubleToXMLNode( soilNailsNode, NAIL_HORIZONTAL_SPACING, horizontalSpacing );
             end;
     //--------------------------------------------------------------------------------------------------------------
 
     //TWall----------------------------------------------------------------------------------------------------
-        function TWall.tryReadFromXMLNode(var XMLNodeIn : IXMLNode) : boolean;
+        function TWall.tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
             var
-                readSuccessful : boolean;
-                limitStateNode : IXMLNode;
+                readSuccessful  : boolean;
+                wallNode        : IXMLNode;
             begin
-                if NOT( XMLNodeIsDataType( XMLNodeIn, DT_WALL ) ) then
+                if NOT( tryGetXMLChildNode( XMLNodeIn, identifierIn, DT_WALL, wallNode ) ) then
                     exit( False );
 
-                tryGetXMLChildNode( XMLNodeIn, CONCRETE_COMPRESSIVE_STRENGTH, limitStateNode );
-                readSuccessful := concrete.strength.compressive.tryReadFromXMLNode( limitStateNode );
+                readSuccessful := concrete.strength.compressive.tryReadFromXMLNode( wallNode, CONCRETE_COMPRESSIVE_STRENGTH );
 
-                tryGetXMLChildNode( XMLNodeIn, CONCRETE_REINFORCEMENT_STRENGTH, limitStateNode );
-                readSuccessful := readSuccessful AND concrete.strength.reinforcement.tryReadFromXMLNode( limitStateNode );
+                readSuccessful := readSuccessful AND concrete.strength.reinforcement.tryReadFromXMLNode( wallNode, CONCRETE_REINFORCEMENT_STRENGTH );
 
-                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( XMLNodeIn, WALL_ANGLE, angle );
-                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( XMLNodeIn, WALL_HEIGHT, height );
-                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( XMLNodeIn, WALL_THICKNESS, thickness );
+                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( wallNode, WALL_ANGLE, angle );
+                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( wallNode, WALL_HEIGHT, height );
+                readSuccessful := readSuccessful AND tryReadDoubleFromXMLNode( wallNode, WALL_THICKNESS, thickness );
 
                 result := readSuccessful;
             end;
 
-        procedure TWall.writeToXMLNode(var XMLNodeInOut : IXMLNode);
+        procedure TWall.writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
             var
-                limitStateNode : IXMLNode;
+                wallNode : IXMLNode;
             begin
-                setXMLNodeDataType( XMLNodeInOut, DT_WALL );
+                if NOT( tryCreateNewXMLChildNode( XMLNodeInOut, identifierIn, DT_WALL, wallNode ) ) then
+                    exit();
 
-                tryCreateNewXMLChildNode( XMLNodeInOut, CONCRETE_COMPRESSIVE_STRENGTH, limitStateNode );
-                concrete.strength.compressive.writeToXMLNode( limitStateNode );
+                concrete.strength.compressive.writeToXMLNode( wallNode, CONCRETE_COMPRESSIVE_STRENGTH );
 
-                tryCreateNewXMLChildNode( XMLNodeInOut, CONCRETE_REINFORCEMENT_STRENGTH, limitStateNode );
-                concrete.strength.reinforcement.writeToXMLNode( limitStateNode );
+                concrete.strength.reinforcement.writeToXMLNode( wallNode, CONCRETE_REINFORCEMENT_STRENGTH );
 
-                writeDoubleToXMLNode( XMLNodeInOut, WALL_ANGLE, angle );
-                writeDoubleToXMLNode( XMLNodeInOut, WALL_HEIGHT, height );
-                writeDoubleToXMLNode( XMLNodeInOut, WALL_THICKNESS, thickness );
+                writeDoubleToXMLNode( wallNode, WALL_ANGLE, angle );
+                writeDoubleToXMLNode( wallNode, WALL_HEIGHT, height );
+                writeDoubleToXMLNode( wallNode, WALL_THICKNESS, thickness );
             end;
 
 end.

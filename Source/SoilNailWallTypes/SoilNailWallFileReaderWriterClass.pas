@@ -18,15 +18,15 @@ interface
                 //destructor
                     destructor destroy(); override;
                 //read
-                    function tryReadLimitStateMaterial(const identifierIn : string; out valueOut : TLimitStateMaterial) : boolean;
-                    function tryReadSoil(const identifierIn : string; out valueOut : TSoil) : boolean;
-                    function tryReadSoilNails(const identifierIn : string; out valueOut : TSoilNails) : boolean;
-                    function tryReadWall(const identifierIn : string; out valueOut : TWall) : boolean;
+                    function tryReadLimitStateMaterial(const identifierIn : string; out LSMOut : TLimitStateMaterial) : boolean;
+                    function tryReadSoil(const identifierIn : string; out soilOut : TSoil) : boolean;
+                    function tryReadSoilNails(const identifierIn : string; out soilNailsOut : TSoilNails) : boolean;
+                    function tryReadWall(const identifierIn : string; out wallOut : TWall) : boolean;
                 //write
-                    procedure writeLimitStateMaterial(const identifierIn : string; const valueIn : TlimitStateMaterial);
-                    procedure writeSoil(const identifierIn : string; const valueIn : TSoil);
-                    procedure writeSoilNails(const identifierIn : string; const valueIn : TSoilNails);
-                    procedure writeWall(const identifierIn : string; const valueIn : TWall);
+                    procedure writeLimitStateMaterial(const identifierIn : string; const LSMIn : TlimitStateMaterial);
+                    procedure writeSoil(const identifierIn : string; const soilIn : TSoil);
+                    procedure writeSoilNails(const identifierIn : string; const soilNailsIn : TSoilNails);
+                    procedure writeWall(const identifierIn : string; const wallIn : TWall);
         end;
 
 implementation
@@ -45,91 +45,52 @@ implementation
                 end;
 
         //read
-            function TSoilNailWallFileReaderWriter.tryReadLimitStateMaterial(const identifierIn : string; out valueOut : TLimitStateMaterial) : boolean;
+            function TSoilNailWallFileReaderWriter.tryReadLimitStateMaterial(const identifierIn : string; out LSMOut : TLimitStateMaterial) : boolean;
                 var
                     nodeDataType    : string;
                     itemNode        : IXMLNode;
                 begin
                     //initialise the value of the material
-                        valueOut.setValues( 0, 0, 0, 1 );
-
-                    //check the node exists
-                        if NOT( tryGetNode( identifierIn, itemNode ) ) then
-                            exit( False );
+                        LSMOut.setValues( 0, 0, 0, 1 );
 
                     //read from XML node
-                        result := valueOut.tryReadFromXMLNode( itemNode );
+                        result := LSMOut.tryReadFromXMLNode( rootNode, identifierIn );
                 end;
 
-            function TSoilNailWallFileReaderWriter.tryReadSoil(const identifierIn : string; out valueOut : TSoil) : boolean;
-                var
-                    itemNode : IXMLNode;
+            function TSoilNailWallFileReaderWriter.tryReadSoil(const identifierIn : string; out soilOut : TSoil) : boolean;
                 begin
-                    if NOT( tryGetNode( identifierIn, itemNode ) ) then
-                        exit( False );
-
-                    result := valueOut.tryReadFromXMLNode( itemNode );
+                    result := soilOut.tryReadFromXMLNode( rootNode, identifierIn );
                 end;
 
-            function TSoilNailWallFileReaderWriter.tryReadSoilNails(const identifierIn : string; out valueOut : TSoilNails) : boolean;
-                var
-                    itemNode : IXMLNode;
+            function TSoilNailWallFileReaderWriter.tryReadSoilNails(const identifierIn : string; out soilNailsOut : TSoilNails) : boolean;
                 begin
-                    if NOT( tryGetNode( identifierIn, itemNode ) ) then
-                        exit( False );
-
-                    result := valueOut.tryReadFromXMLNode( itemNode );
+                    result := soilNailsOut.tryReadFromXMLNode( rootNode, identifierIn );
                 end;
 
-            function TSoilNailWallFileReaderWriter.tryReadWall(const identifierIn : string; out valueOut : TWall) : boolean;
-                var
-                    itemNode : IXMLNode;
+            function TSoilNailWallFileReaderWriter.tryReadWall(const identifierIn : string; out wallOut : TWall) : boolean;
                 begin
-                    if NOT( tryGetNode( identifierIn, itemNode ) ) then
-                        exit( False );
-
-                    result := valueOut.tryReadFromXMLNode( itemNode );
+                    result := wallOut.tryReadFromXMLNode( rootNode, identifierIn );
                 end;
 
         //write
-            procedure TSoilNailWallFileReaderWriter.writeLimitStateMaterial(const identifierIn : string; const valueIn : TlimitStateMaterial);
-                var
-                    itemNode : IXMLNode;
+            procedure TSoilNailWallFileReaderWriter.writeLimitStateMaterial(const identifierIn : string; const LSMIn : TlimitStateMaterial);
                 begin
-                    if NOT( tryCreateNewNode( identifierIn, itemNode ) ) then
-                        exit();
-
-                    valueIn.writeToXMLNode( itemNode );
+                    LSMIn.writeToXMLNode( rootNode, identifierIn );
                 end;
 
-            procedure TSoilNailWallFileReaderWriter.writeSoil(const identifierIn : string; const valueIn : TSoil);
-                var
-                    itemNode : IXMLNode;
+            procedure TSoilNailWallFileReaderWriter.writeSoil(const identifierIn : string; const soilIn : TSoil);
                 begin
-                    if NOT( tryCreateNewNode( identifierIn, itemNode ) ) then
-                        exit();
-
-                    valueIn.writeToXMLNode( itemNode );
+                    soilIn.writeToXMLNode( rootNode, identifierIn );
                 end;
 
-            procedure TSoilNailWallFileReaderWriter.writeSoilNails(const identifierIn : string; const valueIn : TSoilNails);
-                var
-                    itemNode : IXMLNode;
+            procedure TSoilNailWallFileReaderWriter.writeSoilNails(const identifierIn : string; const soilNailsIn : TSoilNails);
                 begin
-                    if NOT( tryCreateNewNode( identifierIn, itemNode ) ) then
-                        exit();
-
-                    valueIn.writeToXMLNode( itemNode );
+                    soilNailsIn.writeToXMLNode( rootNode, identifierIn );
                 end;
 
-            procedure TSoilNailWallFileReaderWriter.writeWall(const identifierIn : string; const valueIn : TWall);
-                var
-                    itemNode : IXMLNode;
+            procedure TSoilNailWallFileReaderWriter.writeWall(const identifierIn : string; const wallIn : TWall);
                 begin
-                    if NOT( tryCreateNewNode( identifierIn, itemNode ) ) then
-                        exit();
-
-                    valueIn.writeToXMLNode( itemNode );
+                    wallIn.writeToXMLNode( rootNode, identifierIn );
                 end;
 
 end.
