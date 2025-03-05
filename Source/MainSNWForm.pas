@@ -20,6 +20,8 @@ interface
             SoilNailWallMasterClass,
             UISetupMethods,
             SNWUITypes,
+            InputManagerClass,
+            MaterialParametersInputManagerClass,
             InputParametersTabManagement, WallGeometryTabManagement, NailPropertiesTabManagement, NailLayoutGenerator,
             SoilNailWallExampleMethods, CustomComponentPanelClass,
             Graphic2DComponent, GraphicDrawerObjectAdderClass, SoilNailWallFileReaderWriterClass
@@ -106,11 +108,11 @@ interface
             ListBoxMaterialProperties: TListBox;
             ListBoxWallGeom: TListBox;
             ListBoxNailProperties: TListBox;
-    ActionOpen: TAction;
-    ActionSave: TAction;
-    ActionSaveAs: TAction;
-    OpenFileDialog: TFileOpenDialog;
-    SaveFileDialog: TFileSaveDialog;
+            ActionOpen: TAction;
+            ActionSave: TAction;
+            ActionSaveAs: TAction;
+            OpenFileDialog: TFileOpenDialog;
+            SaveFileDialog: TFileSaveDialog;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
@@ -120,6 +122,7 @@ interface
             //file menu
                 procedure ActionNewExecute(Sender: TObject);
                 procedure ActionOpenExecute(Sender: TObject);
+                procedure ActionSaveAsExecute(Sender: TObject);
             //input tab
                 //input parameters
                     procedure ActionInputParametersExecute(Sender: TObject);
@@ -162,8 +165,6 @@ interface
                                                             var AGeomDrawer : TGraphicDrawerObjectAdder);
             //show form
                 procedure FormShow(Sender: TObject);
-    procedure ActionSaveAsExecute(Sender: TObject);
-
         private
             var
                 mustRedrawImage         : boolean;
@@ -172,6 +173,7 @@ interface
                 activeRibbonTab         : EActiveRibbonTab;
                 activeUITheme           : EUITheme;
                 SoilNailWallDesign      : TSoilNailWall;
+                materialsInputManager   : TInputManager;
             //helper methods
                 //enter pressed on grid
                     procedure gridCellEnterPressed();
@@ -542,6 +544,13 @@ implementation
                                     GridSoilParInput,       GridSteelParInput,      GridConcreteParInput,
                                     GridWallProperties,     GridSlopeProperties,
                                     GridNailProperties,     GridNailLayout                              );
+
+                    materialsInputManager := TMaterialParametersInputManager.create(
+                                                                                        ListBoxMaterialProperties,
+                                                                                        GridSoilParInput, GridSteelParInput, GridConcreteParInput,
+                                                                                        GridPanelInputHeadings,
+                                                                                        SoilNailWallDesign
+                                                                                   );
 
                     sortUI();
 

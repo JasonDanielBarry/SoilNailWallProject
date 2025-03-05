@@ -52,92 +52,6 @@ implementation
                     strGrdInOut.createBorder(1, clSilver);
             end;
 
-    //input parameters tab
-        procedure setupInputParametersTab(  var StrGrdSoilParInOut, StrGrdSteelParInOut, StrGrdConcreteParInOut : TStringGrid;
-                                            var GridPanelLabelsInOut                                            : TGridPanel    );
-            var
-                gridLabel       : TLabel;
-                parentComponent : TWinControl;
-            procedure
-                _setupGrid(strGrdInOut : TStringGrid);
-                    begin
-                        //column widths
-                            strGrdInOut.ColWidths[0] := 249;
-
-                        //column count
-                            strGrdInOut.ColCount := 7;
-
-                        gridPositionAndSize(gridLabel, strGrdInOut);
-
-                        //fixed columns
-                            strGrdInOut.FixedCols := 1;
-                    end;
-            procedure
-                _soilParameters();
-                    begin
-                        //label
-                            setupLabel('Soil Parameters', gridLabel, parentComponent);
-
-                            //position
-                                gridLabel.top := GridPanelLabelsInOut.top + GridPanelLabelsInOut.height;
-
-                        //string grid
-                            StrGrdSoilParInOut.RowCount := 3;
-
-                            //text
-                                StrGrdSoilParInOut.Cells[0, 0] := 'Cohesion - c'' (kPa)';
-                                StrGrdSoilParInOut.Cells[0, 1] := 'Friction Angle - '#966' ('#176')';
-                                StrGrdSoilParInOut.Cells[0, 2] := 'Soil Unit Weight - '#947' (kN/m'#179')';
-
-                            _setupGrid(StrGrdSoilParInOut);
-                    end;
-            procedure
-                _steelParameters();
-                    begin
-                        //label
-                            setupLabel('Steel Parameters', gridLabel, parentComponent);
-
-                            //position
-                                gridLabel.top := StrGrdSoilParInOut.top + StrGrdSoilParInOut.height + CATEGORY_SPACE;
-
-                        //string grid
-                            StrGrdSteelParInOut.RowCount := 2;
-
-                            //text
-                                StrGrdSteelParInOut.Cells[0, 0] := 'Nail Tensile Strength - fu (MPa)';
-                                StrGrdSteelParInOut.Cells[0, 1] := 'Grout-Soil Interface Bond Strength (kPa)';
-
-                            _setupGrid(StrGrdSteelParInOut);
-                    end;
-            procedure
-                _concreteParameters();
-                    begin
-                        //label
-                            setupLabel('Concrete Parameters', gridLabel, parentComponent);
-
-                            //position
-                                gridLabel.top := StrGrdSteelParInOut.top + StrGrdSteelParInOut.height + CATEGORY_SPACE;
-
-                        //string grid
-                            StrGrdConcreteParInOut.RowCount := 2;
-
-                            //text
-                                StrGrdConcreteParInOut.Cells[0, 0] := 'Steel Reinforcement Strength  - fy (MPa)';
-                                StrGrdConcreteParInOut.Cells[0, 1] := 'Concrete Compressive Strength - fcu (MPa)';
-
-                            _setupGrid(StrGrdConcreteParInOut);
-                    end;
-            begin
-                parentComponent := StrGrdSoilParInOut.Parent;
-
-                GridPanelLabelsInOut.left   := 5 + 249;
-                GridPanelLabelsInOut.top    := 5;
-
-                _soilParameters();
-                _steelParameters();
-                _concreteParameters();
-            end;
-
     //wall geometry tab
         procedure setupWallGeometryTab(var strGrdWallPropertiesInOut, strGrdSlopePropertiesInOut : TStringGrid);
             const
@@ -312,8 +226,6 @@ implementation
                                     strGrdWallPropertiesInOut,  strGrdSlopePropertiesInOut,
                                     strGrdSoilNailPropInOut,    strGrdNailLayoutInOut                               : TStringGrid);
             begin
-                setupInputParametersTab(StrGrdSoilParInOut, StrGrdSteelParInOut, StrGrdConcreteParInOut, GridPanelLabelsInOut);
-
                 setupWallGeometryTab(strGrdWallPropertiesInOut, strGrdSlopePropertiesInOut);
 
                 setupNailLayoutTab(strGrdSoilNailPropInOut, strGrdNailLayoutInOut);
