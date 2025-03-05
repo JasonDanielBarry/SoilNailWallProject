@@ -75,7 +75,7 @@ interface
                         horizontalSpacing   : double;
                         diameter            : TNailDiameter;
                         strength            : TSoilNailStrength;
-                    procedure addNail(const heightIn, lengthIn: double);
+                    procedure addNail(const heightIn, lengthIn : double);
                     procedure clearNailLayout();
                     procedure copyHeightsAndLengths(const soilNailsIn : TSoilNails);
                     procedure generateLayout(const  topSpaceIn,  verticalSpacingIn,
@@ -171,7 +171,7 @@ implementation
     //--------------------------------------------------------------------------------------------------------------
 
     //TSoilNails----------------------------------------------------------------------------------------------------
-        procedure TSoilNails.addNail(const heightIn, lengthIn: double);
+        procedure TSoilNails.addNail(const heightIn, lengthIn : double);
             var
                 nailHeightIsTaken           : boolean;
                 i, arrLen                   : integer;
@@ -288,9 +288,9 @@ implementation
 
                     for nailHeight in arrNailHeights do
                         begin
-                            nailLength := nailLengthInterpolator.interpolateX(nailHeight);
+                            nailLength := nailLengthInterpolator.interpolateX( nailHeight );
 
-                            addNail(nailHeight, nailLength);
+                            addNail( nailHeight, nailLength );
                         end;
 
                 FreeAndNil(nailLengthInterpolator);
@@ -307,8 +307,6 @@ implementation
 
                 if (nailCount() < 2) then
                     exit();
-
-
 
                 topSpaceOut         := wallHeightIn - arrHeights[0];
                 verticalSpacingOut  := (arrHeights[0] - arrHeights[nailCount() - 1]) / (nailCount() - 1);

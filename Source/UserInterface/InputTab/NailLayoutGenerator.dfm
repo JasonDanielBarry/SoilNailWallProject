@@ -105,7 +105,7 @@ object NailLayoutGenForm: TNailLayoutGenForm
         Height = 38
         Align = alClient
         Caption = 'Top Space (m)'
-        ExplicitWidth = 76
+        ExplicitWidth = 75
         ExplicitHeight = 15
       end
       object LabelNailSpacing: TLabel
@@ -125,7 +125,7 @@ object NailLayoutGenForm: TNailLayoutGenForm
         Height = 38
         Align = alClient
         Caption = 'Top Length (m)'
-        ExplicitWidth = 82
+        ExplicitWidth = 81
         ExplicitHeight = 15
       end
       object LabelBottomLength: TLabel
@@ -263,7 +263,9 @@ object NailLayoutGenForm: TNailLayoutGenForm
     BevelEdges = []
     BevelOuter = bvNone
     ParentColor = True
+    ParentShowHint = False
     ShowCaption = False
+    ShowHint = True
     TabOrder = 2
     OnUpdateGeometry = JDBGraphic2DDrawingUpdateGeometry
   end
