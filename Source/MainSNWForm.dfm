@@ -14,18 +14,27 @@ object SNWForm: TSNWForm
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
+  DesignSize = (
+    1751
+    804)
   TextHeight = 15
   object PageControlRibbon: TPageControl
+    AlignWithMargins = True
     Left = 0
-    Top = 0
+    Top = 2
     Width = 1751
     Height = 125
-    ActivePage = PageFile
+    Margins.Left = 0
+    Margins.Top = 2
+    Margins.Right = 0
+    Margins.Bottom = 0
+    ActivePage = PageInput
     Align = alTop
     DoubleBuffered = True
     ParentDoubleBuffered = False
     TabOrder = 0
     OnChange = PageControlRibbonChange
+    ExplicitTop = 0
     object PageFile: TTabSheet
       Caption = 'File'
       Enabled = False
@@ -35,9 +44,6 @@ object SNWForm: TSNWForm
       DoubleBuffered = True
       ImageIndex = 1
       ParentDoubleBuffered = False
-      DesignSize = (
-        1743
-        95)
       object GridPanelInputParOptions: TGridPanel
         Left = 225
         Top = 0
@@ -264,13 +270,13 @@ object SNWForm: TSNWForm
           Top = 0
           Width = 75
           Height = 75
+          Action = ActionMaterialParameters
           Align = alClient
           AllowAllUp = True
           GroupIndex = 1
           Caption = 'Material'#13#10'Parameters'
           Flat = True
           Layout = blGlyphTop
-          OnClick = ActionInputParametersExecute
           ExplicitLeft = -6
           ExplicitTop = -6
         end
@@ -311,7 +317,7 @@ object SNWForm: TSNWForm
           Alignment = taCenter
           Caption = 'Input Type'
           Layout = tlCenter
-          ExplicitWidth = 55
+          ExplicitWidth = 56
           ExplicitHeight = 15
         end
       end
@@ -506,69 +512,8 @@ object SNWForm: TSNWForm
           Alignment = taCenter
           Caption = 'Examples'
           Layout = tlCenter
-          ExplicitWidth = 50
+          ExplicitWidth = 49
           ExplicitHeight = 15
-        end
-      end
-      object GridPanelTheme: TGridPanel
-        Left = 1648
-        Top = 8
-        Width = 95
-        Height = 23
-        Anchors = [akTop, akRight]
-        BevelOuter = bvNone
-        ColumnCollection = <
-          item
-            SizeStyle = ssAbsolute
-            Value = 40.000000000000000000
-          end
-          item
-            Value = 100.000000000000000000
-          end>
-        ControlCollection = <
-          item
-            Column = 0
-            Control = LabelTheme
-            Row = 0
-          end
-          item
-            Column = 1
-            Control = ComboBoxTheme
-            Row = 0
-          end>
-        ParentColor = True
-        RowCollection = <
-          item
-            Value = 100.000000000000000000
-          end>
-        TabOrder = 4
-        object LabelTheme: TLabel
-          AlignWithMargins = True
-          Left = 0
-          Top = 3
-          Width = 40
-          Height = 20
-          Margins.Left = 0
-          Margins.Right = 0
-          Margins.Bottom = 0
-          Align = alClient
-          Caption = 'Theme'
-          ExplicitWidth = 36
-          ExplicitHeight = 15
-        end
-        object ComboBoxTheme: TComboBox
-          Left = 40
-          Top = 0
-          Width = 55
-          Height = 23
-          Align = alClient
-          Style = csDropDownList
-          Color = clWhite
-          TabOrder = 0
-          OnChange = ComboBoxThemeChange
-          Items.Strings = (
-            'Light'
-            'Dark')
         end
       end
     end
@@ -664,7 +609,7 @@ object SNWForm: TSNWForm
           Alignment = taCenter
           Caption = 'Computation Type'
           Layout = tlCenter
-          ExplicitWidth = 98
+          ExplicitWidth = 99
           ExplicitHeight = 15
         end
         object PanelComputationTypeSeparator: TPanel
@@ -687,22 +632,24 @@ object SNWForm: TSNWForm
   end
   object PageControlProgrammeFlow: TPageControl
     Left = 0
-    Top = 125
+    Top = 127
     Width = 857
-    Height = 679
+    Height = 677
     Margins.Left = 0
     Margins.Top = 5
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = PageInputParameters
+    ActivePage = PageMaterialParameters
     Align = alLeft
     TabOrder = 1
-    object PageInputParameters: TTabSheet
+    ExplicitTop = 125
+    ExplicitHeight = 679
+    object PageMaterialParameters: TTabSheet
       Caption = 'Material Parameters'
       ImageIndex = 2
       DesignSize = (
         849
-        649)
+        647)
       object GridPanelInputHeadings: TGridPanel
         Left = 154
         Top = 0
@@ -849,11 +796,11 @@ object SNWForm: TSNWForm
           Margins.Bottom = 5
           Align = alClient
           Alignment = taCenter
-          Caption = 'Partial Factor'
+          Caption = 'Partial'#13#10'Factor'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 69
-          ExplicitHeight = 15
+          ExplicitWidth = 33
+          ExplicitHeight = 30
         end
         object LabelDesVal: TLabel
           Left = 375
@@ -866,11 +813,11 @@ object SNWForm: TSNWForm
           Margins.Bottom = 5
           Align = alClient
           Alignment = taCenter
-          Caption = 'Design Value'
+          Caption = 'Design'#13#10'Value'
           Layout = tlCenter
           WordWrap = True
-          ExplicitWidth = 67
-          ExplicitHeight = 15
+          ExplicitWidth = 36
+          ExplicitHeight = 30
         end
       end
       object GridSoilParInput: TStringGrid
@@ -929,10 +876,12 @@ object SNWForm: TSNWForm
       end
       object ListBoxMaterialProperties: TListBox
         Left = 5
-        Top = 494
-        Width = 250
+        Top = 492
+        Width = 350
         Height = 150
         Anchors = [akLeft, akBottom]
+        BevelInner = bvNone
+        BevelOuter = bvNone
         ItemHeight = 15
         TabOrder = 4
       end
@@ -941,7 +890,7 @@ object SNWForm: TSNWForm
       Caption = 'Wall Geometry'
       DesignSize = (
         849
-        649)
+        647)
       object GridSlopeProperties: TStringGrid
         Left = 7
         Top = 146
@@ -992,12 +941,13 @@ object SNWForm: TSNWForm
       end
       object ListBoxWallGeom: TListBox
         Left = 3
-        Top = 496
+        Top = 494
         Width = 250
         Height = 150
         Anchors = [akLeft, akBottom]
         ItemHeight = 15
         TabOrder = 2
+        ExplicitTop = 496
       end
     end
     object PageNailProperties: TTabSheet
@@ -1005,7 +955,7 @@ object SNWForm: TSNWForm
       ImageIndex = 1
       DesignSize = (
         849
-        649)
+        647)
       object GridNailLayout: TStringGrid
         AlignWithMargins = True
         Left = 6
@@ -1051,20 +1001,21 @@ object SNWForm: TSNWForm
       end
       object ListBoxNailProperties: TListBox
         Left = 3
-        Top = 496
+        Top = 494
         Width = 250
         Height = 150
         Anchors = [akLeft, akBottom]
         ItemHeight = 15
         TabOrder = 2
+        ExplicitTop = 496
       end
     end
   end
   object JDBGraphic2DDiagram: TJDBGraphic2D
     Left = 857
-    Top = 125
+    Top = 127
     Width = 894
-    Height = 679
+    Height = 677
     Align = alClient
     BevelEdges = []
     BevelOuter = bvNone
@@ -1074,6 +1025,75 @@ object SNWForm: TSNWForm
     ShowHint = True
     TabOrder = 2
     OnUpdateGeometry = JDBGraphic2DDiagramUpdateGeometry
+    ExplicitTop = 125
+    ExplicitHeight = 679
+  end
+  object GridPanelTheme: TGridPanel
+    Left = 1648
+    Top = -1
+    Width = 95
+    Height = 23
+    Anchors = [akTop, akRight]
+    BevelOuter = bvNone
+    ColumnCollection = <
+      item
+        SizeStyle = ssAbsolute
+        Value = 40.000000000000000000
+      end
+      item
+        Value = 100.000000000000000000
+      end>
+    ControlCollection = <
+      item
+        Column = 0
+        Control = LabelTheme
+        Row = 0
+      end
+      item
+        Column = 1
+        Control = ComboBoxTheme
+        Row = 0
+      end>
+    ParentColor = True
+    RowCollection = <
+      item
+        Value = 100.000000000000000000
+      end>
+    TabOrder = 3
+    object LabelTheme: TLabel
+      AlignWithMargins = True
+      Left = 0
+      Top = 0
+      Width = 40
+      Height = 21
+      Margins.Left = 0
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 2
+      Align = alClient
+      Caption = 'Theme'
+      Color = clBtnFace
+      ParentColor = False
+      Transparent = True
+      Layout = tlCenter
+      ExplicitTop = 3
+      ExplicitWidth = 37
+      ExplicitHeight = 15
+    end
+    object ComboBoxTheme: TComboBox
+      Left = 40
+      Top = 0
+      Width = 55
+      Height = 23
+      Align = alClient
+      Style = csDropDownList
+      Color = clWhite
+      TabOrder = 0
+      OnChange = ComboBoxThemeChange
+      Items.Strings = (
+        'Light'
+        'Dark')
+    end
   end
   object ActionManager1: TActionManager
     Left = 1344
@@ -1124,9 +1144,10 @@ object SNWForm: TSNWForm
       Caption = 'ActionAnalysis'
       OnExecute = ActionAnalysisExecute
     end
-    object ActionInputType: TAction
+    object ActionMaterialParameters: TAction
       Category = 'Input'
-      Caption = 'InputType'
+      Caption = 'MaterialParameters'
+      OnExecute = ActionMaterialParametersExecute
     end
     object ActionDarkTheme: TAction
       Category = 'Theme'
@@ -1177,7 +1198,7 @@ object SNWForm: TSNWForm
       Caption = '-'
     end
     object FMTheme: TMenuItem
-      Caption = 'Theme'
+      Caption = '&Theme'
       object FMLightTheme: TMenuItem
         Action = ActionLightTheme
       end

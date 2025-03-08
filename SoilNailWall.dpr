@@ -9,7 +9,7 @@ uses
   UISetupMethods in 'Source\UserInterface\UISetupMethods.pas',
   GeneralInputTabManagement in 'Source\UserInterface\InputTab\GeneralInputTabManagement.pas',
   InputParametersTabManagement in 'Source\UserInterface\InputTab\InputParametersTabManagement.pas',
-  NailLayoutGenerator in 'Source\UserInterface\InputTab\NailLayoutGenerator.pas' {NailLayoutGenForm},
+  NailLayoutGeneratorWizard in 'Source\UserInterface\InputTab\NailLayoutGeneratorWizard.pas' {NailLayoutGenForm},
   NailPropertiesTabManagement in 'Source\UserInterface\InputTab\NailPropertiesTabManagement.pas',
   WallGeometryTabManagement in 'Source\UserInterface\InputTab\WallGeometryTabManagement.pas',
   SoilNailWallTypes in 'Source\SoilNailWallTypes\SoilNailWallTypes.pas',
@@ -23,7 +23,8 @@ uses
   Vcl.Styles,
   SoilNailWallFileManagementClass in 'Source\SoilNailWallClass\FileManagement\SoilNailWallFileManagementClass.pas',
   SoilNailWallFileReaderWriterClass in 'Source\SoilNailWallTypes\SoilNailWallFileReaderWriterClass.pas',
-  MaterialParametersInputManagerClass in 'Source\UserInterface\InputTab\MaterialParametersInputManagerClass.pas';
+  MaterialParametersInputManagerClass in 'Source\UserInterface\InputTab\MaterialParametersInputManagerClass.pas',
+  NailLayoutGeneratorInputManager in 'Source\UserInterface\InputTab\NailLayoutGeneratorInputManager.pas';
 
 {$R *.res}
 

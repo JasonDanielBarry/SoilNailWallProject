@@ -33,11 +33,12 @@ implementation
                 var
                     gridIsPopulated     : boolean;
                     row                 : integer;
+                    dummy               : double;
                     nails               : TSoilNails;
                 begin
                     for row := 0 to (strGrdNailPropertiesInOut.RowCount - 1) do
                         begin
-                            gridIsPopulated := strGrdNailPropertiesInOut.isCellDouble(1, row);
+                            gridIsPopulated := strGrdNailPropertiesInOut.tryCellToDouble( 1, row, dummy );
 
                             if ( NOT(gridIsPopulated) ) then
                                 break;

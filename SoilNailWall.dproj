@@ -152,7 +152,7 @@
         <DCCReference Include="Source\UserInterface\UISetupMethods.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\GeneralInputTabManagement.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\InputParametersTabManagement.pas"/>
-        <DCCReference Include="Source\UserInterface\InputTab\NailLayoutGenerator.pas">
+        <DCCReference Include="Source\UserInterface\InputTab\NailLayoutGeneratorWizard.pas">
             <Form>NailLayoutGenForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
@@ -168,6 +168,7 @@
         <DCCReference Include="Source\SoilNailWallClass\FileManagement\SoilNailWallFileManagementClass.pas"/>
         <DCCReference Include="Source\SoilNailWallTypes\SoilNailWallFileReaderWriterClass.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\MaterialParametersInputManagerClass.pas"/>
+        <DCCReference Include="Source\UserInterface\InputTab\NailLayoutGeneratorInputManager.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -188,7 +189,10 @@
                 <Source>
                     <Source Name="MainSource">SoilNailWall.dpr</Source>
                 </Source>
-                <Excluded_Packages/>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k290.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp290.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="5">
                 <DeployFile LocalName="..\BuildOutput\SoilNailWall.exe" Configuration="Debug" Class="ProjectOutput">

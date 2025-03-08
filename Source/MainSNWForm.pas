@@ -22,7 +22,7 @@ interface
             SNWUITypes,
             InputManagerClass,
             MaterialParametersInputManagerClass,
-            InputParametersTabManagement, WallGeometryTabManagement, NailPropertiesTabManagement, NailLayoutGenerator,
+            InputParametersTabManagement, WallGeometryTabManagement, NailPropertiesTabManagement, NailLayoutGeneratorWizard,
             SoilNailWallExampleMethods, CustomComponentPanelClass,
             Graphic2DComponent, GraphicDrawerObjectAdderClass, SoilNailWallFileReaderWriterClass
             ;
@@ -34,7 +34,7 @@ interface
             GridWallProperties: TStringGrid;
             GridNailProperties: TStringGrid;
             PageNailProperties: TTabSheet;
-            PageInputParameters: TTabSheet;
+            PageMaterialParameters: TTabSheet;
             GridPanelInputHeadings: TGridPanel;
             LabelAveVal: TLabel;
             LabelVarCoef: TLabel;
@@ -89,7 +89,7 @@ interface
             LabelFactorOptions: TLabel;
             LabelNailLayoutOptions: TLabel;
             LabelExamples: TLabel;
-            ActionInputType: TAction;
+            ActionMaterialParameters: TAction;
             LabelComputationType: TLabel;
             PanelComputationTypeSeparator: TPanel;
             PopupMenuFile: TPopupMenu;
@@ -125,7 +125,7 @@ interface
                 procedure ActionSaveAsExecute(Sender: TObject);
             //input tab
                 //input parameters
-                    procedure ActionInputParametersExecute(Sender: TObject);
+                    procedure ActionMaterialParametersExecute(Sender: TObject);
                     procedure ActionLimitStateFactorsExecute(Sender: TObject);
                     procedure ActionAverageValuesExecute(Sender: TObject);
                     procedure ActionClearFactorsExecute(Sender: TObject);
@@ -167,7 +167,6 @@ interface
                 procedure FormShow(Sender: TObject);
         private
             var
-                mustRedrawImage         : boolean;
                 activeInputPage         : EActiveInputPage;
                 activeComputationPage   : EActiveComputationPage;
                 activeRibbonTab         : EActiveRibbonTab;
@@ -193,8 +192,6 @@ interface
                     procedure sortPage();
                 //theme menu
                     procedure setUITheme(const themeIn : EUITheme);
-                    procedure activateLightTheme();
-                    procedure activateDarkTheme();
                     procedure positionThemeDropMenu();
                 procedure sortUI();
             //check if grids are populated
@@ -257,6 +254,8 @@ implementation
                         SoilNailWallDesign := TSoilNailWall.create();
 
                         JDBGraphic2DDiagram.updateGeometry();
+
+                        writeToAllInputGrids( False );
                     end;
 
                 procedure TSNWForm.ActionOpenExecute(Sender: TObject);
@@ -308,7 +307,7 @@ implementation
 
             //input tab
                 //input parameters
-                    procedure TSNWForm.ActionInputParametersExecute(Sender: TObject);
+                    procedure TSNWForm.ActionMaterialParametersExecute(Sender: TObject);
                         begin
                             activeInputPage := EActiveInputPage.aipMaterials;
 
@@ -405,14 +404,13 @@ implementation
             //theme
                 procedure TSNWForm.ActionDarkThemeExecute(Sender: TObject);
                     begin
-                        activateDarkTheme();
+                        setUITheme( EUITheme.uitDark );
                     end;
 
                 procedure TSNWForm.ActionLightThemeExecute(Sender: TObject);
                     begin
-                        activateLightTheme();
+                        setUITheme( EUITheme.uitLight );
                     end;
-
 
         //general events
             //input
@@ -421,7 +419,7 @@ implementation
                                                             ACol, ARow      : Integer;
                                                             var CanSelect   : Boolean);
                         begin
-                            if (PageControlProgrammeFlow.ActivePageIndex = PageInputParameters.PageIndex) then
+                            if (PageControlProgrammeFlow.ActivePageIndex = PageMaterialParameters.PageIndex) then
                                 begin
                                     //fixed rows are 4 and 6 for parameters grids
                                         if (ACol in [4, 6]) then
@@ -463,9 +461,9 @@ implementation
 
                         case (activeUITheme) of
                             EUITheme.uitLight:
-                                activateLightTheme();
+                                setUITheme( EUITheme.uitLight );
                             EUITheme.uitDark:
-                                activateDarkTheme();
+                                setUITheme( EUITheme.uitDark );
                         end;
 
                         ComboBoxTheme.Refresh();
@@ -476,10 +474,7 @@ implementation
                     begin
                         case (PageControlRibbon.ActivePageIndex) of
                             0:
-                                begin
-                                    showFilePopupMenu();
-                                    exit();
-                                end;
+                                showFilePopupMenu();
                             1:
                                 activeRibbonTab := EActiveRibbonTab.artInput;
                             2:
@@ -554,6 +549,8 @@ implementation
 
                     sortUI();
 
+                    positionThemeDropMenu();
+
                     readFromAndWriteToInputGrids();
                 end;
 
@@ -565,8 +562,6 @@ implementation
                         popupPointOnRibbon,
                         popupPointOnScreen  : TPoint;
                     begin
-                        sortUI();
-
                         popupPointOnRibbon := Point(PageControlRibbon.Left, PageControlRibbon.top + round(20 * self.ScaleFactor));
 
                         popupPointOnScreen := PageControlRibbon.ClientToScreen(popupPointOnRibbon);
@@ -574,7 +569,7 @@ implementation
                         x := popupPointOnScreen.X;
                         y := popupPointOnScreen.Y;
 
-                        PopupMenuFile.Popup(x, y);
+                        PopupMenuFile.Popup( x, y );
                     end;
 
             //ribbon management
@@ -590,16 +585,16 @@ implementation
                             case (activeInputPage) of
                                 EActiveInputPage.aipMaterials:
                                     begin
-                                        setSpeedButtonDown(1, SpeedButtonInputParameters);
+                                        setSpeedButtonDown( 1, SpeedButtonInputParameters );
                                         GridPanelInputParOptions.Visible := True;
                                     end;
                                 EActiveInputPage.aipWallGeom:
                                     begin
-                                        setSpeedButtonDown(1, SpeedButtonWallGeometry);
+                                        setSpeedButtonDown( 1, SpeedButtonWallGeometry );
                                     end;
                                 EActiveInputPage.aipNailProperties:
                                     begin
-                                        setSpeedButtonDown(1, SpeedButtonNailLayout);
+                                        setSpeedButtonDown( 1, SpeedButtonNailLayout );
                                         GridPanelNailLayoutOptions.Visible  := True;
                                     end;
                             end;
@@ -638,7 +633,7 @@ implementation
                                 end;
                         end;
 
-                        positionThemeDropMenu();
+//                        positionThemeDropMenu();
                     end;
 
             //page management
@@ -646,7 +641,7 @@ implementation
                     begin
                         case (activeInputPage) of
                             EActiveInputPage.aipMaterials:
-                                PageControlProgrammeFlow.ActivePage := PageInputParameters;
+                                PageControlProgrammeFlow.ActivePage := PageMaterialParameters;
 
                             EActiveInputPage.aipWallGeom:
                                 PageControlProgrammeFlow.ActivePage := PageWallGeometry;
@@ -693,29 +688,19 @@ implementation
 
                         case (activeUITheme) of
                             EUITheme.uitLight:
-                                TStyleManager.SetStyle(WINDOWS11_THEME_LIGHT);
+                                TStyleManager.SetStyle( WINDOWS11_THEME_LIGHT );
 
                             EUITheme.uitDark:
-                                TStyleManager.SetStyle(WINDOWS11_THEME_DARK);
+                                TStyleManager.SetStyle( WINDOWS11_THEME_DARK );
                         end;
-                    end;
-
-                procedure TSNWForm.activateLightTheme();
-                    begin
-                        setUITheme(EUITheme.uitLight);
-                    end;
-
-                procedure TSNWForm.activateDarkTheme();
-                    begin
-                        setUITheme(EUITheme.uitDark);
                     end;
 
                 procedure TSNWForm.positionThemeDropMenu();
                     begin
-                        GridPanelTheme.Parent := PageControlRibbon.ActivePage;
-
                         GridPanelTheme.top := 0;
-                            GridPanelTheme.left := GridPanelTheme.parent.Width - GridPanelTheme.width - round(1 * self.ScaleFactor);
+                            GridPanelTheme.left := GridPanelTheme.parent.Width - GridPanelTheme.width - round(12 * self.ScaleFactor);
+
+                        GridPanelTheme.BringToFront();
                     end;
 
             procedure TSNWForm.sortUI();
@@ -734,13 +719,13 @@ implementation
         //check if grids are populated
             function TSNWForm.readFromAllInputGrids() : boolean;
                 var
-                    inputParPop, wallGeomPop, nailsPop, allInputPopulated : boolean;
+                    materialParPop, wallGeomPop, nailsPop, allInputPopulated : boolean;
                 begin
-                    inputParPop := readInputParGrids( GridSoilParInput, GridSteelParInput, GridConcreteParInput, SoilNailWallDesign );
+                    materialParPop := materialsInputManager.readFromInputControls();
                     wallGeomPop := readWallGeomGrids( GridWallProperties, GridSlopeProperties, SoilNailWallDesign );
                     nailsPop    := readNailPropGrids( GridNailProperties, GridNailLayout, SoilNailWallDesign );
 
-                    allInputPopulated := (inputParPop AND wallGeomPop AND nailsPop);
+                    allInputPopulated := (materialParPop AND wallGeomPop AND nailsPop);
 
                     {$ifdef DEBUG}
                         PageControlRibbon.Pages[PageComputation.PageIndex].TabVisible := True;
@@ -753,7 +738,7 @@ implementation
 
             procedure TSNWForm.writeToAllInputGrids(const updateEmptyCellsIn : boolean);
                 begin
-                    writeToInputParGrids( updateEmptyCellsIn, GridSoilParInput, GridSteelParInput, GridConcreteParInput, SoilNailWallDesign );
+                    materialsInputManager.writeToInputControls( updateEmptyCellsIn );
                     writeToWallGeomGrids( updateEmptyCellsIn, GridWallProperties, GridSlopeProperties, SoilNailWallDesign );
                     writeToNailPropGrids( updateEmptyCellsIn, GridNailProperties, GridNailLayout, SoilNailWallDesign );
 

@@ -30,14 +30,14 @@ interface
 implementation
 
     //update the grid based on input data
-        procedure gridWallGeomChanged(var strGrdPropInOut : TStringGrid);
-            var
-                row : integer;
-            begin
-                //check if a double is entered
-                    for row := 0 to (strGrdPropInOut.RowCount - 1) do
-                        strGrdPropInOut.isCellDouble(1, row);
-            end;
+//        procedure gridWallGeomChanged(var strGrdPropInOut : TStringGrid);
+//            var
+//                row : integer;
+//            begin
+//                //check if a double is entered
+//                    for row := 0 to (strGrdPropInOut.RowCount - 1) do
+//                        strGrdPropInOut.isCellDouble(1, row);
+//            end;
 
     //check if the wall geometry grids are populated
         //helper method
@@ -45,12 +45,13 @@ implementation
                 var
                     gridPopulated   : boolean;
                     row             : integer;
+                    dummy           : double;
                 begin
-                    gridWallGeomChanged(strGrdWallGeomInOut);
+//                    gridWallGeomChanged(strGrdWallGeomInOut);
 
                     for row := 0 to (strGrdWallGeomInOut.RowCount - 1) do
                         begin
-                            gridPopulated := strGrdWallGeomInOut.isCellDouble(1, row);
+                            gridPopulated := strGrdWallGeomInOut.tryCellToDouble( 1, row, dummy );
 
                             if (gridPopulated = False) then
                                 break;
