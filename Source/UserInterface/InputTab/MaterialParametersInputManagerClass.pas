@@ -6,13 +6,13 @@ interface
         system.SysUtils, system.Math, System.Classes, system.Generics.Collections, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
         StringGridHelperClass, LimitStateMaterialClass,
-        InputManagerClass,
+        InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes,
         SoilNailWallMasterClass
         ;
 
     type
-        TMaterialParametersInputManager = class(TInputManager)
+        TMaterialParametersInputManager = class(TSoilNailWallInputManager)
             private
                 var
                     soilLabel, nailsLabel,
@@ -21,7 +21,6 @@ interface
                     nailParametersGrid,
                     concreteParametersGrid  : TStringGrid;
                     gridPanelLabels         : TGridPanel;
-                    soilNailWallDesign      : TSoilNailWall;
                 //read from controls
                     //soil
                         function readSoilParameters() : boolean;
@@ -56,12 +55,15 @@ interface
                         function readFromInputControls() : boolean; override;
                     //write to input controls
                         procedure writeToInputControls(const updateEmptyControlsIn : boolean = False); override;
+                //use average design values
+                    procedure useAverageValuesForDesign();
+                //use limit state values
+                    procedure useLimitStateValuesForDesign();
+                //clear factors
+                    procedure clearLimitStateFactors();
         end;
 
 implementation
-
-    const
-        CATEGORY_SPACE : integer = 20;
 
     //helper methods
         function tryGridToLimitStateMaterial(   const gridRowIn     : integer;
@@ -110,13 +112,10 @@ implementation
                             begin
                                 inc( col ); //this is here first on purpose; col initialised to 0 and set to 1 at start of looping
 
-                                mustUpdateCell := NOT(writeGridInOut.cellIsEmpty(col, gridRowIn)) OR updateEmptyCellsIn;
-
-                                if NOT( mustUpdateCell ) then
+                                if ( writeGridInOut.cellIsEmpty( 1, gridRowIn ) AND NOT(updateEmptyCellsIn) ) then
                                     Continue;
 
                                 stringValue := FloatToStrF( doubleValue, ffFixed, 5, 2 );
-
                                 writeGridInOut.Cells[col, gridRowIn] := stringValue;
                             end;
 
@@ -332,7 +331,7 @@ implementation
 
                     soilNailWallDesign := soilNailWallDesignIn;
 
-                    inherited create( errorListBoxIn );
+                    inherited create( errorListBoxIn, soilNailWallDesignIn );
                 end;
 
         //destructor
@@ -357,11 +356,11 @@ implementation
                 begin
                     inherited setupInputControls();
 
-                    controlParent   := soilParametersGrid.Parent;
+                    controlParent := soilParametersGrid.Parent;
 
                     //create labels
-                        for tempComponent in [ soilLabel, nailsLabel, concreteLabel ] do
-                            FreeAndNil( tempComponent );
+                        for tempLabel in [ soilLabel, nailsLabel, concreteLabel ] do
+                            FreeAndNil( tempLabel );
 
                         soilLabel       := TLabel.Create( nil );
                         nailsLabel      := TLabel.Create( nil );
@@ -369,17 +368,17 @@ implementation
 
                         for tempLabel in [ soilLabel, nailsLabel, concreteLabel ] do
                             begin
-                                tempLabel.Parent := controlParent;
-                                tempLabel.AutoSize := True;
+                                tempLabel.Parent    := controlParent;
+                                tempLabel.AutoSize  := True;
                             end;
 
                     //position controls
                         ctrlScaleFactor := controlParent.ScaleFactor;
 
                         for tempComponent in [ soilLabel, nailsLabel, concreteLabel, soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
-                            tempComponent.Left := round( CONTROL_EDGE_SPACE * ctrlScaleFactor );
+                            tempComponent.Left := round( CONTROL_MARGIN * ctrlScaleFactor );
 
-                        gridPanelLabels.left := round( (CONTROL_EDGE_SPACE + 249) * ctrlScaleFactor );
+                        gridPanelLabels.left := round( (CONTROL_MARGIN + 249) * ctrlScaleFactor );
 
                     //setup grids
                         for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
@@ -403,7 +402,6 @@ implementation
                             soilParametersGrid.Cells[0, 0] := 'Cohesion - c'' (kPa)';
                             soilParametersGrid.Cells[0, 1] := 'Friction Angle - '#966' ('#176')';
                             soilParametersGrid.Cells[0, 2] := 'Soil Unit Weight - '#947' (kN/m'#179')';
-                            soilParametersGrid.minSize();
 
                         //nail input
                             nailsLabel.Caption  := 'Nail Parameters';
@@ -413,7 +411,6 @@ implementation
                             nailParametersGrid.RowCount := 2;
                             nailParametersGrid.Cells[0, 0] := 'Nail Tensile Strength - fu (MPa)';
                             nailParametersGrid.Cells[0, 1] := 'Grout-Soil Interface Bond Strength (kPa)';
-                            nailParametersGrid.minSize();
 
                         //concrete input
                             concreteLabel.Caption   := 'Nail Parameters';
@@ -423,13 +420,14 @@ implementation
                             concreteParametersGrid.RowCount := 2;
                             concreteParametersGrid.Cells[0, 0] := 'Steel Reinforcement Strength  - fy (MPa)';
                             concreteParametersGrid.Cells[0, 1] := 'Concrete Compressive Strength - fcu (MPa)';
-                            concreteParametersGrid.minSize();
 
                         for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
                             begin
                                 tempGrid.minSize();
                                 tempGrid.createBorder( 1, clSilver );
                             end;
+
+                    setListBoxErrorsWidth( concreteParametersGrid.Width );
                 end;
 
         //process input
@@ -458,5 +456,89 @@ implementation
 
                         writeConcreteParameters( updateEmptyControlsIn );
                     end;
+
+        //use average design values
+            procedure TMaterialParametersInputManager.useAverageValuesForDesign();
+                var
+                    soil    : TSoil;
+                    nails   : TSoilNails;
+                    wall    : TWall;
+                begin
+                    //soil
+                        soil := soilNailWallDesign.getSoil();
+
+                        soil.cohesion.useAverageValue();
+                        soil.frictionAngle.useAverageValue();
+                        soil.unitWeight.useAverageValue();
+
+                        soilNailWallDesign.setSoil( soil );
+
+                    //nails
+                        nails := soilNailWallDesign.getNails();
+
+                        nails.strength.tensile.useAverageValue();
+                        nails.strength.groutSoilInterface.useAverageValue();
+
+                        soilNailWallDesign.setNails( nails );
+
+                    //wall
+                        wall := soilNailWallDesign.getWall();
+
+                        wall.concrete.strength.reinforcement.useAverageValue();
+                        wall.concrete.strength.compressive.useAverageValue();
+
+                        soilNailWallDesign.setWall( wall );
+
+                    writeToInputControls( True );
+                end;
+
+        //use limit state values
+            procedure TMaterialParametersInputManager.useLimitStateValuesForDesign();
+                var
+                    soil    : TSoil;
+                    nails   : TSoilNails;
+                    wall    : TWall;
+                begin
+                    //soil
+                        soil := soilNailWallDesign.getSoil();
+
+                        soil.cohesion.useLimitStateValue( 0.4, 1.0, 1.4 );
+                        soil.frictionAngle.useLimitStateValue( 0.1, 1.0, 1.25 );
+                        soil.unitWeight.useAverageValue();
+
+                        soilNailWallDesign.setSoil( soil );
+
+                    //nails
+                        nails := soilNailWallDesign.getNails();
+
+                        nails.strength.tensile.useLimitStateValue( 0.05, 1.0, 1.8 );
+                        nails.strength.groutSoilInterface.useLimitStateValue( 0.4, 1.0, 1.4 );
+
+                        soilNailWallDesign.setNails( nails );
+
+                    //wall
+                        wall := soilNailWallDesign.getWall();
+
+                        wall.concrete.strength.reinforcement.useLimitStateValue( 0.05, 1.0, 1.15 );
+                        wall.concrete.strength.compressive.useLimitStateValue( 0.15, 1.0, 1.5 );
+
+                        soilNailWallDesign.setWall( wall );
+
+                    writeToInputControls( True );
+                end;
+
+        //clear factors
+            procedure TMaterialParametersInputManager.clearLimitStateFactors();
+                var
+                    row, col    : integer;
+                    tempGrid    : TStringGrid;
+                begin
+                    for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
+                        for col in [2, 3, 5] do
+                            tempGrid.clearColumn( col );
+
+                    readFromInputControls();
+                    writeToInputControls( False );
+                end;
 
 end.

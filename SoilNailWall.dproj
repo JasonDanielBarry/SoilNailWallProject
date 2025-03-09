@@ -4,7 +4,7 @@
         <ProjectVersion>20.2</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <ProjectName Condition="'$(ProjectName)'==''">SoilNailWall</ProjectName>
         <TargetedPlatforms>3</TargetedPlatforms>
@@ -150,8 +150,6 @@
         <DCCReference Include="Source\SoilNailWallGeneralMethods.pas"/>
         <DCCReference Include="Source\UserInterface\SNWUITypes.pas"/>
         <DCCReference Include="Source\UserInterface\UISetupMethods.pas"/>
-        <DCCReference Include="Source\UserInterface\InputTab\GeneralInputTabManagement.pas"/>
-        <DCCReference Include="Source\UserInterface\InputTab\InputParametersTabManagement.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\NailLayoutGeneratorWizard.pas">
             <Form>NailLayoutGenForm</Form>
             <FormType>dfm</FormType>
@@ -169,6 +167,8 @@
         <DCCReference Include="Source\SoilNailWallTypes\SoilNailWallFileReaderWriterClass.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\MaterialParametersInputManagerClass.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\NailLayoutGeneratorInputManager.pas"/>
+        <DCCReference Include="Source\UserInterface\InputTab\WallGeometryInputManagerClass.pas"/>
+        <DCCReference Include="Source\UserInterface\SoilNailWallInputManagerClass.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -204,6 +204,12 @@
                 <DeployFile LocalName="..\BuildOutput\SoilNailWall.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win64">
                         <RemoteName>SoilNailWall.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\BuildOutput\SoilNailWall.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win64">
+                        <RemoteName>SoilNailWall.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

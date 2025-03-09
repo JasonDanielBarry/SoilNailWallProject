@@ -21,8 +21,8 @@ interface
             UISetupMethods,
             SNWUITypes,
             InputManagerClass,
-            MaterialParametersInputManagerClass,
-            InputParametersTabManagement, WallGeometryTabManagement, NailPropertiesTabManagement, NailLayoutGeneratorWizard,
+            MaterialParametersInputManagerClass, WallGeometryInputManagerClass,
+            WallGeometryTabManagement, NailPropertiesTabManagement, NailLayoutGeneratorWizard,
             SoilNailWallExampleMethods, CustomComponentPanelClass,
             Graphic2DComponent, GraphicDrawerObjectAdderClass, SoilNailWallFileReaderWriterClass
             ;
@@ -167,12 +167,13 @@ interface
                 procedure FormShow(Sender: TObject);
         private
             var
-                activeInputPage         : EActiveInputPage;
-                activeComputationPage   : EActiveComputationPage;
-                activeRibbonTab         : EActiveRibbonTab;
-                activeUITheme           : EUITheme;
-                SoilNailWallDesign      : TSoilNailWall;
-                materialsInputManager   : TInputManager;
+                activeInputPage             : EActiveInputPage;
+                activeComputationPage       : EActiveComputationPage;
+                activeRibbonTab             : EActiveRibbonTab;
+                activeUITheme               : EUITheme;
+                SoilNailWallDesign          : TSoilNailWall;
+                materialsInputManager       : TMaterialParametersInputManager;
+                wallGeometryInputManager    : TWallGeometryInputManager;
             //helper methods
                 //enter pressed on grid
                     procedure gridCellEnterPressed();
@@ -316,23 +317,17 @@ implementation
 
                     procedure TSNWForm.ActionLimitStateFactorsExecute(Sender: TObject);
                         begin
-                            InputParlimitStateFactors(GridSoilParInput, GridSteelParInput, GridConcreteParInput);
-
-                            readFromAndWriteToInputGrids();
+                            materialsInputManager.useLimitStateValuesForDesign();
                         end;
 
                     procedure TSNWForm.ActionAverageValuesExecute(Sender: TObject);
                         begin
-                            useAverageInputValuesForDesign(GridSoilParInput, GridSteelParInput, GridConcreteParInput);
-
-                            readFromAndWriteToInputGrids();
+                            materialsInputManager.useAverageValuesForDesign();
                         end;
 
                     procedure TSNWForm.ActionClearFactorsExecute(Sender: TObject);
                         begin
-                            clearInputFactors(GridSoilParInput, GridSteelParInput, GridConcreteParInput);
-
-                            readFromAndWriteToInputGrids();
+                            materialsInputManager.clearLimitStateFactors();
                         end;
 
                 //wall geometry
@@ -547,6 +542,12 @@ implementation
                                                                                         SoilNailWallDesign
                                                                                    );
 
+                    wallGeometryInputManager := TWallGeometryInputManager.create(
+                                                                                    ListBoxWallGeom,
+                                                                                    GridWallProperties, GridSlopeProperties,
+                                                                                    SoilNailWallDesign
+                                                                                );
+
                     sortUI();
 
                     positionThemeDropMenu();
@@ -698,7 +699,7 @@ implementation
                 procedure TSNWForm.positionThemeDropMenu();
                     begin
                         GridPanelTheme.top := 0;
-                            GridPanelTheme.left := GridPanelTheme.parent.Width - GridPanelTheme.width - round(12 * self.ScaleFactor);
+                            GridPanelTheme.left := PageControlRibbon.Width - GridPanelTheme.width;
 
                         GridPanelTheme.BringToFront();
                     end;
@@ -722,7 +723,7 @@ implementation
                     materialParPop, wallGeomPop, nailsPop, allInputPopulated : boolean;
                 begin
                     materialParPop := materialsInputManager.readFromInputControls();
-                    wallGeomPop := readWallGeomGrids( GridWallProperties, GridSlopeProperties, SoilNailWallDesign );
+                    wallGeomPop := wallGeometryInputManager.readFromInputControls();
                     nailsPop    := readNailPropGrids( GridNailProperties, GridNailLayout, SoilNailWallDesign );
 
                     allInputPopulated := (materialParPop AND wallGeomPop AND nailsPop);
@@ -739,7 +740,7 @@ implementation
             procedure TSNWForm.writeToAllInputGrids(const updateEmptyCellsIn : boolean);
                 begin
                     materialsInputManager.writeToInputControls( updateEmptyCellsIn );
-                    writeToWallGeomGrids( updateEmptyCellsIn, GridWallProperties, GridSlopeProperties, SoilNailWallDesign );
+                    wallGeometryInputManager.writeToInputControls( updateEmptyCellsIn );
                     writeToNailPropGrids( updateEmptyCellsIn, GridNailProperties, GridNailLayout, SoilNailWallDesign );
 
                     JDBGraphic2DDiagram.updateGeometry();

@@ -34,7 +34,6 @@ object SNWForm: TSNWForm
     ParentDoubleBuffered = False
     TabOrder = 0
     OnChange = PageControlRibbonChange
-    ExplicitTop = 0
     object PageFile: TTabSheet
       Caption = 'File'
       Enabled = False
@@ -273,7 +272,6 @@ object SNWForm: TSNWForm
           Action = ActionMaterialParameters
           Align = alClient
           AllowAllUp = True
-          GroupIndex = 1
           Caption = 'Material'#13#10'Parameters'
           Flat = True
           Layout = blGlyphTop
@@ -639,11 +637,9 @@ object SNWForm: TSNWForm
     Margins.Top = 5
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = PageMaterialParameters
+    ActivePage = PageWallGeometry
     Align = alLeft
     TabOrder = 1
-    ExplicitTop = 125
-    ExplicitHeight = 679
     object PageMaterialParameters: TTabSheet
       Caption = 'Material Parameters'
       ImageIndex = 2
@@ -947,7 +943,6 @@ object SNWForm: TSNWForm
         Anchors = [akLeft, akBottom]
         ItemHeight = 15
         TabOrder = 2
-        ExplicitTop = 496
       end
     end
     object PageNailProperties: TTabSheet
@@ -1007,7 +1002,6 @@ object SNWForm: TSNWForm
         Anchors = [akLeft, akBottom]
         ItemHeight = 15
         TabOrder = 2
-        ExplicitTop = 496
       end
     end
   end
@@ -1025,8 +1019,6 @@ object SNWForm: TSNWForm
     ShowHint = True
     TabOrder = 2
     OnUpdateGeometry = JDBGraphic2DDiagramUpdateGeometry
-    ExplicitTop = 125
-    ExplicitHeight = 679
   end
   object GridPanelTheme: TGridPanel
     Left = 1648
@@ -1076,7 +1068,6 @@ object SNWForm: TSNWForm
       ParentColor = False
       Transparent = True
       Layout = tlCenter
-      ExplicitTop = 3
       ExplicitWidth = 37
       ExplicitHeight = 15
     end

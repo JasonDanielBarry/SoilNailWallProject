@@ -7,8 +7,6 @@ uses
   SoilNailWallGeneralMethods in 'Source\SoilNailWallGeneralMethods.pas',
   SNWUITypes in 'Source\UserInterface\SNWUITypes.pas',
   UISetupMethods in 'Source\UserInterface\UISetupMethods.pas',
-  GeneralInputTabManagement in 'Source\UserInterface\InputTab\GeneralInputTabManagement.pas',
-  InputParametersTabManagement in 'Source\UserInterface\InputTab\InputParametersTabManagement.pas',
   NailLayoutGeneratorWizard in 'Source\UserInterface\InputTab\NailLayoutGeneratorWizard.pas' {NailLayoutGenForm},
   NailPropertiesTabManagement in 'Source\UserInterface\InputTab\NailPropertiesTabManagement.pas',
   WallGeometryTabManagement in 'Source\UserInterface\InputTab\WallGeometryTabManagement.pas',
@@ -24,7 +22,9 @@ uses
   SoilNailWallFileManagementClass in 'Source\SoilNailWallClass\FileManagement\SoilNailWallFileManagementClass.pas',
   SoilNailWallFileReaderWriterClass in 'Source\SoilNailWallTypes\SoilNailWallFileReaderWriterClass.pas',
   MaterialParametersInputManagerClass in 'Source\UserInterface\InputTab\MaterialParametersInputManagerClass.pas',
-  NailLayoutGeneratorInputManager in 'Source\UserInterface\InputTab\NailLayoutGeneratorInputManager.pas';
+  NailLayoutGeneratorInputManager in 'Source\UserInterface\InputTab\NailLayoutGeneratorInputManager.pas',
+  WallGeometryInputManagerClass in 'Source\UserInterface\InputTab\WallGeometryInputManagerClass.pas',
+  SoilNailWallInputManagerClass in 'Source\UserInterface\SoilNailWallInputManagerClass.pas';
 
 {$R *.res}
 

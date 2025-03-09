@@ -52,96 +52,6 @@ implementation
                     strGrdInOut.createBorder(1, clSilver);
             end;
 
-    //wall geometry tab
-        procedure setupWallGeometryTab(var strGrdWallPropertiesInOut, strGrdSlopePropertiesInOut : TStringGrid);
-            const
-                PANEL_MARGIN    : integer = 5;
-                COL_WIDTHS      : TArray<integer> = [200, 75];
-            var
-                gridLabel       : TLabel;
-                previousGrid    : TStringGrid;
-                parentComponent : TWinControl;
-            procedure
-                _setupGrid(var strGrdInOut : TStringGrid);
-                    begin
-                        //column widths
-                            strGrdInOut.width := COL_WIDTHS[0]+ COL_WIDTHS[1] + 10;
-                            strGrdInOut.ColWidths[0] := COL_WIDTHS[0];
-                            strGrdInOut.ColWidths[1] := COL_WIDTHS[1];
-
-                        //column count
-                            strGrdInOut.ColCount := 2;
-
-                        gridPositionAndSize(gridLabel, strGrdInOut);
-
-                        //fixed columns
-                            strGrdInOut.FixedCols := 1;
-                    end;
-            procedure
-                _wallProperties();
-                    begin
-                        //label
-                            setupLabel('Wall Properties', gridLabel, parentComponent);
-
-                            //position
-                                gridLabel.top := PANEL_MARGIN;
-
-                        //string grid
-                            strGrdWallPropertiesInOut.RowCount := 3;
-
-                            //text
-                                strGrdWallPropertiesInOut.Cells[0, 0] := 'Height (m)';
-                                strGrdWallPropertiesInOut.Cells[0, 1] := 'Thickness (mm)';
-                                strGrdWallPropertiesInOut.Cells[0, 2] := 'Angle ('#176')';
-
-                            _setupGrid(strGrdWallPropertiesInOut);
-
-                            previousGrid := strGrdWallPropertiesInOut;
-                    end;
-            procedure
-                _slopeProperties();
-                    begin
-                        //label
-                            setupLabel('Up-Slope Properties', gridLabel, parentComponent);
-
-                            //position
-                                gridLabel.top := previousGrid.top + previousGrid.height + CATEGORY_SPACE;
-
-                        //string grid
-                            strGrdSlopePropertiesInOut.RowCount := 2;
-
-                            //text
-                                strGrdSlopePropertiesInOut.Cells[0, 0] := 'Angle ('#176')';
-                                strGrdSlopePropertiesInOut.Cells[0, 1] := 'Height (m)';
-
-                            _setupGrid(strGrdSlopePropertiesInOut);
-
-                            previousGrid := strGrdSlopePropertiesInOut
-                    end;
-            procedure
-                _loads();
-                    begin
-//                        //label
-//                            setupLabel('Loads', gridLabel, parentComponent);
-//
-//                            //position
-//                                gridLabel.top := previousGrid.top + previousGrid.height + CATEGORY_SPACE;
-//
-//                        //string grid
-//                            //text
-//                                strGrdLoadsInOut.Cells[0, 0] := 'Surcharge Load Intensity - Q (kPa)';
-//
-//                            _setupGrid(strGrdLoadsInOut);
-//
-//                        previousGrid := strGrdLoadsInOut
-                    end;
-            begin
-                parentComponent := strGrdWallPropertiesInOut.Parent;
-
-                _wallProperties();
-                _slopeProperties();
-            end;
-
     //nail layout tab
         procedure setupNailLayoutTab(var strGrdSoilNailPropInOut, strGrdNailLayoutInOut : TStringGrid);
             const
@@ -226,7 +136,6 @@ implementation
                                     strGrdWallPropertiesInOut,  strGrdSlopePropertiesInOut,
                                     strGrdSoilNailPropInOut,    strGrdNailLayoutInOut                               : TStringGrid);
             begin
-                setupWallGeometryTab(strGrdWallPropertiesInOut, strGrdSlopePropertiesInOut);
 
                 setupNailLayoutTab(strGrdSoilNailPropInOut, strGrdNailLayoutInOut);
             end;
