@@ -22,7 +22,7 @@ interface
             SNWUITypes,
             InputManagerClass,
             MaterialParametersInputManagerClass, WallGeometryInputManagerClass,
-            WallGeometryTabManagement, NailPropertiesTabManagement, NailLayoutGeneratorWizard,
+            NailPropertiesTabManagement, NailLayoutGeneratorWizard,
             SoilNailWallExampleMethods, CustomComponentPanelClass,
             Graphic2DComponent, GraphicDrawerObjectAdderClass, SoilNailWallFileReaderWriterClass
             ;

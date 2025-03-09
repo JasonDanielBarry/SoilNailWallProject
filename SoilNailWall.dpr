@@ -9,7 +9,6 @@ uses
   UISetupMethods in 'Source\UserInterface\UISetupMethods.pas',
   NailLayoutGeneratorWizard in 'Source\UserInterface\InputTab\NailLayoutGeneratorWizard.pas' {NailLayoutGenForm},
   NailPropertiesTabManagement in 'Source\UserInterface\InputTab\NailPropertiesTabManagement.pas',
-  WallGeometryTabManagement in 'Source\UserInterface\InputTab\WallGeometryTabManagement.pas',
   SoilNailWallTypes in 'Source\SoilNailWallTypes\SoilNailWallTypes.pas',
   SoilNailWallMasterClass in 'Source\SoilNailWallClass\SoilNailWallMasterClass.pas',
   SoilNailWallBaseClass in 'Source\SoilNailWallClass\Base\SoilNailWallBaseClass.pas',
