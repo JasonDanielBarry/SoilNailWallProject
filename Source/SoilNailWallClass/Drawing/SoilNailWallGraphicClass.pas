@@ -64,7 +64,7 @@ implementation
                     var
                         arrNailGeom : TArray<TGeomLine>;
                     begin
-                        graphicDrawerInOut.setCurrentDrawingLayer('Soil Nails');
+                        graphicDrawerInOut.setCurrentDrawingLayer('Nails');
 
                         arrNailGeom := determineNailGeometry();
 

@@ -112,7 +112,7 @@ implementation
                             begin
                                 inc( col ); //this is here first on purpose; col initialised to 0 and set to 1 at start of looping
 
-                                if ( writeGridInOut.cellIsEmpty( 1, gridRowIn ) AND NOT(updateEmptyCellsIn) ) then
+                                if ( writeGridInOut.cellIsEmpty( col, gridRowIn ) AND NOT(updateEmptyCellsIn) ) then
                                     Continue;
 
                                 stringValue := FloatToStrF( doubleValue, ffFixed, 5, 2 );
@@ -534,7 +534,7 @@ implementation
                     tempGrid    : TStringGrid;
                 begin
                     for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
-                        for col in [2, 3, 5] do
+                        for col := 2 to (tempGrid.ColCount - 1) do
                             tempGrid.clearColumn( col );
 
                     readFromInputControls();

@@ -241,16 +241,9 @@ implementation
                         strGrd      : TStringGrid;
                         arrStrGrd   : TArray<TStringGrid>;
                     begin
-                        ActionClearLayoutExecute(nil);
+                        FreeAndNil( SoilNailWallDesign );
 
-                        FreeAndNil(SoilNailWallDesign);
-
-                        arrStrGrd := [  GridSoilParInput, GridSteelParInput, GridConcreteParInput,
-                                        GridWallProperties, GridSlopeProperties,
-                                        GridNailProperties, GridNailLayout                          ];
-
-                        for strGrd in arrStrGrd do
-                            strGrd.clearColumns(1);
+                        TInputManager.resetInputControls( [ materialsInputManager, wallGeometryInputManager ] );
 
                         SoilNailWallDesign := TSoilNailWall.create();
 
@@ -728,22 +721,28 @@ implementation
 
                     allInputPopulated := (materialParPop AND wallGeomPop AND nailsPop);
 
-                    {$ifdef DEBUG}
-                        PageControlRibbon.Pages[PageComputation.PageIndex].TabVisible := True;
-                    {$else}
-                        PageControlRibbon.Pages[PageComputation.PageIndex].TabVisible := allInputPopulated;
-                    {$endif}
-
                     result := allInputPopulated;
                 end;
 
             procedure TSNWForm.writeToAllInputGrids(const updateEmptyCellsIn : boolean);
+                var
+                    inputErrorCount : integer;
                 begin
                     materialsInputManager.writeToInputControls( updateEmptyCellsIn );
                     wallGeometryInputManager.writeToInputControls( updateEmptyCellsIn );
                     writeToNailPropGrids( updateEmptyCellsIn, GridNailProperties, GridNailLayout, SoilNailWallDesign );
 
                     JDBGraphic2DDiagram.updateGeometry();
+
+                    inputErrorCount := TInputManager.countInputErrors( [ materialsInputManager, wallGeometryInputManager ] );
+
+                    {$ifdef DEBUG}
+                        PageControlRibbon.Pages[PageComputation.PageIndex].TabVisible := True;
+                    {$else}
+                        inputErrorCount := TInputManager.countInputErrors( [ materialsInputManager, wallGeometryInputManager ] );
+
+                        PageControlRibbon.Pages[PageComputation.PageIndex].TabVisible := ( inputErrorCount = 0 );
+                    {$endif}
                 end;
 
             function TSNWForm.readFromAndWriteToInputGrids() : boolean;
