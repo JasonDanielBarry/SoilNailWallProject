@@ -50,6 +50,8 @@ interface
                     destructor destroy(); override;
                 //setup input controls
                     procedure setupInputControls(); override;
+                //reset controls
+                    procedure resetInputControls(); override;
                 //process input
                     //read input
                         function readFromInputControls() : boolean; override;
@@ -430,6 +432,15 @@ implementation
                     setListBoxErrorsWidth( concreteParametersGrid.Width );
                 end;
 
+        //reset controls
+            procedure TMaterialParametersInputManager.resetInputControls();
+                var
+                    tempGrid : TStringGrid;
+                begin
+                    for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
+                        tempGrid.clearColumns( 1 );
+                end;
+
         //process input
             //read input
                 function TMaterialParametersInputManager.readFromInputControls() : boolean;
@@ -534,8 +545,7 @@ implementation
                     tempGrid    : TStringGrid;
                 begin
                     for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
-                        for col := 2 to (tempGrid.ColCount - 1) do
-                            tempGrid.clearColumn( col );
+                        tempGrid.clearColumns( 2 );
 
                     readFromInputControls();
                     writeToInputControls( False );

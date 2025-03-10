@@ -41,6 +41,8 @@ interface
                     destructor destroy(); override;
                 //setup input controls
                     procedure setupInputControls(); override;
+                //reset controls
+                    procedure resetInputControls(); override;
                 //process input
                     //read input
                         function readFromInputControls() : boolean; override;
@@ -251,6 +253,13 @@ implementation
                             end;
 
                     setListBoxErrorsWidth( slopeParametersGrid.Width );
+                end;
+
+        //reset controls
+            procedure TWallGeometryInputManager.resetInputControls();
+                begin
+                    wallParametersGrid.clearColumn( 1 );
+                    slopeParametersGrid.clearColumn( 1 );
                 end;
 
         //process input
