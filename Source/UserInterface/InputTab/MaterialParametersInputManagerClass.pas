@@ -4,7 +4,7 @@ interface
 
     uses
         system.SysUtils, system.Math, System.Classes, system.Generics.Collections, System.UITypes,
-        Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
+        Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
         StringGridHelperClass, LimitStateMaterialClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes,
@@ -428,8 +428,6 @@ implementation
                                 tempGrid.minSize();
                                 tempGrid.createBorder( 1, clSilver );
                             end;
-
-                    setListBoxErrorsWidth( concreteParametersGrid.Width );
                 end;
 
         //reset controls

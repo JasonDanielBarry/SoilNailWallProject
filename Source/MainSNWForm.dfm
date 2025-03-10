@@ -601,12 +601,14 @@ object SNWForm: TSNWForm
         object LabelComputationType: TLabel
           Left = 0
           Top = 75
-          Width = 98
-          Height = 15
+          Width = 149
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'Computation Type'
           Layout = tlCenter
+          ExplicitWidth = 98
+          ExplicitHeight = 15
         end
         object PanelComputationTypeSeparator: TPanel
           Left = 149
@@ -635,15 +637,12 @@ object SNWForm: TSNWForm
     Margins.Top = 5
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = PageWallGeometry
+    ActivePage = PageNailProperties
     Align = alLeft
     TabOrder = 1
     object PageMaterialParameters: TTabSheet
       Caption = 'Material Parameters'
       ImageIndex = 2
-      DesignSize = (
-        849
-        647)
       object GridPanelInputHeadings: TGridPanel
         Left = 154
         Top = 0
@@ -714,8 +713,8 @@ object SNWForm: TSNWForm
         object LabelAveVal: TLabel
           Left = 0
           Top = 0
-          Width = 43
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -725,12 +724,14 @@ object SNWForm: TSNWForm
           Caption = 'Average'#13#10'Value'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 43
+          ExplicitHeight = 30
         end
         object LabelVarCoef: TLabel
           Left = 75
           Top = 0
-          Width = 58
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -740,12 +741,14 @@ object SNWForm: TSNWForm
           Caption = 'Variation Coefficient'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 58
+          ExplicitHeight = 30
         end
         object LabelDowngFact: TLabel
           Left = 150
           Top = 0
-          Width = 64
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -755,12 +758,14 @@ object SNWForm: TSNWForm
           Caption = 'Downgrade Factor'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 64
+          ExplicitHeight = 30
         end
         object LabelCauEst: TLabel
           Left = 225
           Top = 0
-          Width = 50
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -770,12 +775,14 @@ object SNWForm: TSNWForm
           Caption = 'Cautious Estimate'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 50
+          ExplicitHeight = 30
         end
         object LabelParFac: TLabel
           Left = 300
           Top = 0
-          Width = 33
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -785,12 +792,14 @@ object SNWForm: TSNWForm
           Caption = 'Partial'#13#10'Factor'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 33
+          ExplicitHeight = 30
         end
         object LabelDesVal: TLabel
           Left = 375
           Top = 0
-          Width = 36
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -800,6 +809,8 @@ object SNWForm: TSNWForm
           Caption = 'Design'#13#10'Value'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 36
+          ExplicitHeight = 30
         end
       end
       object GridSoilParInput: TStringGrid
@@ -857,11 +868,16 @@ object SNWForm: TSNWForm
         OnSelectCell = GridInputSelectCell
       end
       object ListBoxMaterialProperties: TListBox
+        AlignWithMargins = True
         Left = 5
-        Top = 492
-        Width = 350
-        Height = 150
-        Anchors = [akLeft, akBottom]
+        Top = 517
+        Width = 839
+        Height = 125
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
+        Align = alBottom
         BevelInner = bvNone
         BevelOuter = bvNone
         ItemHeight = 15
@@ -870,9 +886,6 @@ object SNWForm: TSNWForm
     end
     object PageWallGeometry: TTabSheet
       Caption = 'Wall Geometry'
-      DesignSize = (
-        849
-        647)
       object GridSlopeProperties: TStringGrid
         Left = 7
         Top = 146
@@ -922,11 +935,16 @@ object SNWForm: TSNWForm
         OnSelectCell = GridInputSelectCell
       end
       object ListBoxWallGeom: TListBox
-        Left = 3
-        Top = 494
-        Width = 250
-        Height = 150
-        Anchors = [akLeft, akBottom]
+        AlignWithMargins = True
+        Left = 5
+        Top = 517
+        Width = 839
+        Height = 125
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
+        Align = alBottom
         ItemHeight = 15
         TabOrder = 2
       end
@@ -934,9 +952,6 @@ object SNWForm: TSNWForm
     object PageNailProperties: TTabSheet
       Caption = 'Nail Properties'
       ImageIndex = 1
-      DesignSize = (
-        849
-        647)
       object GridNailLayout: TStringGrid
         AlignWithMargins = True
         Left = 6
@@ -981,11 +996,16 @@ object SNWForm: TSNWForm
         OnSelectCell = GridInputSelectCell
       end
       object ListBoxNailProperties: TListBox
-        Left = 3
-        Top = 494
-        Width = 250
-        Height = 150
-        Anchors = [akLeft, akBottom]
+        AlignWithMargins = True
+        Left = 5
+        Top = 517
+        Width = 839
+        Height = 125
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
+        Align = alBottom
         ItemHeight = 15
         TabOrder = 2
       end

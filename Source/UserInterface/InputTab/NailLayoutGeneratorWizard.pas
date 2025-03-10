@@ -28,6 +28,8 @@ interface
         ButtonCancel: TButton;
         ButtonOK: TButton;
         JDBGraphic2DDrawing: TJDBGraphic2D;
+    ListBox1: TListBox;
+    GridPanelMain: TGridPanel;
         procedure ComboBoxChange(Sender: TObject);
         procedure FormCreate(Sender: TObject);
         procedure JDBGraphic2DDrawingUpdateGeometry(ASender         : TObject;

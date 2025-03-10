@@ -4,7 +4,7 @@ interface
 
     uses
         system.SysUtils, system.Math, System.Classes, system.Generics.Collections, System.UITypes,
-        Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
+        Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
         StringGridHelperClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes,
@@ -218,7 +218,9 @@ implementation
                     //setup grids
                         for tempGrid in [ wallParametersGrid, slopeParametersGrid ] do
                             begin
-                                tempGrid.ColCount := 2;
+                                tempGrid.ColCount   := 2;
+                                tempGrid.FixedCols  := 1;
+                                tempGrid.FixedRows  := 0;
 
                                 tempGrid.width := round( (COL_WIDTHS[0]+ COL_WIDTHS[1] + 10) * ctrlScaleFactor );
                                 tempGrid.ColWidths[0] := round( COL_WIDTHS[0] * ctrlScaleFactor );
@@ -234,7 +236,6 @@ implementation
                             wallParametersGrid.Cells[0, 0] := 'Height (m)';
                             wallParametersGrid.Cells[0, 1] := 'Thickness (mm)';
                             wallParametersGrid.Cells[0, 2] := 'Angle ('#176')';
-                            wallParametersGrid.minSize();
 
                         //slope input
                             slopeLabel.Caption  := 'Slope Properties';
@@ -244,15 +245,12 @@ implementation
                             slopeParametersGrid.RowCount    := 2;
                             slopeParametersGrid.Cells[0, 0] := 'Angle ('#176')';
                             slopeParametersGrid.Cells[0, 1] := 'Height (m)';
-                            slopeParametersGrid.minSize();
 
                         for tempGrid in [ wallParametersGrid, slopeParametersGrid ] do
                             begin
                                 tempGrid.minSize();
                                 tempGrid.createBorder( 1, clSilver );
                             end;
-
-                    setListBoxErrorsWidth( slopeParametersGrid.Width );
                 end;
 
         //reset controls

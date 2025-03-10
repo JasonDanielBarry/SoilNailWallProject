@@ -137,7 +137,7 @@ implementation
                                     strGrdSoilNailPropInOut,    strGrdNailLayoutInOut                               : TStringGrid);
             begin
 
-                setupNailLayoutTab(strGrdSoilNailPropInOut, strGrdNailLayoutInOut);
+//                setupNailLayoutTab(strGrdSoilNailPropInOut, strGrdNailLayoutInOut);
             end;
 
 end.

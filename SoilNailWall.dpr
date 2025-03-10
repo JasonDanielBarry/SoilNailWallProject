@@ -23,7 +23,8 @@ uses
   MaterialParametersInputManagerClass in 'Source\UserInterface\InputTab\MaterialParametersInputManagerClass.pas',
   NailLayoutGeneratorInputManager in 'Source\UserInterface\InputTab\NailLayoutGeneratorInputManager.pas',
   WallGeometryInputManagerClass in 'Source\UserInterface\InputTab\WallGeometryInputManagerClass.pas',
-  SoilNailWallInputManagerClass in 'Source\UserInterface\SoilNailWallInputManagerClass.pas';
+  SoilNailWallInputManagerClass in 'Source\UserInterface\SoilNailWallInputManagerClass.pas',
+  NailPropertiesInputManagerClass in 'Source\UserInterface\InputTab\NailPropertiesInputManagerClass.pas';
 
 {$R *.res}
 

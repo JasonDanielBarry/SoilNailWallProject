@@ -21,7 +21,7 @@ interface
             UISetupMethods,
             SNWUITypes,
             InputManagerClass,
-            MaterialParametersInputManagerClass, WallGeometryInputManagerClass,
+            MaterialParametersInputManagerClass, WallGeometryInputManagerClass, NailPropertiesInputManagerClass,
             NailPropertiesTabManagement, NailLayoutGeneratorWizard,
             SoilNailWallExampleMethods, CustomComponentPanelClass,
             Graphic2DComponent, GraphicDrawerObjectAdderClass, SoilNailWallFileReaderWriterClass
@@ -174,6 +174,7 @@ interface
                 SoilNailWallDesign          : TSoilNailWall;
                 materialsInputManager       : TMaterialParametersInputManager;
                 wallGeometryInputManager    : TWallGeometryInputManager;
+                nailPropertiesInputManager  : TNailPropertiesInputManager;
             //helper methods
                 //enter pressed on grid
                     procedure gridCellEnterPressed();
@@ -237,9 +238,6 @@ implementation
         //actions
             //file menu
                 procedure TSNWForm.ActionNewExecute(Sender: TObject);
-                    var
-                        strGrd      : TStringGrid;
-                        arrStrGrd   : TArray<TStringGrid>;
                     begin
                         FreeAndNil( SoilNailWallDesign );
 
@@ -499,8 +497,6 @@ implementation
             procedure TSNWForm.setupForm();
                 procedure
                     _pageConTabsVisiblity();
-                        var
-                            i : integer;
                         begin
                             //input tabs
                                 PageControlProgrammeFlow.hideAllPageTabs();
@@ -540,6 +536,12 @@ implementation
                                                                                     GridWallProperties, GridSlopeProperties,
                                                                                     SoilNailWallDesign
                                                                                 );
+
+//                    nailPropertiesInputManager := TNailPropertiesInputManager.create(
+//                                                                                        ListBoxNailProperties,
+//                                                                                        GridNailProperties, GridNailLayout,
+//                                                                                        SoilNailWallDesign
+//                                                                                    );
 
                     sortUI();
 
@@ -674,8 +676,6 @@ implementation
 
             //theme menu
                 procedure TSNWForm.setUITheme(const themeIn : EUITheme);
-                    var
-                        styleName   : string;
                     begin
                         activeUITheme := themeIn;
                         ComboBoxTheme.ItemIndex := integer(activeUITheme);
