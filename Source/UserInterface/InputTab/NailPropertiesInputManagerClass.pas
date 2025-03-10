@@ -88,7 +88,7 @@ implementation
                 begin
                     inherited setupInputControls();
 
-                    controlParent := nailParametersGrid.Parent;
+                    controlParent := nailLayoutGrid.Parent;
 
                     //create labels
                         for tempLabel in [ nailPropertiesLabel, nailLayoutLabel ] do
@@ -117,14 +117,15 @@ implementation
                             nailParametersGrid.top          := nailPropertiesLabel.Top + round( 1.25 * nailPropertiesLabel.Height );
                             nailParametersGrid.Width        := SumInt( COLUMN_SIZES ) + 10;
                             nailParametersGrid.ColCount     := 2;
-                            nailParametersGrid.ColWidths[0] := COLUMN_SIZES[0];
-                            nailParametersGrid.ColWidths[1] := SumInt( COLUMN_SIZES ) - COLUMN_SIZES[0];
+                            nailParametersGrid.ColWidths[0] := SumInt( COLUMN_SIZES ) - COLUMN_SIZES[3];
+                            nailParametersGrid.ColWidths[1] := COLUMN_SIZES[3];
                             nailParametersGrid.RowCount     := 3;
                             nailParametersGrid.Cells[0, 0]  := 'Angle ('#176')';
                             nailParametersGrid.Cells[0, 1]  := 'Out-of-plane Spacing (m)';
                             nailParametersGrid.Cells[0, 2]  := 'Grout Hole Diameter (mm)';
                             nailParametersGrid.FixedCols    := 1;
                             nailParametersGrid.FixedRows    := 0;
+                            nailParametersGrid.minSize();
 
                         //nail layout
                             nailLayoutLabel.Caption := 'Nail Layout';
@@ -144,12 +145,10 @@ implementation
                             nailLayoutGrid.Cells[1, 0] := 'Height (m)';
                             nailLayoutGrid.Cells[2, 0] := 'Spacing (m)';
                             nailLayoutGrid.Cells[3, 0] := 'Length (m)';
+                            nailLayoutGrid.minSize();
 
                         for tempGrid in [ nailParametersGrid, nailLayoutGrid ] do
-                            begin
-                                tempGrid.minSize();
-                                tempGrid.createBorder( 1, clSilver );
-                            end;
+                            tempGrid.createBorder( 1, clSilver );
                 end;
 
         //reset controls

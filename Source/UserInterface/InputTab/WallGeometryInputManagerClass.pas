@@ -236,6 +236,7 @@ implementation
                             wallParametersGrid.Cells[0, 0] := 'Height (m)';
                             wallParametersGrid.Cells[0, 1] := 'Thickness (mm)';
                             wallParametersGrid.Cells[0, 2] := 'Angle ('#176')';
+                            wallParametersGrid.minSize();
 
                         //slope input
                             slopeLabel.Caption  := 'Slope Properties';
@@ -245,12 +246,10 @@ implementation
                             slopeParametersGrid.RowCount    := 2;
                             slopeParametersGrid.Cells[0, 0] := 'Angle ('#176')';
                             slopeParametersGrid.Cells[0, 1] := 'Height (m)';
+                            slopeParametersGrid.minSize();
 
                         for tempGrid in [ wallParametersGrid, slopeParametersGrid ] do
-                            begin
-                                tempGrid.minSize();
-                                tempGrid.createBorder( 1, clSilver );
-                            end;
+                            tempGrid.createBorder( 1, clSilver );
                 end;
 
         //reset controls

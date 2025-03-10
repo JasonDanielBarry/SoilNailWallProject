@@ -200,7 +200,10 @@ implementation
                     strGrdNailLayoutInOut.FixedCols := 2;
                     strGrdNailLayoutInOut.FixedRows := 1;
 
-                    strGrdNailLayoutInOut.editBorder(1, clSilver);
+                    //for some reason the components are not accessible if using the input manager class
+                    //strGrdNailLayoutInOut.editBorder(1, clSilver); //need to create my own custom grid
+
+                    strGrdNailLayoutInOut.minSize();
 
                     strGrdNailLayoutInOut.Parent.UnlockDrawing();
                 end;

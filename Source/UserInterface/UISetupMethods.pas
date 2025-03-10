@@ -124,10 +124,10 @@ implementation
                             strGrdNailLayoutInOut.FixedRows := 1;
                     end;
             begin
-                parentComponent := strGrdSoilNailPropInOut.Parent;
-
-                _soilNailProperties();
-                _nailLayout();
+//                parentComponent := strGrdSoilNailPropInOut.Parent;
+//
+//                _soilNailProperties();
+//                _nailLayout();
             end;
 
     //set up input tab
@@ -137,7 +137,7 @@ implementation
                                     strGrdSoilNailPropInOut,    strGrdNailLayoutInOut                               : TStringGrid);
             begin
 
-//                setupNailLayoutTab(strGrdSoilNailPropInOut, strGrdNailLayoutInOut);
+                setupNailLayoutTab(strGrdSoilNailPropInOut, strGrdNailLayoutInOut);
             end;
 
 end.

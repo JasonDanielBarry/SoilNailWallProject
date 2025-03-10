@@ -404,6 +404,7 @@ implementation
                             soilParametersGrid.Cells[0, 0] := 'Cohesion - c'' (kPa)';
                             soilParametersGrid.Cells[0, 1] := 'Friction Angle - '#966' ('#176')';
                             soilParametersGrid.Cells[0, 2] := 'Soil Unit Weight - '#947' (kN/m'#179')';
+                            soilParametersGrid.minSize();
 
                         //nail input
                             nailsLabel.Caption  := 'Nail Parameters';
@@ -413,6 +414,7 @@ implementation
                             nailParametersGrid.RowCount := 2;
                             nailParametersGrid.Cells[0, 0] := 'Nail Tensile Strength - fu (MPa)';
                             nailParametersGrid.Cells[0, 1] := 'Grout-Soil Interface Bond Strength (kPa)';
+                            nailParametersGrid.minSize();
 
                         //concrete input
                             concreteLabel.Caption   := 'Nail Parameters';
@@ -422,12 +424,10 @@ implementation
                             concreteParametersGrid.RowCount := 2;
                             concreteParametersGrid.Cells[0, 0] := 'Steel Reinforcement Strength  - fy (MPa)';
                             concreteParametersGrid.Cells[0, 1] := 'Concrete Compressive Strength - fcu (MPa)';
+                            concreteParametersGrid.minSize();
 
                         for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
-                            begin
-                                tempGrid.minSize();
-                                tempGrid.createBorder( 1, clSilver );
-                            end;
+                            tempGrid.createBorder( 1, clSilver );
                 end;
 
         //reset controls

@@ -519,11 +519,6 @@ implementation
                     activeComputationPage   := EActiveComputationPage.aapAnalysis;
                     activeRibbonTab         := EActiveRibbonTab.artInput;
 
-                    setupInputTab(  GridPanelInputHeadings,
-                                    GridSoilParInput,       GridSteelParInput,      GridConcreteParInput,
-                                    GridWallProperties,     GridSlopeProperties,
-                                    GridNailProperties,     GridNailLayout                              );
-
                     materialsInputManager := TMaterialParametersInputManager.create(
                                                                                         ListBoxMaterialProperties,
                                                                                         GridSoilParInput, GridSteelParInput, GridConcreteParInput,
@@ -537,11 +532,11 @@ implementation
                                                                                     SoilNailWallDesign
                                                                                 );
 
-//                    nailPropertiesInputManager := TNailPropertiesInputManager.create(
-//                                                                                        ListBoxNailProperties,
-//                                                                                        GridNailProperties, GridNailLayout,
-//                                                                                        SoilNailWallDesign
-//                                                                                    );
+                    nailPropertiesInputManager := TNailPropertiesInputManager.create(
+                                                                                        ListBoxNailProperties,
+                                                                                        GridNailProperties, GridNailLayout,
+                                                                                        SoilNailWallDesign
+                                                                                    );
 
                     sortUI();
 
