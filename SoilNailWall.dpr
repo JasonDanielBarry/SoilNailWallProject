@@ -33,7 +33,6 @@ begin
   Application.MainFormOnTaskbar := True;
   TStyleManager.TrySetStyle('Windows11 Modern Light');
   Application.CreateForm(TSNWForm, SNWForm);
-  Application.CreateForm(TSNWForm, SNWForm);
   Application.CreateForm(TNailLayoutGenForm, NailLayoutGenForm);
   Application.Run;
 end.
