@@ -154,7 +154,6 @@
             <Form>NailLayoutGenForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Source\UserInterface\InputTab\NailPropertiesTabManagement.pas"/>
         <DCCReference Include="Source\SoilNailWallTypes\SoilNailWallTypes.pas"/>
         <DCCReference Include="Source\SoilNailWallClass\SoilNailWallMasterClass.pas"/>
         <DCCReference Include="Source\SoilNailWallClass\Base\SoilNailWallBaseClass.pas"/>
@@ -165,7 +164,7 @@
         <DCCReference Include="Source\SoilNailWallClass\FileManagement\SoilNailWallFileManagementClass.pas"/>
         <DCCReference Include="Source\SoilNailWallTypes\SoilNailWallFileReaderWriterClass.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\MaterialParametersInputManagerClass.pas"/>
-        <DCCReference Include="Source\UserInterface\InputTab\NailLayoutGeneratorInputManager.pas"/>
+        <DCCReference Include="Source\UserInterface\InputTab\NailLayoutGeneratorInputManagerClass.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\WallGeometryInputManagerClass.pas"/>
         <DCCReference Include="Source\UserInterface\SoilNailWallInputManagerClass.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\NailPropertiesInputManagerClass.pas"/>

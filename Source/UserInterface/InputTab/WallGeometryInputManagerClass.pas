@@ -184,7 +184,7 @@ implementation
         //setup input controls
             procedure TWallGeometryInputManager.setupInputControls();
                 const
-                    COL_WIDTHS : TArray<integer> = [200, 75];
+                    COL_WIDTHS : TArray<integer> = [150, 70];
                 var
                     ctrlScaleFactor : double;
                     tempComponent   : Tcontrol;
@@ -266,7 +266,6 @@ implementation
                         readSuccessful : boolean;
                     begin
                         readSuccessful := readWallParameters();
-
                         readSuccessful := readSlopeParameters() AND readSuccessful;
 
                         result := readSuccessful;
@@ -278,7 +277,6 @@ implementation
                         inherited writeToInputControls( updateEmptyControlsIn );
 
                         writeWallParameters( updateEmptyControlsIn );
-
                         writeSlopeParameters( updateEmptyControlsIn );
                     end;
 

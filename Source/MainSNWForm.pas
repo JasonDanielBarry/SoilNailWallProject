@@ -22,7 +22,6 @@ interface
             SNWUITypes,
             InputManagerClass,
             MaterialParametersInputManagerClass, WallGeometryInputManagerClass, NailPropertiesInputManagerClass,
-            NailPropertiesTabManagement, NailLayoutGeneratorWizard,
             SoilNailWallExampleMethods, CustomComponentPanelClass,
             Graphic2DComponent, GraphicDrawerObjectAdderClass, SoilNailWallFileReaderWriterClass
             ;
@@ -190,8 +189,8 @@ interface
                 //page management
                     procedure sortInputPage();
 //                    procedure sortComputationPage();
-                    procedure PageControlProgammeFlowChanged();
                     procedure sortPage();
+                    procedure PageControlProgammeFlowChanged();
                 //theme menu
                     procedure setUITheme(const themeIn : EUITheme);
                     procedure positionThemeDropMenu();
@@ -215,7 +214,6 @@ implementation
 {$R *.dfm}
 
     //helper methods
-        
 
     //published
         //main form
@@ -241,7 +239,7 @@ implementation
                     begin
                         FreeAndNil( SoilNailWallDesign );
 
-                        TInputManager.resetInputControls( [ materialsInputManager, wallGeometryInputManager ] );
+                        TInputManager.resetInputControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager ] );
 
                         SoilNailWallDesign := TSoilNailWall.create();
 
@@ -338,28 +336,9 @@ implementation
                         end;
 
                     procedure TSNWForm.ActionGenerateLayoutExecute(Sender: TObject);
-                        var
-                            formResult          : TModalResult;
-                            generateLayoutForm  : TNailLayoutGenForm;
                         begin
-                            generateLayoutForm := TNailLayoutGenForm.create(SoilNailWallDesign);
-
-                            generateLayoutForm.ShowModal();
-
-                            formResult := generateLayoutForm.ModalResult;
-
-                            case formResult of
-                                mrOk:
-                                    begin
-                                        var newSNW : TSoilNailWall := generateLayoutForm.getSNW();
-
-                                        SoilNailWallDesign.copySNW( newSNW );
-
-                                        writeToAllInputGrids(False);
-                                    end;
-                            end;
-
-                            FreeAndNil(generateLayoutForm);
+                            if ( nailPropertiesInputManager.NailLayoutGeneratorExecute() ) then
+                                writeToAllInputGrids( False );
 
                             sortUI();
                         end;
@@ -598,10 +577,10 @@ implementation
                     begin
                         case (activeComputationPage) of
                             EActiveComputationPage.aapAnalysis:
-                                setSpeedButtonDown(2, SpeedButtonAnalysis);
+                                setSpeedButtonDown( 2, SpeedButtonAnalysis );
 
                             EActiveComputationPage.aapDesign:
-                                setSpeedButtonDown(2, SpeedButtonDesign);
+                                setSpeedButtonDown( 2, SpeedButtonDesign );
                         end;
                     end;
 
@@ -623,8 +602,6 @@ implementation
                                     PageControlRibbon.ActivePage := PageOutput;
                                 end;
                         end;
-
-//                        positionThemeDropMenu();
                     end;
 
             //page management
@@ -642,6 +619,16 @@ implementation
                         end;
                     end;
 
+                procedure TSNWForm.sortPage();
+                    begin
+                        case (activeRibbonTab) of
+                            EActiveRibbonTab.artInput:
+                                sortInputPage();
+                        end;
+
+                        PageControlProgammeFlowChanged();
+                    end;
+
                 procedure TSNWForm.PageControlProgammeFlowChanged();
                     procedure
                         _calculatePageWidth(const widestStringGridIn : TStringGrid);
@@ -651,22 +638,14 @@ implementation
                     begin
                         case (PageControlProgrammeFlow.ActivePageIndex) of
                             0: //input parameters
-                                _calculatePageWidth(GridSoilParInput);
+                                _calculatePageWidth( GridSoilParInput );
+
                             1: //wall geometry
-                                _calculatePageWidth(GridWallProperties);
+                                _calculatePageWidth( GridWallProperties );
+
                             2: //nail properties
-                                _calculatePageWidth(GridNailLayout);
+                                _calculatePageWidth( GridNailLayout );
                         end;
-                    end;
-
-                procedure TSNWForm.sortPage();
-                    begin
-                        case (activeRibbonTab) of
-                            EActiveRibbonTab.artInput:
-                                sortInputPage();
-                        end;
-
-                        PageControlProgammeFlowChanged();
                     end;
 
             //theme menu
@@ -707,34 +686,22 @@ implementation
 
         //check if grids are populated
             function TSNWForm.readFromAllInputGrids() : boolean;
-                var
-                    materialParPop, wallGeomPop, nailsPop, allInputPopulated : boolean;
                 begin
-                    materialParPop := materialsInputManager.readFromInputControls();
-                    wallGeomPop := wallGeometryInputManager.readFromInputControls();
-                    nailsPop    := readNailPropGrids( GridNailProperties, GridNailLayout, SoilNailWallDesign );
-
-                    allInputPopulated := (materialParPop AND wallGeomPop AND nailsPop);
-
-                    result := allInputPopulated;
+                    result := TInputManager.readFromAllControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager ] );
                 end;
 
             procedure TSNWForm.writeToAllInputGrids(const updateEmptyCellsIn : boolean);
                 var
                     inputErrorCount : integer;
                 begin
-                    materialsInputManager.writeToInputControls( updateEmptyCellsIn );
-                    wallGeometryInputManager.writeToInputControls( updateEmptyCellsIn );
-                    writeToNailPropGrids( updateEmptyCellsIn, GridNailProperties, GridNailLayout, SoilNailWallDesign );
+                    TInputManager.writeToAllControls( [materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager], updateEmptyCellsIn );
 
                     JDBGraphic2DDiagram.updateGeometry();
-
-                    inputErrorCount := TInputManager.countInputErrors( [ materialsInputManager, wallGeometryInputManager ] );
 
                     {$ifdef DEBUG}
                         PageControlRibbon.Pages[PageComputation.PageIndex].TabVisible := True;
                     {$else}
-                        inputErrorCount := TInputManager.countInputErrors( [ materialsInputManager, wallGeometryInputManager ] );
+                        inputErrorCount := TInputManager.countInputErrors( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager ] );
 
                         PageControlRibbon.Pages[PageComputation.PageIndex].TabVisible := ( inputErrorCount = 0 );
                     {$endif}

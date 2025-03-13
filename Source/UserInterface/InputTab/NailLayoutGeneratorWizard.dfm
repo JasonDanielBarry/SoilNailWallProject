@@ -12,7 +12,6 @@ object NailLayoutGenForm: TNailLayoutGenForm
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poMainFormCenter
-  OnCreate = FormCreate
   TextHeight = 15
   object GridPanelMain: TGridPanel
     Left = 0
@@ -233,7 +232,7 @@ object NailLayoutGenForm: TNailLayoutGenForm
           OnChange = ComboBoxChange
         end
       end
-      object ListBox1: TListBox
+      object ListBoxErrors: TListBox
         AlignWithMargins = True
         Left = 5
         Top = 570
@@ -246,7 +245,6 @@ object NailLayoutGenForm: TNailLayoutGenForm
         Align = alBottom
         ItemHeight = 15
         TabOrder = 1
-        ExplicitTop = 598
       end
     end
     object JDBGraphic2DDrawing: TJDBGraphic2D

@@ -9,7 +9,8 @@ interface
         Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
         System.Skia, Vcl.Skia,
         SoilNailWallMasterClass, CustomComponentPanelClass,
-        Graphic2DComponent, GraphicDrawerObjectAdderClass
+        Graphic2DComponent, GraphicDrawerObjectAdderClass,
+        NailLayoutGeneratorInputManagerClass
         ;
 
     type
@@ -28,20 +29,20 @@ interface
         ButtonCancel: TButton;
         ButtonOK: TButton;
         JDBGraphic2DDrawing: TJDBGraphic2D;
-    ListBox1: TListBox;
-    GridPanelMain: TGridPanel;
+        ListBoxErrors: TListBox;
+        GridPanelMain: TGridPanel;
         procedure ComboBoxChange(Sender: TObject);
-        procedure FormCreate(Sender: TObject);
         procedure JDBGraphic2DDrawingUpdateGeometry(ASender         : TObject;
                                                     var AGeomDrawer : TGraphicDrawerObjectAdder);
       private
         { Private declarations }
-        soilNailWallDesign : TSoilNailWall;
+        soilNailWallDesign      : TSoilNailWall;
+        nailLayoutInputManager  : TNailLayoutGeneratorInputManager;
         procedure generateLayout();
       public
         constructor create(const soilNailWallIn : TSoilNailWall);
         destructor destroy(); override;
-        function getSNW() : TSoilNailWall;
+        function getSoilNailWallDesign() : TSoilNailWall;
       end;
 
     var
@@ -56,57 +57,17 @@ implementation
             generateLayout();
         end;
 
-    procedure TNailLayoutGenForm.FormCreate(Sender: TObject);
-        var
-            i           : integer;
-            nailLength  : string;
-        begin
-            //add items to combo boxes
-                for i := 5 to 35 do
-                    begin
-                        nailLength := IntToStr(i);
-
-                        ComboBoxTopLength.Items.Add(nailLength);
-                        ComboBoxBottomLength.Items.Add(nailLength);
-                    end;
-        end;
-
-    procedure TNailLayoutGenForm.JDBGraphic2DDrawingUpdateGeometry(   ASender         : TObject;
-                                                                var AGeomDrawer : TGraphicDrawerObjectAdder );
+    procedure TNailLayoutGenForm.JDBGraphic2DDrawingUpdateGeometry( ASender         : TObject;
+                                                                    var AGeomDrawer : TGraphicDrawerObjectAdder );
         begin
             soilNailWallDesign.updateSoilNailWallGeomtry( AGeomDrawer );
         end;
 
     //private
         procedure TNailLayoutGenForm.generateLayout();
-            var
-                validLengths,   validSpaces,
-                validInputs                     : boolean;
-                topSpace,       nailToNailSpace,
-                bottomLength,   topLength       : double;
             begin
-                //get inputs from UI
-                    //spacing
-                        validSpaces := TryStrToFloat( trim(ComboBoxTopSpace.Text), topSpace );
-                        validSpaces := validSpaces AND TryStrToFloat( trim(ComboBoxNailSpacing.Text), nailToNailSpace );
-
-                    //lengths
-                        validLengths := TryStrToFloat( trim(ComboBoxTopLength.Text), topLength );
-                        validLengths := validLengths AND TryStrToFloat( trim(ComboBoxBottomLength.Text), bottomLength );
-
-                //check the inputs make sense for the calculation to be run
-                    validLengths    := validLengths AND ( (topLength >= 0.5) AND (bottomLength >= 0.5) );
-                    validSpaces     := validSpaces  AND ( (topSpace > 1e-3) AND (nailToNailSpace >= 0.5) );
-                    validInputs     := (validLengths AND validSpaces);
-
-                    if ( NOT(validInputs) ) then
-                        begin
-                            Application.MessageBox('Values entered insufficient for layout generation', 'Invalid Input', MB_OK);
-                            exit();
-                        end;
-
-                SoilNailWallDesign.generateSoilNailLayout(  topSpace,   nailToNailSpace,
-                                                            topLength,  bottomLength    );
+                nailLayoutInputManager.readFromInputControls();
+                nailLayoutInputManager.writeToInputControls();
 
                 JDBGraphic2DDrawing.updateGeometry();
             end;
@@ -117,37 +78,34 @@ implementation
                 topSpace,       nailToNailSpace,
                 bottomLength,   topLength       : double;
             begin
-                inherited create(nil);
+                inherited create( nil );
 
                 soilNailWallDesign := TSoilNailWall.create();
 
-                soilNailWallDesign.copySNW(soilNailWallIn);
+                soilNailWallDesign.copySNW( soilNailWallIn );
 
                 //get the layout from the class
-                    soilNailWallDesign.getNailLayout(   topSpace,   nailToNailSpace,
-                                                        topLength,  bottomLength    );
+                    nailLayoutInputManager := TNailLayoutGeneratorInputManager.create(  ListBoxErrors,
+                                                                                        ComboBoxTopSpace, ComboBoxNailSpacing,
+                                                                                        ComboBoxTopLength, ComboBoxBottomLength,
+                                                                                        soilNailWallDesign                      );
+
+                    nailLayoutInputManager.writeToInputControls();
 
                 //draw wall
                     JDBGraphic2DDrawing.updateGeometry();
                     JDBGraphic2DDrawing.zoomAll();
-
-                if ( IsZero( nailToNailSpace, 1e-3) ) then
-                    exit();
-
-                ComboBoxTopSpace.Text       := FloatToStrF( topSpace,        ffFixed, 5, 2 );
-                ComboBoxNailSpacing.Text    := FloatToStrF( nailToNailSpace, ffFixed, 5, 2 );
-                ComboBoxTopLength.Text      := FloatToStrF( topLength,       ffFixed, 5, 2 );
-                ComboBoxBottomLength.Text   := FloatToStrF( bottomLength,    ffFixed, 5, 2 );
             end;
 
         destructor TNailLayoutGenForm.destroy();
             begin
-                FreeAndNil(soilNailWallDesign);
+                FreeAndNil( soilNailWallDesign );
+                FreeAndNil( nailLayoutInputManager );
 
                 inherited destroy();
             end;
 
-        function TNailLayoutGenForm.getSNW() : TSoilNailWall;
+        function TNailLayoutGenForm.getSoilNailWallDesign() : TSoilNailWall;
             begin
                 result := soilNailWallDesign;
             end;
