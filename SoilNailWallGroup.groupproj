@@ -12,6 +12,9 @@
         <Projects Include="..\JDBDelphiLibrary\Graphic2DTestProject.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="TestSoilNailWall.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="SoilNailWall.dproj">
             <Dependencies/>
         </Projects>
@@ -50,6 +53,15 @@
     <Target Name="Graphic2DTestProject:Make">
         <MSBuild Projects="..\JDBDelphiLibrary\Graphic2DTestProject.dproj" Targets="Make"/>
     </Target>
+    <Target Name="TestSoilNailWall">
+        <MSBuild Projects="TestSoilNailWall.dproj"/>
+    </Target>
+    <Target Name="TestSoilNailWall:Clean">
+        <MSBuild Projects="TestSoilNailWall.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestSoilNailWall:Make">
+        <MSBuild Projects="TestSoilNailWall.dproj" Targets="Make"/>
+    </Target>
     <Target Name="SoilNailWall">
         <MSBuild Projects="SoilNailWall.dproj"/>
     </Target>
@@ -60,13 +72,13 @@
         <MSBuild Projects="SoilNailWall.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="JDBDelphiPackage;JDBDelphiLibrary;Graphic2DTestProject;SoilNailWall"/>
+        <CallTarget Targets="JDBDelphiPackage;JDBDelphiLibrary;Graphic2DTestProject;TestSoilNailWall;SoilNailWall"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="JDBDelphiPackage:Clean;JDBDelphiLibrary:Clean;Graphic2DTestProject:Clean;SoilNailWall:Clean"/>
+        <CallTarget Targets="JDBDelphiPackage:Clean;JDBDelphiLibrary:Clean;Graphic2DTestProject:Clean;TestSoilNailWall:Clean;SoilNailWall:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="JDBDelphiPackage:Make;JDBDelphiLibrary:Make;Graphic2DTestProject:Make;SoilNailWall:Make"/>
+        <CallTarget Targets="JDBDelphiPackage:Make;JDBDelphiLibrary:Make;Graphic2DTestProject:Make;TestSoilNailWall:Make;SoilNailWall:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
