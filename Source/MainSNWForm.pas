@@ -229,6 +229,9 @@ implementation
                 procedure TSNWForm.FormClose(Sender: TObject; var Action: TCloseAction);
                     begin
                         FreeAndNil(SoilNailWallDesign);
+                        FreeAndNil( materialsInputManager );
+                        FreeAndNil( wallGeometryInputManager );
+                        FreeAndNil( nailPropertiesInputManager );
 
                         Action := TCloseAction.caFree;
                     end;

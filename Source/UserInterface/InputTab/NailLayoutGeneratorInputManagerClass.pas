@@ -134,13 +134,18 @@ implementation
                     begin
                         inherited writeToInputControls( updateEmptyControlsIn );
 
-                        topSpaceComboBox.Text       := FloatToStrF( topSpace,               ffFixed, 5, 2 );
-                        NailSpacingComboBox.Text    := FloatToStrF( verticalNailSpacing,    ffFixed, 5, 2 );
-                        topLengthComboBox.Text      := FloatToStrF( topLength,              ffFixed, 5, 2 );
-                        bottomLengthComboBox.Text   := FloatToStrF( bottomLength,           ffFixed, 5, 2 );
+                        if ( updateEmptyControlsIn ) then
+                            begin
+                                topSpaceComboBox.Text       := FloatToStrF( topSpace,               ffFixed, 5, 2 );
+                                NailSpacingComboBox.Text    := FloatToStrF( verticalNailSpacing,    ffFixed, 5, 2 );
+                                topLengthComboBox.Text      := FloatToStrF( topLength,              ffFixed, 5, 2 );
+                                bottomLengthComboBox.Text   := FloatToStrF( bottomLength,           ffFixed, 5, 2 );
+                            end;
 
                         if ( errorCount() = 0 ) then
-                            soilNailWallDesign.generateSoilNailLayout( topSpace, verticalNailSpacing, topLength, bottomLength );
+                            soilNailWallDesign.generateSoilNailLayout( topSpace, verticalNailSpacing, topLength, bottomLength )
+                        else
+                            soilNailWallDesign.generateSoilNailLayout( 0, 1, 0, 0 )
                     end;
 
 

@@ -55,6 +55,8 @@ implementation
     procedure TNailLayoutGenForm.ComboBoxChange(Sender: TObject);
         begin
             generateLayout();
+
+            ButtonOK.Enabled := ( nailLayoutInputManager.errorCount() = 0 );
         end;
 
     procedure TNailLayoutGenForm.JDBGraphic2DDrawingUpdateGeometry( ASender         : TObject;
@@ -67,7 +69,7 @@ implementation
         procedure TNailLayoutGenForm.generateLayout();
             begin
                 nailLayoutInputManager.readFromInputControls();
-                nailLayoutInputManager.writeToInputControls();
+                nailLayoutInputManager.writeToInputControls( False );
 
                 JDBGraphic2DDrawing.updateGeometry();
             end;
@@ -90,7 +92,9 @@ implementation
                                                                                         ComboBoxTopLength, ComboBoxBottomLength,
                                                                                         soilNailWallDesign                      );
 
-                    nailLayoutInputManager.writeToInputControls();
+                    nailLayoutInputManager.writeToInputControls( True );
+
+                    ButtonOK.Enabled := ( nailLayoutInputManager.errorCount() = 0 );
 
                 //draw wall
                     JDBGraphic2DDrawing.updateGeometry();

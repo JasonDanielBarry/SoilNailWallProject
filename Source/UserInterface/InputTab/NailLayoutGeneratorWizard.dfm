@@ -151,7 +151,7 @@ object NailLayoutGenForm: TNailLayoutGenForm
           Height = 38
           Align = alClient
           Caption = 'Top Space (m)'
-          ExplicitWidth = 75
+          ExplicitWidth = 76
           ExplicitHeight = 15
         end
         object LabelNailSpacing: TLabel
@@ -171,7 +171,7 @@ object NailLayoutGenForm: TNailLayoutGenForm
           Height = 38
           Align = alClient
           Caption = 'Top Length (m)'
-          ExplicitWidth = 81
+          ExplicitWidth = 82
           ExplicitHeight = 15
         end
         object LabelBottomLength: TLabel

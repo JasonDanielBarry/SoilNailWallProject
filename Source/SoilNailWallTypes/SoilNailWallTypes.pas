@@ -299,24 +299,28 @@ implementation
         procedure TSoilNails.getNailLayout( const wallHeightIn                      : double;
                                             out topSpaceOut,    verticalSpacingOut,
                                                 topLengthOut,   bottomLengthOut     : double);
+            var
+                localNailCount : integer;
             begin
                 topSpaceOut         := 0;
                 verticalSpacingOut  := 0;
                 topLengthOut        := 0;
                 bottomLengthOut     := 0;
 
-                if (nailCount() < 2) then
+                localNailCount := nailCount();
+
+                if (localNailCount < 2) then
                     exit();
 
                 topSpaceOut         := wallHeightIn - arrHeights[0];
-                verticalSpacingOut  := (arrHeights[0] - arrHeights[nailCount() - 1]) / (nailCount() - 1);
+                verticalSpacingOut  := (arrHeights[0] - arrHeights[localNailCount - 1]) / (localNailCount - 1);
                 topLengthOut        := arrLengths[0];
-                bottomLengthOut     := arrLengths[nailCount() - 1];
+                bottomLengthOut     := arrLengths[localNailCount - 1];
             end;
 
         function TSoilNails.nailCount() : integer;
             begin
-                result := length(arrHeights);
+                result := length( arrHeights );
             end;
 
         function TSoilNails.longestNailLength() : double;

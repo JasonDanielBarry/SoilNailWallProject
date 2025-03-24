@@ -379,27 +379,27 @@ implementation
         //launch layout generator
             function TNailPropertiesInputManager.NailLayoutGeneratorExecute() : boolean;
                 var
-                    formResult          : TModalResult;
+                    formModalResult     : TModalResult;
                     generateLayoutForm  : TNailLayoutGenForm;
                 begin
                     generateLayoutForm := TNailLayoutGenForm.create( SoilNailWallDesign );
 
                     generateLayoutForm.ShowModal();
 
-                    formResult := generateLayoutForm.ModalResult;
+                    formModalResult := generateLayoutForm.ModalResult;
 
-                    case formResult of
-                        mrOk:
-                            begin
-                                var newSNW : TSoilNailWall := generateLayoutForm.getSoilNailWallDesign();
+                    if ( formModalResult = mrOk ) then
+                        begin
+                            var newSNW : TSoilNailWall := generateLayoutForm.getSoilNailWallDesign();
 
-                                SoilNailWallDesign.copySNW( newSNW );
-                            end;
-                    end;
+                            SoilNailWallDesign.copySNW( newSNW );
+
+                            result := True;
+                        end
+                    else
+                        result := False;
 
                     FreeAndNil( generateLayoutForm );
-
-                    result := (formResult = mrOk);
                 end;
 
 end.

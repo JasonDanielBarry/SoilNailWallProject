@@ -315,7 +315,7 @@ object SNWForm: TSNWForm
           Alignment = taCenter
           Caption = 'Input Type'
           Layout = tlCenter
-          ExplicitWidth = 55
+          ExplicitWidth = 56
           ExplicitHeight = 15
         end
       end
@@ -510,7 +510,7 @@ object SNWForm: TSNWForm
           Alignment = taCenter
           Caption = 'Examples'
           Layout = tlCenter
-          ExplicitWidth = 50
+          ExplicitWidth = 49
           ExplicitHeight = 15
         end
       end
@@ -601,7 +601,7 @@ object SNWForm: TSNWForm
         object LabelComputationType: TLabel
           Left = 0
           Top = 75
-          Width = 98
+          Width = 99
           Height = 15
           Align = alClient
           Alignment = taCenter
@@ -1060,7 +1060,7 @@ object SNWForm: TSNWForm
       ParentColor = False
       Transparent = True
       Layout = tlCenter
-      ExplicitWidth = 36
+      ExplicitWidth = 37
       ExplicitHeight = 15
     end
     object ComboBoxTheme: TComboBox
