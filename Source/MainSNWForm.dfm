@@ -2,8 +2,8 @@ object SNWForm: TSNWForm
   Left = 0
   Top = 0
   Caption = 'Soil Nail Wall'
-  ClientHeight = 804
-  ClientWidth = 1751
+  ClientHeight = 783
+  ClientWidth = 1875
   Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -13,16 +13,15 @@ object SNWForm: TSNWForm
   Font.Style = []
   OnClose = FormClose
   OnCreate = FormCreate
-  OnShow = FormShow
   DesignSize = (
-    1751
-    804)
+    1875
+    783)
   TextHeight = 15
   object PageControlRibbon: TPageControl
     AlignWithMargins = True
     Left = 0
     Top = 2
-    Width = 1751
+    Width = 1875
     Height = 125
     Margins.Left = 0
     Margins.Top = 2
@@ -632,7 +631,7 @@ object SNWForm: TSNWForm
     Left = 0
     Top = 127
     Width = 857
-    Height = 677
+    Height = 656
     Margins.Left = 0
     Margins.Top = 5
     Margins.Right = 0
@@ -870,7 +869,7 @@ object SNWForm: TSNWForm
       object ListBoxMaterialProperties: TListBox
         AlignWithMargins = True
         Left = 5
-        Top = 517
+        Top = 496
         Width = 839
         Height = 125
         Margins.Left = 5
@@ -937,7 +936,7 @@ object SNWForm: TSNWForm
       object ListBoxWallGeom: TListBox
         AlignWithMargins = True
         Left = 5
-        Top = 517
+        Top = 496
         Width = 839
         Height = 125
         Margins.Left = 5
@@ -998,7 +997,7 @@ object SNWForm: TSNWForm
       object ListBoxNailProperties: TListBox
         AlignWithMargins = True
         Left = 5
-        Top = 517
+        Top = 496
         Width = 839
         Height = 125
         Margins.Left = 5
@@ -1011,23 +1010,8 @@ object SNWForm: TSNWForm
       end
     end
   end
-  object JDBGraphic2DDiagram: TJDBGraphic2D
-    Left = 857
-    Top = 127
-    Width = 894
-    Height = 677
-    Align = alClient
-    BevelEdges = []
-    BevelOuter = bvNone
-    ParentColor = True
-    ParentShowHint = False
-    ShowCaption = False
-    ShowHint = True
-    TabOrder = 2
-    OnUpdateGeometry = JDBGraphic2DDiagramUpdateGeometry
-  end
   object GridPanelTheme: TGridPanel
-    Left = 1648
+    Left = 1772
     Top = 0
     Width = 95
     Height = 23
@@ -1057,7 +1041,7 @@ object SNWForm: TSNWForm
       item
         Value = 100.000000000000000000
       end>
-    TabOrder = 3
+    TabOrder = 2
     object LabelTheme: TLabel
       AlignWithMargins = True
       Left = 0
@@ -1091,6 +1075,25 @@ object SNWForm: TSNWForm
         'Light'
         'Dark')
     end
+  end
+  object JDBGraphic2DDiagram: TJDBGraphic2D
+    Left = 857
+    Top = 127
+    Width = 1018
+    Height = 656
+    Align = alClient
+    BevelEdges = []
+    BevelOuter = bvNone
+    ParentColor = True
+    ParentShowHint = False
+    ShowCaption = False
+    ShowHint = True
+    TabOrder = 3
+    OnUpdateGeometry = JDBGraphic2DDiagramUpdateGeometry
+    ExplicitLeft = 1232
+    ExplicitTop = 336
+    ExplicitWidth = 185
+    ExplicitHeight = 41
   end
   object ActionManager1: TActionManager
     Left = 1344

@@ -30,7 +30,6 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  TStyleManager.TrySetStyle('Windows11 Modern Light');
   Application.CreateForm(TSNWForm, SNWForm);
   Application.Run;
 end.

@@ -103,7 +103,6 @@ interface
             ActionDarkTheme: TAction;
             ActionLightTheme: TAction;
             ActionNew: TAction;
-            JDBGraphic2DDiagram: TJDBGraphic2D;
             ListBoxMaterialProperties: TListBox;
             ListBoxWallGeom: TListBox;
             ListBoxNailProperties: TListBox;
@@ -112,6 +111,7 @@ interface
             ActionSaveAs: TAction;
             OpenFileDialog: TFileOpenDialog;
             SaveFileDialog: TFileSaveDialog;
+    JDBGraphic2DDiagram: TJDBGraphic2D;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
@@ -162,8 +162,6 @@ interface
             //update geometry
                 procedure JDBGraphic2DDiagramUpdateGeometry(ASender         : TObject;
                                                             var AGeomDrawer : TGraphicDrawerObjectAdder);
-            //show form
-                procedure FormShow(Sender: TObject);
         private
             var
                 activeInputPage             : EActiveInputPage;
@@ -434,7 +432,7 @@ implementation
                                 setUITheme( EUITheme.uitDark );
                         end;
 
-                        ComboBoxTheme.Refresh();
+                        JDBGraphic2DDiagram.updateGeometry();
                     end;
 
             //ribbon
@@ -456,15 +454,9 @@ implementation
 
             //update geometry
                 procedure TSNWForm.JDBGraphic2DDiagramUpdateGeometry(   ASender         : TObject;
-                                                                            var AGeomDrawer : TGraphicDrawerObjectAdder );
+                                                                        var AGeomDrawer : TGraphicDrawerObjectAdder );
                     begin
                         SoilNailWallDesign.updateSoilNailWallGeomtry( AGeomDrawer );
-                    end;
-
-            //show form
-                procedure TSNWForm.FormShow(Sender: TObject);
-                    begin
-                        JDBGraphic2DDiagram.updateGeometry();
                     end;
 
     //private
