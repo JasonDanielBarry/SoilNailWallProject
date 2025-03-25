@@ -111,7 +111,7 @@ interface
             ActionSaveAs: TAction;
             OpenFileDialog: TFileOpenDialog;
             SaveFileDialog: TFileSaveDialog;
-    JDBGraphic2DDiagram: TJDBGraphic2D;
+            JDBGraphic2DDiagram: TJDBGraphic2D;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
