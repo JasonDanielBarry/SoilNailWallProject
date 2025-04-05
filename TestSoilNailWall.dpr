@@ -13,7 +13,8 @@ uses
   DUnitX.Loggers.Xml.NUnit,
   {$ENDIF }
   DUnitX.TestFramework,
-  TEST_SoilNailWallComputationMethods in 'Source\SoilNailWallClass\Computation\Analysis\TEST_SoilNailWallComputationMethods.pas';
+  TEST_SoilNailWallComputationMethods in 'Source\SoilNailWallClass\Computation\Analysis\TEST_SoilNailWallComputationMethods.pas',
+  SoilNailWallComputationMethods in 'Source\SoilNailWallClass\Computation\Analysis\SoilNailWallComputationMethods.pas';
 
 { keep comment here to protect the following conditional from being removed by the IDE when adding a unit }
 {$IFNDEF TESTINSIGHT}
@@ -55,7 +56,7 @@ begin
 
     {$IFNDEF CI}
     //We don't want this happening when running under CI.
-    if TDUnitX.Options.ExitBehavior = TDUnitXExitBehavior.Pause then
+//    if TDUnitX.Options.ExitBehavior = TDUnitXExitBehavior.Pause then
     begin
       System.Write('Done.. press <Enter> key to quit.');
       System.Readln;

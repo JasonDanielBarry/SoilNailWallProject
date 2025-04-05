@@ -2,8 +2,8 @@ object SNWForm: TSNWForm
   Left = 0
   Top = 0
   Caption = 'Soil Nail Wall'
-  ClientHeight = 783
-  ClientWidth = 1875
+  ClientHeight = 758
+  ClientWidth = 1741
   Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -11,17 +11,19 @@ object SNWForm: TSNWForm
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  Position = poDesigned
   OnClose = FormClose
   OnCreate = FormCreate
+  OnShow = FormShow
   DesignSize = (
-    1875
-    783)
+    1741
+    758)
   TextHeight = 15
   object PageControlRibbon: TPageControl
     AlignWithMargins = True
     Left = 0
     Top = 2
-    Width = 1875
+    Width = 1741
     Height = 125
     Margins.Left = 0
     Margins.Top = 2
@@ -33,6 +35,7 @@ object SNWForm: TSNWForm
     ParentDoubleBuffered = False
     TabOrder = 0
     OnChange = PageControlRibbonChange
+    ExplicitWidth = 1707
     object PageFile: TTabSheet
       Caption = 'File'
       Enabled = False
@@ -172,12 +175,14 @@ object SNWForm: TSNWForm
         object LabelFactorOptions: TLabel
           Left = 0
           Top = 75
-          Width = 124
-          Height = 15
+          Width = 224
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'Material Factor Options'
           Layout = tlCenter
+          ExplicitWidth = 124
+          ExplicitHeight = 15
         end
       end
       object GridPanelInputType: TGridPanel
@@ -306,12 +311,14 @@ object SNWForm: TSNWForm
         object LabelInputType: TLabel
           Left = 0
           Top = 75
-          Width = 56
-          Height = 15
+          Width = 224
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'Input Type'
           Layout = tlCenter
+          ExplicitWidth = 56
+          ExplicitHeight = 15
         end
       end
       object GridPanelNailLayoutOptions: TGridPanel
@@ -415,12 +422,14 @@ object SNWForm: TSNWForm
         object LabelNailLayoutOptions: TLabel
           Left = 0
           Top = 75
-          Width = 81
-          Height = 15
+          Width = 149
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'Layout Options'
           Layout = tlCenter
+          ExplicitWidth = 81
+          ExplicitHeight = 15
         end
       end
       object GridPanelExamples: TGridPanel
@@ -497,12 +506,14 @@ object SNWForm: TSNWForm
         object LabelExamples: TLabel
           Left = 0
           Top = 75
-          Width = 49
-          Height = 15
+          Width = 74
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'Examples'
           Layout = tlCenter
+          ExplicitWidth = 49
+          ExplicitHeight = 15
         end
       end
     end
@@ -623,7 +634,7 @@ object SNWForm: TSNWForm
     Left = 0
     Top = 127
     Width = 857
-    Height = 656
+    Height = 631
     Margins.Left = 0
     Margins.Top = 5
     Margins.Right = 0
@@ -704,8 +715,8 @@ object SNWForm: TSNWForm
         object LabelAveVal: TLabel
           Left = 0
           Top = 0
-          Width = 43
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -715,12 +726,14 @@ object SNWForm: TSNWForm
           Caption = 'Average'#13#10'Value'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 43
+          ExplicitHeight = 30
         end
         object LabelVarCoef: TLabel
           Left = 75
           Top = 0
-          Width = 58
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -730,12 +743,14 @@ object SNWForm: TSNWForm
           Caption = 'Variation Coefficient'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 58
+          ExplicitHeight = 30
         end
         object LabelDowngFact: TLabel
           Left = 150
           Top = 0
-          Width = 64
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -745,12 +760,14 @@ object SNWForm: TSNWForm
           Caption = 'Downgrade Factor'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 64
+          ExplicitHeight = 30
         end
         object LabelCauEst: TLabel
           Left = 225
           Top = 0
-          Width = 50
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -760,12 +777,14 @@ object SNWForm: TSNWForm
           Caption = 'Cautious Estimate'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 50
+          ExplicitHeight = 30
         end
         object LabelParFac: TLabel
           Left = 300
           Top = 0
-          Width = 33
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -775,12 +794,14 @@ object SNWForm: TSNWForm
           Caption = 'Partial'#13#10'Factor'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 33
+          ExplicitHeight = 30
         end
         object LabelDesVal: TLabel
           Left = 375
           Top = 0
-          Width = 36
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -790,6 +811,8 @@ object SNWForm: TSNWForm
           Caption = 'Design'#13#10'Value'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 36
+          ExplicitHeight = 30
         end
       end
       object GridSoilParInput: TStringGrid
@@ -849,7 +872,7 @@ object SNWForm: TSNWForm
       object ListBoxMaterialProperties: TListBox
         AlignWithMargins = True
         Left = 5
-        Top = 496
+        Top = 471
         Width = 839
         Height = 125
         Margins.Left = 5
@@ -916,7 +939,7 @@ object SNWForm: TSNWForm
       object ListBoxWallGeom: TListBox
         AlignWithMargins = True
         Left = 5
-        Top = 496
+        Top = 471
         Width = 839
         Height = 125
         Margins.Left = 5
@@ -977,7 +1000,7 @@ object SNWForm: TSNWForm
       object ListBoxNailProperties: TListBox
         AlignWithMargins = True
         Left = 5
-        Top = 496
+        Top = 471
         Width = 839
         Height = 125
         Margins.Left = 5
@@ -991,7 +1014,7 @@ object SNWForm: TSNWForm
     end
   end
   object GridPanelTheme: TGridPanel
-    Left = 1772
+    Left = 1638
     Top = 0
     Width = 95
     Height = 23
@@ -1022,6 +1045,7 @@ object SNWForm: TSNWForm
         Value = 100.000000000000000000
       end>
     TabOrder = 2
+    ExplicitLeft = 1604
     object LabelTheme: TLabel
       AlignWithMargins = True
       Left = 0
@@ -1059,8 +1083,8 @@ object SNWForm: TSNWForm
   object JDBGraphic2DDiagram: TJDBGraphic2D
     Left = 857
     Top = 127
-    Width = 1018
-    Height = 656
+    Width = 884
+    Height = 631
     Align = alClient
     BevelEdges = []
     BevelOuter = bvNone
@@ -1070,10 +1094,11 @@ object SNWForm: TSNWForm
     ShowHint = True
     TabOrder = 3
     OnUpdateGeometry = JDBGraphic2DDiagramUpdateGeometry
+    ExplicitWidth = 850
   end
   object ActionManager1: TActionManager
-    Left = 1344
-    Top = 170
+    Left = 992
+    Top = 138
     StyleName = 'Platform Default'
     object ActionWallGeometry: TAction
       Category = 'Input'
@@ -1156,8 +1181,8 @@ object SNWForm: TSNWForm
     end
   end
   object PopupMenuFile: TPopupMenu
-    Left = 1248
-    Top = 168
+    Left = 896
+    Top = 136
     object FMNew: TMenuItem
       Action = ActionNew
     end
@@ -1194,8 +1219,8 @@ object SNWForm: TSNWForm
         FileMask = '*.snw'
       end>
     Options = []
-    Left = 1249
-    Top = 229
+    Left = 897
+    Top = 197
   end
   object SaveFileDialog: TFileSaveDialog
     FavoriteLinks = <>
@@ -1205,7 +1230,7 @@ object SNWForm: TSNWForm
         FileMask = '*.snw'
       end>
     Options = []
-    Left = 1337
-    Top = 229
+    Left = 985
+    Top = 197
   end
 end

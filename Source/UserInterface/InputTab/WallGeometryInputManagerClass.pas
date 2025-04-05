@@ -62,7 +62,7 @@ implementation
                     begin
                         wall := soilNailWallDesign.getWall();
 
-                        readSuccessful := wallParametersGrid.tryCellToDouble( 1, 0, wall.height ) AND readSuccessful;
+                        readSuccessful := wallParametersGrid.tryCellToDouble( 1, 0, wall.height );
 
                         readSuccessful := wallParametersGrid.tryCellToDouble( 1, 1, wall.thickness ) AND readSuccessful;
                         wall.thickness := wall.thickness / 1000;

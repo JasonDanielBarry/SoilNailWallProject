@@ -3,74 +3,83 @@ unit SoilNailWallComputationMethods;
 interface
 
     uses
-        System.SysUtils, Math,
-        SoilNailWallTypes;
+        System.SysUtils, Math
+        ;
 
-    function nailGroupTension(  const appliedLoadIn, safetyFactorIn   : double;
-                                const nailsIn                         : TSoilNails;
-                                const slipWedgeIn                     : TSlipWedge;
-                                const soilIn                          : TSoil     ) : double;
+    function calculateNailGroupTension( const   slipWedgeWeightIn, slipWedgeAngleIn,
+                                                slipWedgeLengthIn, soilCohesionIn,
+                                                soilFrictionAngleIn, nailAngleIn,
+                                                appliedLoadIn, safetyFactorIn       : double ) : double;
+
+    function calculateNailGroupSafetyFactor(const   slipWedgeWeightIn, slipWedgeAngleIn,
+                                                    slipWedgeLengthIn, soilCohesionIn,
+                                                    soilFrictionAngleIn, nailAngleIn,
+                                                    nailGroupTensionIn, appliedLoadIn   : double) : double;
 
 implementation
 
-    function nailGroupTension(  const appliedLoadIn, safetyFactorIn   : double;
-                                const nailsIn                         : TSoilNails;
-                                const slipWedgeIn                     : TSlipWedge;
-                                const soilIn                          : TSoil     ) : double;
+    function calculateNailGroupTension( const   slipWedgeWeightIn, slipWedgeAngleIn,
+                                                slipWedgeLengthIn, soilCohesionIn,
+                                                soilFrictionAngleIn, nailAngleIn,
+                                                appliedLoadIn, safetyFactorIn       : double ) : double;
         var
-            a, c, FS, L, phi, Q, theta, W,
+            alpha, c, FS, L, phi, Q, theta, W,
             numerator, denominator,
             tensionOut                      : double;
         begin
-            a       := degToRad(slipWedgeIn.angle);
-            c       := soilIn.cohesion.designValue;
-            Fs      := safetyFactorIn;
-            L       := slipWedgeIn.length;
-            phi     := degToRad(soilIn.frictionAngle.designValue);
-            Q       := appliedLoadIn;
-            theta   := degToRad(nailsIn.angle);
-            W       := slipWedgeIn.selfWeight;
+            //calculation variables
+                alpha   := degToRad( slipWedgeAngleIn );
+                c       := soilCohesionIn;
+                Fs      := safetyFactorIn;
+                L       := slipWedgeLengthIn;
+                phi     := degToRad( soilFrictionAngleIn );
+                Q       := appliedLoadIn;
+                theta   := degToRad( nailAngleIn );
+                W       := slipWedgeWeightIn;
 
-            numerator   :=      (W + Q) * (Fs * sin(a) - cos(a) * tan(phi))  - (c * L);
-                            //  ------------------------------------------------------
-            denominator :=          cos(a + theta) + sin(a + theta) * tan(phi);
+            //equation
+                numerator   :=      (W + Q) * (Fs * sin( alpha ) - cos( alpha ) * tan( phi ))  - (c * L);
+                                //  ------------------------------------------------------
+                denominator :=          cos( alpha + theta ) + sin( alpha + theta ) * tan( phi );
 
-            tensionOut := numerator / denominator;
+                tensionOut := numerator / denominator;
 
             result := tensionOut;
         end;
 
-    function nailGroupSafetyFactor( const appliedLoadIn, groupTensionIn   : double;
-                                    const nailsIn                         : TSoilNails;
-                                    const slipWedgeIn                     : TSlipWedge;
-                                    const soilIn                          : TSoil     ) : double;
+    function calculateNailGroupSafetyFactor(const   slipWedgeWeightIn, slipWedgeAngleIn,
+                                                    slipWedgeLengthIn, soilCohesionIn,
+                                                    soilFrictionAngleIn, nailAngleIn,
+                                                    nailGroupTensionIn, appliedLoadIn   : double) : double;
         var
-            a, c, F, L, N, phi, Q, T, theta, W,
+            alpha, c, F, L, N, phi, Q, T, theta, W,
             drivingForce, resistingForce,
             safetyFactorOut                     : double;
         begin
-            a       := degToRad(slipWedgeIn.angle);
-            c       := soilIn.cohesion.designValue;
-            L       := slipWedgeIn.length;
-            phi     := degToRad(soilIn.frictionAngle.designValue);
-            Q       := appliedLoadIn;
-            T       := groupTensionIn;
-            theta   := degToRad(nailsIn.angle);
-            W       := slipWedgeIn.selfWeight;
+            //calculation variables
+                alpha   := degToRad( slipWedgeAngleIn );
+                c       := soilCohesionIn;
+                L       := slipWedgeLengthIn;
+                phi     := degToRad( soilFrictionAngleIn );
+                Q       := appliedLoadIn;
+                T       := nailGroupTensionIn;
+                theta   := degToRad( nailAngleIn );
+                W       := slipWedgeWeightIn;
 
-            //driving force
-                drivingForce := (W + Q) * sin(a);
+            //equation
+                //driving force
+                    drivingForce := (W + Q) * sin(alpha);
 
-            //resisting force
-                //normal force
-                    N := ((W + Q) * cos(a)) + (T * sin(a + theta));
+                //resisting force
+                    //normal force
+                        N := (W + Q) * cos( alpha ) + T * sin( alpha + theta );
 
-                //cohesive/friction force
-                    F := (c * L) + (N * tan(phi));
+                    //cohesive and friction force
+                        F := (c * L) + ( N * tan( phi ) );
 
-                resistingForce := (T * cos(a + theta)) + F;
+                    resistingForce := T * cos( alpha + theta ) + F;
 
-            safetyFactorOut := resistingForce / drivingForce;
+                safetyFactorOut := resistingForce / drivingForce;
 
             result := safetyFactorOut;
         end;

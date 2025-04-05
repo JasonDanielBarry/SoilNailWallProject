@@ -117,6 +117,8 @@ interface
                 procedure FormCreate(Sender: TObject);
             //destruction
                 procedure FormClose(Sender: TObject; var Action: TCloseAction);
+            //on show
+                procedure FormShow(Sender: TObject);
         //actions
             //file menu
                 procedure ActionNewExecute(Sender: TObject);
@@ -232,6 +234,12 @@ implementation
                         FreeAndNil( nailPropertiesInputManager );
 
                         Action := TCloseAction.caFree;
+                    end;
+
+            //on show
+                procedure TSNWForm.FormShow(Sender: TObject);
+                    begin
+                        //nothing here
                     end;
 
         //actions
@@ -431,8 +439,6 @@ implementation
                             EUITheme.uitDark:
                                 setUITheme( EUITheme.uitDark );
                         end;
-
-                        JDBGraphic2DDiagram.updateGeometry();
                     end;
 
             //ribbon
@@ -656,6 +662,8 @@ implementation
                             EUITheme.uitDark:
                                 TStyleManager.SetStyle( WINDOWS11_THEME_DARK );
                         end;
+
+                        JDBGraphic2DDiagram.updateBackgroundColour();
                     end;
 
                 procedure TSNWForm.positionThemeDropMenu();
