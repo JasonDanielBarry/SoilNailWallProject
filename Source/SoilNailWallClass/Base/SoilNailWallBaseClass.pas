@@ -67,7 +67,7 @@ interface
                     //nails
                         function getNails() : TSoilNails;
                     //slip wedge
-                        function getSlipWedge() : TSlipWedge;
+                        function getSlipWedge(const updateSlipWedgeIn : boolean = False) : TSlipWedge; virtual;
                     //soil
                         function getSoil() : TSoil;
                     //wall
@@ -332,7 +332,7 @@ implementation
                     end;
 
             //slip wedge
-                function TSoilNailWallBase.getSlipWedge() : TSlipWedge;
+                function TSoilNailWallBase.getSlipWedge(const updateSlipWedgeIn : boolean = False) : TSlipWedge;
                     begin
                         result := slipWedge;
                     end;

@@ -65,6 +65,9 @@ interface
                 //slip wedge
                     function determineSlipLine() : TGeomLine;
                     function determineSlipWedgeGeometry() : TGeomPolygon;
+                    function calculateSlipWedgeWeight() : double;
+                    function calculateSlipWedgeLength() : double;
+                    function getSlipWedge(const updateSlipWedgeIn : boolean = False) : TSlipWedge; override;
                 //soil
                     function determineSoilGeometry() : TGeomPolygon;
                 //wall
@@ -102,7 +105,7 @@ implementation
                             lowestNailLength := nails.getArrLengths()[lowestNailIndex - 1];
                             lowestNailHeight := nails.getArrHeight()[lowestNailIndex - 1];
 
-                            endPointHeightOut := lowestNailHeight - lowestNailLength * sin(DegToRad(nails.angle));
+                            endPointHeightOut := lowestNailHeight - lowestNailLength * sin( DegToRad(nails.angle) );
 
                             result := endPointHeightOut - 2;
                         end;
@@ -182,13 +185,13 @@ implementation
                                 //find the intersection between the slip-test-line and the slope-line
                                 //otherwise the slip wedge top right point lies on the flat part of the soil
 
-                                    if ( NOT( slipWedgeRightBoundary() < determineSlopeToFlatPoint().x ) ) then
+                                    if ( determineSlopeToFlatPoint().x < slipWedgeRightBoundary() ) then
                                         exit( TGeomPoint.create( slipWedgeRightBoundary(), getSoil().slope.maxHeight ) );
 
                                     soilSlopeLine   := determineSlopeLine();
                                     slipTestLine    := _determineSlipTestLine();
 
-                                    topRightPointOut := TGeomLine.calculateLineIntersection( soilSlopeLine, slipTestLine, false ).point;
+                                    topRightPointOut := TGeomLine.calculateLineIntersection( soilSlopeLine, slipTestLine, True ).point;
 
                                 result := topRightPointOut;
                             end;
@@ -219,10 +222,10 @@ implementation
 
                                 //rigth boundary scenarios
                                     //nail length
-                                        nailLengthCriterion := wallTopRightPoint().x + (1.25 * getNails().longestNailLength());
+                                        nailLengthCriterion := wallTopRightPoint().x + (1.15 * getNails().longestNailLength());
 
                                     //slip wedge
-                                        slipWedgeAngleLengthCriterion := slipWedgeRightBoundary() + 5;
+                                        slipWedgeAngleLengthCriterion := slipWedgeRightBoundary() + 2.5;
 
                                     //wall height
                                         wallHeightLengthCriterion := wallTopRightPoint().x + getWall().height;
@@ -264,7 +267,7 @@ implementation
                                     dy := soil.slope.maxHeight - wall.height;
 
                                     //a dy value of zero results in x = 0
-                                        if ( (dy > 1e-3) AND (soil.slope.angle > 1e-3) ) then
+                                        if ( (1e-3 < dy) AND (1e-3 < soil.slope.angle) ) then
                                             dx := dy / (tan(DegToRad(soil.slope.angle)))
                                         else
                                             dx := soilRightBoundary();
@@ -433,20 +436,20 @@ implementation
                         for i := 0 to (length(arrNailGeometry) - 1) do
                             begin
                                 //find the intersection of the nail and the slip line
-                                    intersectionPoint   := slipLine.calculateLineIntersection(arrNailGeometry[i], False).point;
+                                    intersectionPoint   := slipLine.calculateLineIntersection(arrNailGeometry[i], True).point;
                                     nailEndPoint        := arrNailGeometry[i].getEndPoint();
 
                                 //create a line representing nail anchored section
                                     nailBeyondSlipLine := ( intersectionPoint.x < nailEndPoint.x );
 
-                                    if (nailBeyondSlipLine) then
-                                        begin
-                                            inc(anchoredNails);
+                                    if NOT(nailBeyondSlipLine) then
+                                        continue;
 
-                                            SetLength(arrAnchoredNailGeom, anchoredNails);
+                                    inc(anchoredNails);
 
-                                            arrAnchoredNailGeom[anchoredNails - 1] := TGeomLine.create(intersectionPoint, nailEndPoint);
-                                        end;
+                                    SetLength(arrAnchoredNailGeom, anchoredNails);
+
+                                    arrAnchoredNailGeom[anchoredNails - 1] := TGeomLine.create(intersectionPoint, nailEndPoint);
                             end;
 
                     //free nail geometry memory
@@ -494,10 +497,48 @@ implementation
                         //wall top
                             slipWedgeGeometry.addVertex(wallTopRightPoint());
 
-                    //assign the slip wedge its weight
-                        setslipWedgeWeight( slipWedgeGeometry.calculatePolygonArea() * getSoil().unitWeight.designValue() );
-
                     result := slipWedgeGeometry;
+                end;
+
+            function TSoilNailWallGeometry.calculateSlipWedgeWeight() : double;
+                var
+                    wedgeWeightOut      : double;
+                    slipWedgeGeometry   : TGeomPolygon;
+                begin
+                    slipWedgeGeometry := determineSlipWedgeGeometry();
+
+                    wedgeWeightOut := slipWedgeGeometry.calculatePolygonArea() * getSoil().unitWeight.designValue();
+
+                    setslipWedgeWeight( wedgeWeightOut );
+
+                    FreeAndNil( slipWedgeGeometry );
+
+                    result := wedgeWeightOut;
+                end;
+
+            function TSoilNailWallGeometry.calculateSlipWedgeLength() : double;
+                var
+                    lineLengthOut   : double;
+                    slipLine        : TGeomLine;
+                begin
+                    //slip length
+                        slipLine        := determineSlipLine();
+                        lineLengthOut   := slipline.calculateLength();
+                        setSlipWedgeLength( lineLengthOut );
+                        FreeAndNil( slipLine );
+
+                    result := lineLengthOut;
+                end;
+
+            function TSoilNailWallGeometry.getSlipWedge(const updateSlipWedgeIn : boolean = False) : TSlipWedge;
+                begin
+                    if ( updateSlipWedgeIn ) then
+                        begin
+                            calculateSlipWedgeWeight();
+                            calculateSlipWedgeLength();
+                        end;
+
+                    result := inherited getSlipWedge();
                 end;
 
         //soil
@@ -508,13 +549,13 @@ implementation
                     soilGeometry := TGeomPolygon.create();
 
                     //add points
-                        soilGeometry.addVertex(0, 0);                                       //wall bottom
-                        soilGeometry.addVertex(soilLeftBoundary(),  0                   );  //soil left ground level
-                        soilGeometry.addVertex(determineSoilBottomLeftPoint()           );  //soil bottom left
-                        soilGeometry.addVertex(soilRightBoundary(), soilBottomBoundary());  //soil bottom right
-                        soilGeometry.addVertex(determineSoilTopRightPoint()             );  //soil top right
-                        soilGeometry.addVertex(determineSlopeEndPoint()                 );  //slope end
-                        soilGeometry.addVertex(wallTopRightPoint()                      );  //wall top
+                        soilGeometry.addVertex( 0, 0 );                                         //wall bottom
+                        soilGeometry.addVertex( soilLeftBoundary(),  0                      );  //soil left ground level
+                        soilGeometry.addVertex( determineSoilBottomLeftPoint()              );  //soil bottom left
+                        soilGeometry.addVertex( soilRightBoundary(), soilBottomBoundary()   );  //soil bottom right
+                        soilGeometry.addVertex( determineSoilTopRightPoint()                );  //soil top right
+                        soilGeometry.addVertex( determineSlopeEndPoint()                    );  //slope end
+                        soilGeometry.addVertex( wallTopRightPoint()                         );  //wall top
 
                     result := soilGeometry;
                 end;

@@ -35,7 +35,6 @@ object SNWForm: TSNWForm
     ParentDoubleBuffered = False
     TabOrder = 0
     OnChange = PageControlRibbonChange
-    ExplicitWidth = 1707
     object PageFile: TTabSheet
       Caption = 'File'
       Enabled = False
@@ -639,7 +638,7 @@ object SNWForm: TSNWForm
     Margins.Top = 5
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = PageNailProperties
+    ActivePage = PageLoads
     Align = alLeft
     TabOrder = 1
     object PageMaterialParameters: TTabSheet
@@ -1012,6 +1011,19 @@ object SNWForm: TSNWForm
         TabOrder = 2
       end
     end
+    object PageLoads: TTabSheet
+      Caption = 'Load Cases'
+      ImageIndex = 3
+      object StringGrid1: TStringGrid
+        Left = 35
+        Top = 40
+        Width = 320
+        Height = 120
+        ColCount = 3
+        RowCount = 2
+        TabOrder = 0
+      end
+    end
   end
   object GridPanelTheme: TGridPanel
     Left = 1638
@@ -1045,7 +1057,6 @@ object SNWForm: TSNWForm
         Value = 100.000000000000000000
       end>
     TabOrder = 2
-    ExplicitLeft = 1604
     object LabelTheme: TLabel
       AlignWithMargins = True
       Left = 0
@@ -1094,7 +1105,6 @@ object SNWForm: TSNWForm
     ShowHint = True
     TabOrder = 3
     OnUpdateGeometry = JDBGraphic2DDiagramUpdateGeometry
-    ExplicitWidth = 850
   end
   object ActionManager1: TActionManager
     Left = 992

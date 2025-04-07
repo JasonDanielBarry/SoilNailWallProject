@@ -39,12 +39,12 @@ implementation
 
             //equation
                 numerator   :=      (W + Q) * (Fs * sin( alpha ) - cos( alpha ) * tan( phi ))  - (c * L);
-                                //  ------------------------------------------------------
+                                //  --------------------------------------------------------------------
                 denominator :=          cos( alpha + theta ) + sin( alpha + theta ) * tan( phi );
 
                 tensionOut := numerator / denominator;
 
-            result := tensionOut;
+            result := max(0, tensionOut);
         end;
 
     function calculateNailGroupSafetyFactor(const   slipWedgeWeightIn, slipWedgeAngleIn,

@@ -8,11 +8,11 @@ interface
             VCL.Graphics,
         //custom
             GeometryTypes, GeomBox, GeomLineClass, GeomPolyLineClass, GeomPolygonClass,
-            SoilNailWallTypes, SoilNailWallGeometryClass,
+            SoilNailWallTypes, SoilNailWallAnalysisClass,
             GraphicDrawerObjectAdderClass;
 
     type
-        TSoilNailWallGraphic = class(TSoilNailWallGeometry)
+        TSoilNailWallGraphic = class(TSoilNailWallAnalysis)
             private
                 //drawing methods
                     //nails

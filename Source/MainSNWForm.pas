@@ -112,6 +112,8 @@ interface
             OpenFileDialog: TFileOpenDialog;
             SaveFileDialog: TFileSaveDialog;
             JDBGraphic2DDiagram: TJDBGraphic2D;
+    PageLoads: TTabSheet;
+    StringGrid1: TStringGrid;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
@@ -701,10 +703,15 @@ implementation
 
                     JDBGraphic2DDiagram.updateGeometry();
 
+                    inputErrorCount := TInputManager.countInputErrors( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager ] );
+
+//                    if (inputErrorCount = 0) then
+//                        SoilNailWallDesign.calculateNailGroupTensionVSSlipAngleCurve( 0, 1 );
+
                     {$ifdef DEBUG}
                         PageControlRibbon.Pages[PageComputation.PageIndex].TabVisible := True;
                     {$else}
-                        inputErrorCount := TInputManager.countInputErrors( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager ] );
+
 
                         PageControlRibbon.Pages[PageComputation.PageIndex].TabVisible := ( inputErrorCount = 0 );
                     {$endif}
