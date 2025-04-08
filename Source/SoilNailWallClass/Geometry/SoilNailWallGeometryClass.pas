@@ -27,8 +27,8 @@ interface
                         //boundaries
                             //right
                                 function slipWedgeRightBoundary() : double;
-                        //top right point
-                            function slipWedgeTopRightPoint() : TGeomPoint;
+                            //top right point
+                                function slipWedgeTopRightPoint() : TGeomPoint;
                     //soil
                         //soil boundaries
                             //left
@@ -143,22 +143,21 @@ implementation
                                 soil        : TSoil;
                                 slipWedge   : TSlipWedge;
                             begin
-                                if ( usableSlipWedgeAngle() ) then
-                                    begin
-                                        soil        := getSoil();
-                                        slipWedge   := getSlipWedge();
+                                if NOT( usableSlipWedgeAngle() ) then
+                                    exit( 0 );
 
-                                        //calculate the x distance based on the max height of the slope
-                                            y := soil.slope.maxHeight;
+                                soil        := getSoil();
+                                slipWedge   := getSlipWedge();
 
-                                            x := y / tan(DegToRad(slipWedge.angle));
-                                    end
-                                else
-                                    x := 0;
+                                //calculate the x distance based on the max height of the slope
+                                    y := soil.slope.maxHeight;
+
+                                    x := y / tan(DegToRad(slipWedge.angle));
 
                                 result := x;
                             end;
 
+                    //top right point
                         function TSoilNailWallGeometry.slipWedgeTopRightPoint() : TGeomPoint;
                             var
 
@@ -330,13 +329,12 @@ implementation
 
                                 //the slope end point is where the soil turns from slope to flat
                                     //[1] if the slope rises above the max height by the end then return the point where the change from slope to flat occurs
-                                    //[2] if the slope does not rise to the max heigth there is only slope until the top right
+                                        if (maxHeightPoint.y < maxLengthPoint.y) then
+                                            result := maxHeightPoint
 
-                                //choose which point to return
-                                    if (maxHeightPoint.y < maxLengthPoint.y) then
-                                        result := maxHeightPoint //[1]
-                                    else
-                                        result := maxLengthPoint;//[2]
+                                    //[2] if the slope does not rise to the max heigth there is only slope until the top right
+                                        else
+                                            result := maxLengthPoint;
                             end;
 
                 //soil slope line
@@ -482,23 +480,26 @@ implementation
 
             function TSoilNailWallGeometry.determineSlipWedgeGeometry() : TGeomPolygon;
                 var
-                    slipWedgeTopRight, slopToFlatPoint  : TGeomPoint;
+                    slipWedgeTopRight, slopeToFlatPoint : TGeomPoint;
                     slipWedgeGeometry                   : TGeomPolygon;
                 begin
                     slipWedgeTopRight   := slipWedgeTopRightPoint();
-                    slopToFlatPoint     := determineSlopeToFlatPoint();
+                    slopeToFlatPoint     := determineSlopeToFlatPoint();
                     slipWedgeGeometry   := TGeomPolygon.create();
 
                     //add points
                         //origin
                             slipWedgeGeometry.addVertex(0, 0);
+
                         //top right
-                            slipWedgeGeometry.addVertex(slipWedgeTopRight);
+                            slipWedgeGeometry.addVertex( slipWedgeTopRight );
+
                         //slope-to-flat point
-                            if (slopToFlatPoint.x < slipWedgeTopRight.x) then
-                                slipWedgeGeometry.addVertex(slopToFlatPoint);
+                            if (slopeToFlatPoint.x < slipWedgeTopRight.x) then
+                                slipWedgeGeometry.addVertex( slopeToFlatPoint );
+
                         //wall top
-                            slipWedgeGeometry.addVertex(wallTopRightPoint());
+                            slipWedgeGeometry.addVertex( wallTopRightPoint() );
 
                     result := slipWedgeGeometry;
                 end;
@@ -509,11 +510,8 @@ implementation
                     slipWedgeGeometry   : TGeomPolygon;
                 begin
                     slipWedgeGeometry := determineSlipWedgeGeometry();
-
                     wedgeWeightOut := slipWedgeGeometry.calculatePolygonArea() * getSoil().unitWeight.designValue();
-
                     setslipWedgeWeight( wedgeWeightOut );
-
                     FreeAndNil( slipWedgeGeometry );
 
                     result := wedgeWeightOut;
@@ -524,11 +522,10 @@ implementation
                     lineLengthOut   : double;
                     slipLine        : TGeomLine;
                 begin
-                    //slip length
-                        slipLine        := determineSlipLine();
-                        lineLengthOut   := slipline.calculateLength();
-                        setSlipWedgeLength( lineLengthOut );
-                        FreeAndNil( slipLine );
+                    slipLine        := determineSlipLine();
+                    lineLengthOut   := slipline.calculateLength();
+                    setSlipWedgeLength( lineLengthOut );
+                    FreeAndNil( slipLine );
 
                     result := lineLengthOut;
                 end;
@@ -575,15 +572,15 @@ implementation
                     wall := getWall();
 
                     //the origin of the SNW geometry is the bottom right corner of the wall
-                        bottomRight := TGeomPoint.create(0                          , 0         );
+                        bottomRight := TGeomPoint.create( 0 ,0 );
                         topRight    := wallTopRightPoint();
-                        topLeft     := TGeomPoint.create(topRight.x - wall.thickness, topRight.y);
-                        bottomLeft  := TGeomPoint.create(-wall.thickness            , 0         );
+                        topLeft     := TGeomPoint.create( topRight.x - wall.thickness, topRight.y );
+                        bottomLeft  := TGeomPoint.create( -wall.thickness ,0 );
 
                     wallGeometry := TGeomPolygon.create();
 
                     for point in [bottomRight, topRight, topLeft, bottomLeft] do
-                        wallGeometry.addVertex(point);
+                        wallGeometry.addVertex( point );
 
                     result := wallGeometry;
                 end;
