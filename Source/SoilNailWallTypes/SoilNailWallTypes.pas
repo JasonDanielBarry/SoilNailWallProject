@@ -84,7 +84,7 @@ interface
                     procedure getNailLayout(const wallHeightIn                      : double;
                                             out topSpaceOut,    verticalSpacingOut,
                                                 topLengthOut,   bottomLengthOut     : double);
-                    function nailCount()            : integer;
+                    function determineNailCount()            : integer;
                     function longestNailLength()    : double;
                     function getArrHeight()         : TArray<double>;
                     function getArrLengths()        : TArray<double>;
@@ -191,7 +191,7 @@ implementation
                     exit();
 
                 //get number of nails
-                    arrLen := nailCount();
+                    arrLen := determineNailCount();
 
                 //check the nail height is valid
                     for i := 0 to (arrLen - 1) do
@@ -225,7 +225,7 @@ implementation
             begin
                 self.clearNailLayout();
 
-                arrLen := soilNailsIn.nailCount();
+                arrLen := soilNailsIn.determineNailCount();
 
                 if (arrLen < 1) then
                     exit();
@@ -307,7 +307,7 @@ implementation
                 topLengthOut        := 0;
                 bottomLengthOut     := 0;
 
-                localNailCount := nailCount();
+                localNailCount := determineNailCount();
 
                 if (localNailCount < 2) then
                     exit();
@@ -318,22 +318,17 @@ implementation
                 bottomLengthOut     := arrLengths[localNailCount - 1];
             end;
 
-        function TSoilNails.nailCount() : integer;
+        function TSoilNails.determineNailCount() : integer;
             begin
                 result := length( arrHeights );
             end;
 
         function TSoilNails.longestNailLength() : double;
-            var
-                i               : integer;
-                maxLengthOut    : double;
             begin
-                maxLengthOut := 0;
+                if ( determineNailCount() < 1 ) then
+                    exit(0);
 
-                for i := 0 to (nailCount() - 1) do
-                    maxLengthOut := max(arrLengths[i], maxLengthOut);
-
-                result := maxLengthOut;
+                result := MaxValue( arrLengths );
             end;
 
         function TSoilNails.getArrHeight() : TArray<double>;

@@ -50,7 +50,7 @@ implementation
 
                     nailAnchoredLength := 0;
 
-                    for i := 0 to ( nails.nailCount() - 1 ) do
+                    for i := 0 to ( nails.determineNailCount() - 1 ) do
                         nailAnchoredLength := nailAnchoredLength + anchoredNailGeom[i].calculateLength();
 
                     maxTensionOut {kN} := Pi * nails.diameter.groutHole / 1000 {m} * nails.strength.groutSoilInterface.designValue() {kPa} * nailAnchoredLength {m};

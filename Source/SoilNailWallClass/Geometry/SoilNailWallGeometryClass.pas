@@ -39,17 +39,18 @@ interface
                                 function soilTopBoundary() : double;
                             //bottom
                                 function soilBottomBoundary() : double;
+                            //soil bottom left point
+                                function determineSoilBottomLeftPoint() : TGeomPoint;
+                            //soil top right point
+                                function determineSoilTopRightPoint() : TGeomPoint;
                         //slope-to-flat point
                             //exact slope-to-flat point
                                 function determineSlopeToFlatPoint() : TGeomPoint;
                             //max length point - find the slope end point if the soil nail length is the criterion
-                                function determineMaxLengthSlopeEndPoint() : TGeomPoint;
+                                function determineSlopeEndPointAtRightBoundary() : TGeomPoint;
                             //slope end-point - use the max heigth and length points to find where the angled slope ends
                                 function determineSlopeEndPoint() : TGeomPoint;
-                        //soil bottom left point
-                            function determineSoilBottomLeftPoint() : TGeomPoint;
-                        //soil top right point
-                            function determineSoilTopRightPoint() : TGeomPoint;
+
                         //soil slope line
                             function determineSlopeLine() : TGeomLine;
                     //wall
@@ -60,7 +61,7 @@ interface
                     function SNWboundingBox() : TGeomBox;
                 //nails
                     function determineNailGeometry() : TArray<TGeomLine>;
-                    function determineAnchoredNailGeometry : Tarray<TGeomLine>;
+                    function determineAnchoredNailGeometry() : Tarray<TGeomLine>;
                     procedure freeNailGeometry(var arrNailGeomIn : Tarray<TGeomLine>);
                 //slip wedge
                     function determineSlipLine() : TGeomLine;
@@ -92,7 +93,7 @@ implementation
                             endPointHeightOut                   : double;
                             nails                               : TSoilNails;
                         begin
-                            lowestNailIndex := getNails().nailCount();
+                            lowestNailIndex := getNails().determineNailCount();
 
                             if (lowestNailIndex = 0) then
                                 begin
@@ -161,14 +162,14 @@ implementation
                         function TSoilNailWallGeometry.slipWedgeTopRightPoint() : TGeomPoint;
                             var
 
-                                topRightPointOut            : TGeomPoint;
+                                SWRB                        : double;
                                 slipTestLine, soilSlopeLine : TGeomLine;
                             function
                                 _determineSlipTestLine() : TGeomLine;
                                     var
                                         x, y : double;
                                     begin
-                                        x := slipWedgeRightBoundary();
+                                        x := SWRB;
                                         y := getSoil().slope.maxHeight;
 
                                         result := TGeomLine.create(
@@ -181,19 +182,21 @@ implementation
                                     if ( NOT(usableSlipWedgeAngle()) ) then
                                         exit( TGeomPoint.create(0, 0) );
 
-                                //if the slip wedge right boundary is less than the slope-to-flat point x-ordinate then
-                                //find the intersection between the slip-test-line and the slope-line
-                                //otherwise the slip wedge top right point lies on the flat part of the soil
+                                SWRB := slipWedgeRightBoundary();
 
-                                    if ( determineSlopeToFlatPoint().x < slipWedgeRightBoundary() ) then
-                                        exit( TGeomPoint.create( slipWedgeRightBoundary(), getSoil().slope.maxHeight ) );
+                                //if the slip wedge right boundary is greater than the slope-to-flat point x-ordinate then
+                                    //[1] find the slip wedge top right point lies on the flat part of the soil
+                                        if ( determineSlopeToFlatPoint().x < SWRB ) then
+                                            exit(
+                                                    TGeomPoint.create( SWRB, getSoil().slope.maxHeight )
+                                                );
 
-                                    soilSlopeLine   := determineSlopeLine();
-                                    slipTestLine    := _determineSlipTestLine();
+                                //else
+                                    //[2] find the intersection between the slip-test-line and the slope-line
+                                        soilSlopeLine   := determineSlopeLine();
+                                        slipTestLine    := _determineSlipTestLine();
 
-                                    topRightPointOut := TGeomLine.calculateLineIntersection( soilSlopeLine, slipTestLine, True ).point;
-
-                                result := topRightPointOut;
+                                        result := TGeomLine.calculateLineIntersection( soilSlopeLine, slipTestLine, True ).point;
                             end;
 
             //soil
@@ -225,10 +228,10 @@ implementation
                                         nailLengthCriterion := wallTopRightPoint().x + (1.15 * getNails().longestNailLength());
 
                                     //slip wedge
-                                        slipWedgeAngleLengthCriterion := slipWedgeRightBoundary() + 2.5;
+                                        slipWedgeAngleLengthCriterion := 1.05 * slipWedgeRightBoundary();
 
                                     //wall height
-                                        wallHeightLengthCriterion := wallTopRightPoint().x + getWall().height;
+                                        wallHeightLengthCriterion := wallTopRightPoint().x + 1.5 * getWall().height;
 
                                 result := MaxValue([
                                                         nailLengthCriterion,
@@ -250,6 +253,35 @@ implementation
                                                 soilLeftBoundary(),
                                                 lowestNailEndPointHeight()
                                              );
+                            end;
+
+                    //soil bottom left point
+                        function TSoilNailWallGeometry.determineSoilBottomLeftPoint() : TGeomPoint;
+                            begin
+                                result := TGeomPoint.create(
+                                                                soilLeftBoundary(),
+                                                                soilBottomBoundary()
+                                                            );
+                            end;
+
+                    //soil top right point
+                        function TSoilNailWallGeometry.determineSoilTopRightPoint() : TGeomPoint;
+                            var
+                                x, y            : double;
+                                soil            : TSoil;
+                                slopeEndPoint   : TGeomPoint;
+                            begin
+                                soil := getSoil();
+
+                                x := soilRightBoundary();
+
+                                //calculate slope point at the soil right boundary
+                                    slopeEndPoint := determineSlopeEndPointAtRightBoundary();
+
+                                //y is the min between the max slope height and the right boundary slope point height
+                                    y := min( soil.slope.maxHeight, slopeEndPoint.y );
+
+                                result := TGeomPoint.create(x, y);
                             end;
 
                 //slope-to-flat point
@@ -276,14 +308,14 @@ implementation
                             end;
 
                     //max length point
-                        function TSoilNailWallGeometry.determineMaxLengthSlopeEndPoint() : TGeomPoint;
+                        function TSoilNailWallGeometry.determineSlopeEndPointAtRightBoundary() : TGeomPoint;
                             var
                                 x, y : double;
                             begin
                                 //find (x, y) using the soil right boundary as criterion
                                     x := soilRightBoundary();
 
-                                    y := getWall().height + x * tan(DegToRad(getSoil().slope.angle));
+                                    y := getWall().height + (x * tan( DegToRad(getSoil().slope.angle )));
 
                                 result := TGeomPoint.create(x, y);
                             end;
@@ -294,7 +326,7 @@ implementation
                                 maxHeightPoint, maxLengthPoint : TGeomPoint;
                             begin
                                 maxHeightPoint := determineSlopeToFlatPoint();
-                                maxLengthPoint := determineMaxLengthSlopeEndPoint();
+                                maxLengthPoint := determineSlopeEndPointAtRightBoundary();
 
                                 //the slope end point is where the soil turns from slope to flat
                                     //[1] if the slope rises above the max height by the end then return the point where the change from slope to flat occurs
@@ -306,36 +338,6 @@ implementation
                                     else
                                         result := maxLengthPoint;//[2]
                             end;
-
-                //soil bottom left point
-                    function TSoilNailWallGeometry.determineSoilBottomLeftPoint() : TGeomPoint;
-                        begin
-                            result := TGeomPoint.create(
-                                                            soilLeftBoundary(),
-                                                            soilBottomBoundary()
-                                                        );
-                        end;
-
-                //soil top right point
-                    function TSoilNailWallGeometry.determineSoilTopRightPoint() : TGeomPoint;
-                        var
-                            x, y : double;
-                            soil : TSoil;
-                            wall : TWall;
-                        begin
-                            soil := getSoil();
-                            wall := getWall();
-
-                            x := soilRightBoundary();
-
-                            //calculate y at the soil right boundary
-                                y := wall.height + (x * tan(DegToRad(soil.slope.angle)));
-
-                            //y is the min between the max slope height and the calculated y-value
-                                y := min(soil.slope.maxHeight, y);
-
-                            result := TGeomPoint.create(x, y);
-                        end;
 
                 //soil slope line
                     function TSoilNailWallGeometry.determineSlopeLine() : TGeomLine;
@@ -389,11 +391,11 @@ implementation
                     nails   := getNails();
                     wall    := getWall();
 
-                    setlength(arrLinesOut, nails.nailCount());
+                    setlength(arrLinesOut, nails.determineNailCount());
 
                     interpolator := TInterpolator.create(0, wall.height, 0, wallTopRightPoint().x);
 
-                    for i := 0 to (nails.nailCount() - 1) do
+                    for i := 0 to (nails.determineNailCount() - 1) do
                         begin
                             //nailX and nailY define where the nail line intersects the back of the wall
                                 nailX := interpolator.interpolateX(nails.getArrHeight()[i]);
@@ -415,7 +417,7 @@ implementation
                     result := arrLinesOut;
                 end;
 
-            function TSoilNailWallGeometry.determineAnchoredNailGeometry : Tarray<TGeomLine>;
+            function TSoilNailWallGeometry.determineAnchoredNailGeometry() : Tarray<TGeomLine>;
                 var
                     nailBeyondSlipLine  : boolean;
                     anchoredNails, i    : integer;
@@ -436,7 +438,7 @@ implementation
                         for i := 0 to (length(arrNailGeometry) - 1) do
                             begin
                                 //find the intersection of the nail and the slip line
-                                    intersectionPoint   := slipLine.calculateLineIntersection(arrNailGeometry[i], True).point;
+                                    intersectionPoint   := slipLine.calculateLineIntersection(arrNailGeometry[i], False).point;
                                     nailEndPoint        := arrNailGeometry[i].getEndPoint();
 
                                 //create a line representing nail anchored section
@@ -454,6 +456,7 @@ implementation
 
                     //free nail geometry memory
                         freeNailGeometry(arrNailGeometry);
+                        FreeAndNil( slipLine );
 
                     result := arrAnchoredNailGeom;
                 end;

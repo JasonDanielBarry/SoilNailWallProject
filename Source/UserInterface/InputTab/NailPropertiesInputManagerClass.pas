@@ -163,7 +163,7 @@ implementation
 
                         nails := soilNailWallDesign.getNails();
 
-                        nailLayoutGrid.RowCount := nails.nailCount() + 2;
+                        nailLayoutGrid.RowCount := nails.determineNailCount() + 2;
 
                         //get the nail arrays
                             arrHeights := nails.getArrHeight();
@@ -172,7 +172,7 @@ implementation
                         //wall height it first prevHeight
                             prevNailHeight := soilNailWallDesign.getWall().height;
 
-                        for i := 0 to ( nails.nailCount() - 1 ) do
+                        for i := 0 to ( nails.determineNailCount() - 1 ) do
                             begin
                                 //write nail number
                                     nailNum := i + 1;
@@ -235,12 +235,12 @@ implementation
                             addError('Grout hole diameter must be non-zero');
 
                     //nail layout
-                        if ( nails.nailCount() < 2 ) then
+                        if ( nails.determineNailCount() < 2 ) then
                             addError('At least 2 nail are required for a valid layout');
 
                         arrNaillengths := nails.getArrLengths();
 
-                        for i := 0 to (nails.nailCount() - 1) do
+                        for i := 0 to (nails.determineNailCount() - 1) do
                             if ( IsZero( arrNaillengths[i], 1e-3 ) ) then
                                 addError('Nail ' + IntToStr(i+1) + ' length must be non-zero');
                 end;

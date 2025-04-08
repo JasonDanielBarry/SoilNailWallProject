@@ -174,9 +174,9 @@ implementation
         //drawing
             procedure TSoilNailWallGraphic.updateSoilNailWallGeomtry(var graphicDrawerInOut: TGraphicDrawerObjectAdder);
                 begin
-                    //for now set a value of 50 to the wedge angle for testing
-                        setSlipWedgeAngle(45);
-                        setslipWedgevisible(False);
+                    //for now set a value to the wedge angle for testing
+                        setSlipWedgeAngle(35);
+                        setslipWedgevisible(True);
 
                     updateSoil( graphicDrawerInOut );
 
@@ -189,26 +189,5 @@ implementation
 
                     updateWall( graphicDrawerInOut );
                 end;
-
-        //drawing
-//            procedure TSoilNailWallGraphic.drawSoilNailWall(canvasHeightIn, canvasWidthIn   : integer;
-//                                                            var canvasInOut                 : ISkCanvas);
-//                begin
-//                    //for now set a value of 50 to the wedge angle for testing
-//                        setSlipWedgeAngle(45);
-//                        setslipWedgevisible(False);
-//
-//                    updateSoil(canvasInOut);
-//
-//                    updateSlipWedge(canvasInOut);
-//
-//                    updateNails(canvasInOut);
-//                    updateAnchoredNails(canvasInOut);
-//
-//                    updateSlipLine(canvasInOut);
-//
-//                    updateWall(canvasInOut);
-//                end;
-
 
 end.
