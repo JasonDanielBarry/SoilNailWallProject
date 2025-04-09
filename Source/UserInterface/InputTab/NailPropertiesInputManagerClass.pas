@@ -236,7 +236,7 @@ implementation
 
                     //nail layout
                         if ( nails.determineNailCount() < 2 ) then
-                            addError('At least 2 nail are required for a valid layout');
+                            addError('At least 2 nails are required for a valid layout');
 
                         arrNaillengths := nails.getArrLengths();
 
@@ -255,16 +255,18 @@ implementation
                     nailParametersGrid  := nailParametersGridIn;
                     nailLayoutGrid      := nailLayoutGridIn;
 
+                    //create labels
+                        nailPropertiesLabel := TLabel.Create( nil );
+                        nailLayoutLabel     := TLabel.Create( nil );
+
                     inherited create( errorListBoxIn, soilNailWallDesignIn );
                 end;
 
         //destructor
             destructor TNailPropertiesInputManager.destroy();
-                var
-                    tempLabel : TLabel;
                 begin
-                    for tempLabel in [ nailPropertiesLabel, nailLayoutLabel ] do
-                        FreeAndNil( tempLabel );
+                    FreeAndNil( nailPropertiesLabel );
+                    FreeAndNil( nailLayoutLabel );
 
                     inherited destroy();
                 end;
@@ -285,18 +287,11 @@ implementation
 
                     controlParent := nailLayoutGrid.Parent;
 
-                    //create labels
-                        for tempLabel in [ nailPropertiesLabel, nailLayoutLabel ] do
-                            FreeAndNil( tempLabel );
-
-                        nailPropertiesLabel := TLabel.Create( nil );
-                        nailLayoutLabel     := TLabel.Create( nil );
-
-                        for tempLabel in [ nailPropertiesLabel, nailLayoutLabel ] do
-                            begin
-                                tempLabel.Parent    := controlParent;
-                                tempLabel.AutoSize  := True;
-                            end;
+                    for tempLabel in [ nailPropertiesLabel, nailLayoutLabel ] do
+                        begin
+                            tempLabel.Parent    := controlParent;
+                            tempLabel.AutoSize  := True;
+                        end;
 
                     //position controls
                         ctrlScaleFactor := controlParent.ScaleFactor;

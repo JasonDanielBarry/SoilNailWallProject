@@ -168,6 +168,7 @@
         <DCCReference Include="Source\UserInterface\InputTab\WallGeometryInputManagerClass.pas"/>
         <DCCReference Include="Source\UserInterface\SoilNailWallInputManagerClass.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\NailPropertiesInputManagerClass.pas"/>
+        <DCCReference Include="Source\UserInterface\InputTab\LoadCasesInputManagerClass.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -200,6 +201,12 @@
                 <DeployFile LocalName="..\BuildOutput\SoilNailWall.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win64">
                         <RemoteName>SoilNailWall.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\BuildOutput\SoilNailWall.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win64">
+                        <RemoteName>SoilNailWall.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

@@ -331,18 +331,20 @@ implementation
                     //grid panel
                         gridPanelLabels := gridPanelLabelsIn;
 
-                    soilNailWallDesign := soilNailWallDesignIn;
+                    //create labels
+                        soilLabel       := TLabel.Create( nil );
+                        nailsLabel      := TLabel.Create( nil );
+                        concreteLabel   := TLabel.Create( nil );
 
                     inherited create( errorListBoxIn, soilNailWallDesignIn );
                 end;
 
         //destructor
             destructor TMaterialParametersInputManager.destroy();
-                var
-                    tempLabel : TLabel;
                 begin
-                    for tempLabel in [ soilLabel, nailsLabel, concreteLabel ] do
-                        FreeAndNil( tempLabel );
+                    FreeAndNil( soilLabel );
+                    FreeAndNil( nailsLabel );
+                    FreeAndNil( concreteLabel );
 
                     inherited destroy();
                 end;
@@ -360,19 +362,11 @@ implementation
 
                     controlParent := soilParametersGrid.Parent;
 
-                    //create labels
-                        for tempLabel in [ soilLabel, nailsLabel, concreteLabel ] do
-                            FreeAndNil( tempLabel );
-
-                        soilLabel       := TLabel.Create( nil );
-                        nailsLabel      := TLabel.Create( nil );
-                        concreteLabel   := TLabel.Create( nil );
-
-                        for tempLabel in [ soilLabel, nailsLabel, concreteLabel ] do
-                            begin
-                                tempLabel.Parent    := controlParent;
-                                tempLabel.AutoSize  := True;
-                            end;
+                    for tempLabel in [ soilLabel, nailsLabel, concreteLabel ] do
+                        begin
+                            tempLabel.Parent    := controlParent;
+                            tempLabel.AutoSize  := True;
+                        end;
 
                     //position controls
                         ctrlScaleFactor := controlParent.ScaleFactor;

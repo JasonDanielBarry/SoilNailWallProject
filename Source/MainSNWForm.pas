@@ -21,7 +21,7 @@ interface
             UISetupMethods,
             SNWUITypes,
             InputManagerClass,
-            MaterialParametersInputManagerClass, WallGeometryInputManagerClass, NailPropertiesInputManagerClass,
+            MaterialParametersInputManagerClass, WallGeometryInputManagerClass, NailPropertiesInputManagerClass, LoadCasesInputManagerClass,
             SoilNailWallExampleMethods, CustomComponentPanelClass,
             Graphic2DComponent, GraphicDrawerObjectAdderClass, SoilNailWallFileReaderWriterClass
             ;
@@ -112,8 +112,11 @@ interface
             OpenFileDialog: TFileOpenDialog;
             SaveFileDialog: TFileSaveDialog;
             JDBGraphic2DDiagram: TJDBGraphic2D;
-    PageLoads: TTabSheet;
-    StringGrid1: TStringGrid;
+            PageLoads: TTabSheet;
+            GridLoadCases: TStringGrid;
+            SpeedButtonLoadCases: TSpeedButton;
+            ActionLoads: TAction;
+    ListBoxLoadCases: TListBox;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
@@ -138,6 +141,8 @@ interface
                     procedure ActionNailPropertiesExecute(Sender: TObject);
                     procedure ActionGenerateLayoutExecute(Sender: TObject);
                     procedure ActionClearLayoutExecute(Sender: TObject);
+                //load cases
+                    procedure ActionLoadsExecute(Sender: TObject);
                 //examples
                     procedure ActionExampleVerticalWallFlatSlopeExecute(Sender: TObject);
             //analysis & design tab
@@ -166,16 +171,18 @@ interface
             //update geometry
                 procedure JDBGraphic2DDiagramUpdateGeometry(ASender         : TObject;
                                                             var AGeomDrawer : TGraphicDrawerObjectAdder);
+
         private
             var
-                activeInputPage             : EActiveInputPage;
-                activeComputationPage       : EActiveComputationPage;
-                activeRibbonTab             : EActiveRibbonTab;
+                activeInputPage             : EInputPage;
+                activeComputationPage       : EComputationPage;
+                activeRibbonTab             : ERibbonTab;
                 activeUITheme               : EUITheme;
                 SoilNailWallDesign          : TSoilNailWall;
                 materialsInputManager       : TMaterialParametersInputManager;
                 wallGeometryInputManager    : TWallGeometryInputManager;
                 nailPropertiesInputManager  : TNailPropertiesInputManager;
+                loadCasesInputManager       : TLoadCasesInputManager;
             //helper methods
                 //enter pressed on grid
                     procedure gridCellEnterPressed();
@@ -234,6 +241,7 @@ implementation
                         FreeAndNil( materialsInputManager );
                         FreeAndNil( wallGeometryInputManager );
                         FreeAndNil( nailPropertiesInputManager );
+                        FreeAndNil( loadCasesInputManager );
 
                         Action := TCloseAction.caFree;
                     end;
@@ -310,7 +318,7 @@ implementation
                 //input parameters
                     procedure TSNWForm.ActionMaterialParametersExecute(Sender: TObject);
                         begin
-                            activeInputPage := EActiveInputPage.aipMaterials;
+                            activeInputPage := EInputPage.ipMaterials;
 
                             sortUI();
                         end;
@@ -333,7 +341,7 @@ implementation
                 //wall geometry
                     procedure TSNWForm.ActionWallGeometryExecute(Sender: TObject);
                         begin
-                            activeInputPage := EActiveInputPage.aipWallGeom;
+                            activeInputPage := EInputPage.ipWallGeom;
 
                             sortUI();
                         end;
@@ -341,7 +349,7 @@ implementation
                 //nail properties
                     procedure TSNWForm.ActionNailPropertiesExecute(Sender: TObject);
                         begin
-                            activeInputPage := EActiveInputPage.aipNailProperties;
+                            activeInputPage := EInputPage.ipNailProperties;
 
                             sortUI();
                         end;
@@ -359,6 +367,14 @@ implementation
                             SoilNailWallDesign.clearNailLayout();
 
                             writeToAndReadFromInputGrids();
+                        end;
+
+                //load cases
+                    procedure TSNWForm.ActionLoadsExecute(Sender: TObject);
+                        begin
+                            activeInputPage := EInputPage.ipLoadCases;
+
+                            sortUI();
                         end;
 
                 //examples
@@ -450,11 +466,11 @@ implementation
                             0:
                                 showFilePopupMenu();
                             1:
-                                activeRibbonTab := EActiveRibbonTab.artInput;
+                                activeRibbonTab := ERibbonTab.rtInput;
                             2:
-                                activeRibbonTab := EActiveRibbonTab.artComputation;
+                                activeRibbonTab := ERibbonTab.rtComputation;
                             3:
-                                activeRibbonTab := EActiveRibbonTab.artOutput;
+                                activeRibbonTab := ERibbonTab.rtOutput;
                         end;
 
                         sortUI();
@@ -497,9 +513,9 @@ implementation
                     ComboBoxTheme.ItemIndex := 0;
                     ComboBoxThemeChange(nil);
 
-                    activeInputPage         := EActiveInputPage.aipMaterials;
-                    activeComputationPage   := EActiveComputationPage.aapAnalysis;
-                    activeRibbonTab         := EActiveRibbonTab.artInput;
+                    activeInputPage         := EInputPage.ipMaterials;
+                    activeComputationPage   := EComputationPage.apAnalysis;
+                    activeRibbonTab         := ERibbonTab.rtInput;
 
                     materialsInputManager := TMaterialParametersInputManager.create(
                                                                                         ListBoxMaterialProperties,
@@ -519,6 +535,10 @@ implementation
                                                                                         GridNailProperties, GridNailLayout,
                                                                                         SoilNailWallDesign
                                                                                     );
+
+                    loadCasesInputManager := TLoadCasesInputManager.create( ListBoxLoadCases,
+                                                                            GridLoadCases,
+                                                                            SoilNailWallDesign  );
 
                     sortUI();
 
@@ -556,19 +576,26 @@ implementation
 
                         //show elevant grid panels
                             case (activeInputPage) of
-                                EActiveInputPage.aipMaterials:
+                                EInputPage.ipMaterials:
                                     begin
                                         setSpeedButtonDown( 1, SpeedButtonInputParameters );
                                         GridPanelInputParOptions.Visible := True;
                                     end;
-                                EActiveInputPage.aipWallGeom:
+
+                                EInputPage.ipWallGeom:
                                     begin
                                         setSpeedButtonDown( 1, SpeedButtonWallGeometry );
                                     end;
-                                EActiveInputPage.aipNailProperties:
+
+                                EInputPage.ipNailProperties:
                                     begin
                                         setSpeedButtonDown( 1, SpeedButtonNailLayout );
                                         GridPanelNailLayoutOptions.Visible  := True;
+                                    end;
+
+                                EInputPage.ipLoadCases:
+                                    begin
+                                        setSpeedButtonDown( 1, SpeedButtonLoadCases );
                                     end;
                             end;
 
@@ -579,10 +606,10 @@ implementation
                 procedure TSNWForm.sortComputationRibbon();
                     begin
                         case (activeComputationPage) of
-                            EActiveComputationPage.aapAnalysis:
+                            EComputationPage.apAnalysis:
                                 setSpeedButtonDown( 2, SpeedButtonAnalysis );
 
-                            EActiveComputationPage.aapDesign:
+                            EComputationPage.apDesign:
                                 setSpeedButtonDown( 2, SpeedButtonDesign );
                         end;
                     end;
@@ -590,17 +617,17 @@ implementation
                 procedure TSNWForm.sortRibbon();
                     begin
                         case (activeRibbonTab) of
-                            EActiveRibbonTab.artInput:
+                            ERibbonTab.rtInput:
                                 begin
                                     PageControlRibbon.ActivePage := PageInput;
                                     sortInputRibbon();
                                 end;
-                            EActiveRibbonTab.artComputation:
+                            ERibbonTab.rtComputation:
                                 begin
                                     PageControlRibbon.ActivePage := PageComputation;
                                     sortComputationRibbon();
                                 end;
-                            EActiveRibbonTab.artOutput:
+                            ERibbonTab.rtOutput:
                                 begin
                                     PageControlRibbon.ActivePage := PageOutput;
                                 end;
@@ -611,21 +638,24 @@ implementation
                 procedure TSNWForm.sortInputPage();
                     begin
                         case (activeInputPage) of
-                            EActiveInputPage.aipMaterials:
+                            EInputPage.ipMaterials:
                                 PageControlProgrammeFlow.ActivePage := PageMaterialParameters;
 
-                            EActiveInputPage.aipWallGeom:
+                            EInputPage.ipWallGeom:
                                 PageControlProgrammeFlow.ActivePage := PageWallGeometry;
 
-                            EActiveInputPage.aipNailProperties:
+                            EInputPage.ipNailProperties:
                                 PageControlProgrammeFlow.ActivePage := PageNailProperties;
+
+                            EInputPage.ipLoadCases:
+                                PageControlProgrammeFlow.ActivePage := PageLoads;
                         end;
                     end;
 
                 procedure TSNWForm.sortPage();
                     begin
                         case (activeRibbonTab) of
-                            EActiveRibbonTab.artInput:
+                            ERibbonTab.rtInput:
                                 sortInputPage();
                         end;
 
@@ -648,6 +678,9 @@ implementation
 
                             2: //nail properties
                                 _calculatePageWidth( GridNailLayout );
+
+                            3: //load cases
+                                _calculatePageWidth( GridLoadCases );
                         end;
                     end;
 
@@ -659,10 +692,10 @@ implementation
 
                         case (activeUITheme) of
                             EUITheme.uitLight:
-                                TStyleManager.SetStyle( WINDOWS11_THEME_LIGHT );
+                                TStyleManager.SetStyle( WINDOWS_11_THEME_LIGHT );
 
                             EUITheme.uitDark:
-                                TStyleManager.SetStyle( WINDOWS11_THEME_DARK );
+                                TStyleManager.SetStyle( WINDOWS_11_THEME_DARK );
                         end;
 
                         JDBGraphic2DDiagram.updateBackgroundColour();

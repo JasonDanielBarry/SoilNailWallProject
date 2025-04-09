@@ -23,7 +23,8 @@ uses
   NailLayoutGeneratorInputManagerClass in 'Source\UserInterface\InputTab\NailLayoutGeneratorInputManagerClass.pas',
   WallGeometryInputManagerClass in 'Source\UserInterface\InputTab\WallGeometryInputManagerClass.pas',
   SoilNailWallInputManagerClass in 'Source\UserInterface\SoilNailWallInputManagerClass.pas',
-  NailPropertiesInputManagerClass in 'Source\UserInterface\InputTab\NailPropertiesInputManagerClass.pas';
+  NailPropertiesInputManagerClass in 'Source\UserInterface\InputTab\NailPropertiesInputManagerClass.pas',
+  LoadCasesInputManagerClass in 'Source\UserInterface\InputTab\LoadCasesInputManagerClass.pas';
 
 {$R *.res}
 

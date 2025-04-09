@@ -167,16 +167,18 @@ implementation
                         wallParametersGrid  := wallParametersGridIn;
                         slopeParametersGrid := slopeParametersGridIn;
 
+                    //create labels
+                        wallLabel   := TLabel.Create( nil );
+                        slopeLabel  := TLabel.Create( nil );
+
                     inherited create( errorListBoxIn, soilNailWallDesignIn );
                 end;
 
         //destructor
             destructor TWallGeometryInputManager.destroy();
-                var
-                    tempLabel : TLabel;
                 begin
-                    for tempLabel in [ wallLabel, slopeLabel ] do
-                        FreeAndNil( tempLabel );
+                    FreeAndNil( wallLabel );
+                    FreeAndNil( slopeLabel );
 
                     inherited destroy();
                 end;
@@ -196,18 +198,11 @@ implementation
 
                     controlParent := wallParametersGrid.Parent;
 
-                    //create labels
-                        for tempLabel in [ wallLabel, slopeLabel ] do
-                            FreeAndNil( tempLabel );
-
-                        wallLabel   := TLabel.Create( nil );
-                        slopeLabel  := TLabel.Create( nil );
-
-                        for tempLabel in [ wallLabel, slopeLabel ] do
-                            begin
-                                tempLabel.Parent    := controlParent;
-                                tempLabel.AutoSize  := True;
-                            end;
+                    for tempLabel in [ wallLabel, slopeLabel ] do
+                        begin
+                            tempLabel.Parent    := controlParent;
+                            tempLabel.AutoSize  := True;
+                        end;
 
                     //position controls
                         ctrlScaleFactor := controlParent.ScaleFactor;

@@ -29,7 +29,7 @@ object SNWForm: TSNWForm
     Margins.Top = 2
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = PageComputation
+    ActivePage = PageInput
     Align = alTop
     DoubleBuffered = True
     ParentDoubleBuffered = False
@@ -45,7 +45,7 @@ object SNWForm: TSNWForm
       ImageIndex = 1
       ParentDoubleBuffered = False
       object GridPanelInputParOptions: TGridPanel
-        Left = 225
+        Left = 300
         Top = 0
         Width = 225
         Height = 95
@@ -187,7 +187,7 @@ object SNWForm: TSNWForm
       object GridPanelInputType: TGridPanel
         Left = 0
         Top = 0
-        Width = 225
+        Width = 300
         Height = 95
         Margins.Left = 0
         Margins.Top = 5
@@ -197,13 +197,16 @@ object SNWForm: TSNWForm
         BevelOuter = bvNone
         ColumnCollection = <
           item
-            Value = 33.333333333333340000
+            Value = 25.000000000000000000
           end
           item
-            Value = 33.333333333333340000
+            Value = 25.000000000000000000
           end
           item
-            Value = 33.333333333333340000
+            Value = 25.000000000000000000
+          end
+          item
+            Value = 25.000000000000000000
           end
           item
             SizeStyle = ssAbsolute
@@ -211,7 +214,7 @@ object SNWForm: TSNWForm
           end>
         ControlCollection = <
           item
-            Column = 3
+            Column = 4
             Control = PanelInputTypeSeparator
             Row = 0
             RowSpan = 2
@@ -233,9 +236,14 @@ object SNWForm: TSNWForm
           end
           item
             Column = 0
-            ColumnSpan = 3
+            ColumnSpan = 4
             Control = LabelInputType
             Row = 1
+          end
+          item
+            Column = 3
+            Control = SpeedButtonLoadCases
+            Row = 0
           end>
         ParentColor = True
         RowCollection = <
@@ -248,7 +256,7 @@ object SNWForm: TSNWForm
           end>
         TabOrder = 1
         object PanelInputTypeSeparator: TPanel
-          Left = 224
+          Left = 299
           Top = 0
           Width = 1
           Height = 95
@@ -310,7 +318,7 @@ object SNWForm: TSNWForm
         object LabelInputType: TLabel
           Left = 0
           Top = 75
-          Width = 224
+          Width = 299
           Height = 20
           Align = alClient
           Alignment = taCenter
@@ -319,9 +327,22 @@ object SNWForm: TSNWForm
           ExplicitWidth = 56
           ExplicitHeight = 15
         end
+        object SpeedButtonLoadCases: TSpeedButton
+          Left = 224
+          Top = 0
+          Width = 75
+          Height = 75
+          Action = ActionLoads
+          Align = alClient
+          Caption = 'Load'#13#10'Cases'
+          ExplicitLeft = 248
+          ExplicitTop = 32
+          ExplicitWidth = 23
+          ExplicitHeight = 22
+        end
       end
       object GridPanelNailLayoutOptions: TGridPanel
-        Left = 450
+        Left = 525
         Top = 0
         Width = 150
         Height = 95
@@ -432,7 +453,7 @@ object SNWForm: TSNWForm
         end
       end
       object GridPanelExamples: TGridPanel
-        Left = 600
+        Left = 675
         Top = 0
         Width = 75
         Height = 95
@@ -632,7 +653,7 @@ object SNWForm: TSNWForm
   object PageControlProgrammeFlow: TPageControl
     Left = 0
     Top = 127
-    Width = 857
+    Width = 705
     Height = 631
     Margins.Left = 0
     Margins.Top = 5
@@ -872,7 +893,7 @@ object SNWForm: TSNWForm
         AlignWithMargins = True
         Left = 5
         Top = 471
-        Width = 839
+        Width = 687
         Height = 125
         Margins.Left = 5
         Margins.Top = 5
@@ -939,7 +960,7 @@ object SNWForm: TSNWForm
         AlignWithMargins = True
         Left = 5
         Top = 471
-        Width = 839
+        Width = 687
         Height = 125
         Margins.Left = 5
         Margins.Top = 5
@@ -1000,7 +1021,7 @@ object SNWForm: TSNWForm
         AlignWithMargins = True
         Left = 5
         Top = 471
-        Width = 839
+        Width = 687
         Height = 125
         Margins.Left = 5
         Margins.Top = 5
@@ -1014,14 +1035,33 @@ object SNWForm: TSNWForm
     object PageLoads: TTabSheet
       Caption = 'Load Cases'
       ImageIndex = 3
-      object StringGrid1: TStringGrid
+      object GridLoadCases: TStringGrid
         Left = 35
         Top = 40
         Width = 320
         Height = 120
         ColCount = 3
         RowCount = 2
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goFixedRowDefAlign]
+        ParentColor = True
         TabOrder = 0
+      end
+      object ListBoxLoadCases: TListBox
+        AlignWithMargins = True
+        Left = 5
+        Top = 471
+        Width = 687
+        Height = 125
+        Margins.Left = 5
+        Margins.Top = 5
+        Margins.Right = 5
+        Margins.Bottom = 5
+        Align = alBottom
+        ItemHeight = 15
+        TabOrder = 1
+        ExplicitLeft = 0
+        ExplicitTop = 476
+        ExplicitWidth = 697
       end
     end
   end
@@ -1092,9 +1132,9 @@ object SNWForm: TSNWForm
     end
   end
   object JDBGraphic2DDiagram: TJDBGraphic2D
-    Left = 857
+    Left = 705
     Top = 127
-    Width = 884
+    Width = 1036
     Height = 631
     Align = alClient
     BevelEdges = []
@@ -1188,6 +1228,11 @@ object SNWForm: TSNWForm
       Category = 'File'
       Caption = 'Save &As'
       OnExecute = ActionSaveAsExecute
+    end
+    object ActionLoads: TAction
+      Category = 'Input'
+      Caption = 'Load'#13'Cases'
+      OnExecute = ActionLoadsExecute
     end
   end
   object PopupMenuFile: TPopupMenu
