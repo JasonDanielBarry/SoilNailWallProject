@@ -12,11 +12,11 @@ interface
         TSoilNailWallBase = class
             private
                 var
-                    load        : double;
                     nails       : TSoilNails;
                     soil        : TSoil;
                     wall        : TWall;
                     slipWedge   : TSlipWedge;
+                    loadCases   : TLoadCaseMap;
                 //instantiate material classes
                     procedure instantiateMaterialClasses();
                 //destroy material classes
@@ -63,7 +63,7 @@ interface
                     destructor destroy(); override;
                 //accessors
                     //load
-                        function getLoad() : double;
+                        function getLoadCases() : TLoadCaseMap;
                     //nails
                         function getNails() : TSoilNails;
                     //slip wedge
@@ -74,7 +74,7 @@ interface
                         function getWall() : TWall;
                 //modifiers
                     //load
-                        procedure setLoad(const loadIn : double);
+                        procedure setLoadCases(const loadCasesIn : TLoadCaseMap);
                     //nails
                         procedure addNail(const heightIn, lengthIn : double);
                         procedure clearNailLayout();
@@ -135,7 +135,7 @@ implementation
             procedure TSoilNailWallBase.deepCopy(const otherSNWIn : TSoilNailWallBase);
 
                 begin
-                    self.setLoad( otherSNWIn.load );
+//                    self.setLoadCases( otherSNWIn.load );
                     self.setNails( otherSNWIn.nails );
                     self.setSlipWedge( otherSNWIn.slipWedge );
                     self.setSoil( otherSNWIn.soil );
@@ -278,8 +278,8 @@ implementation
 
                     instantiateMaterialClasses();
 
-                    //load
-                        setLoad(0);
+                    //load cases
+                        loadCases := TLoadCaseMap.Create();
 
                     //nails
                         clearNailLayout();
@@ -305,9 +305,6 @@ implementation
                         //geometry
                             setWallAngle(0);
                             setWallHeight(0);
-
-                        //load
-                            setLoad(0);
                 end;
 
         //destructor
@@ -315,14 +312,16 @@ implementation
                 begin
                     destroyMaterialClasses();
 
+                    FreeAndNil( loadCases );
+
                     inherited destroy();
                 end;
 
         //accessors
             //load
-                function TSoilNailWallBase.getLoad() : double;
+                function TSoilNailWallBase.getLoadCases() : TLoadCaseMap;
                     begin
-                        result := load;
+                        result := loadCases;
                     end;
 
             //nails
@@ -351,9 +350,9 @@ implementation
 
         //modifiers
             //load
-                procedure TSoilNailWallBase.setLoad(const loadIn : double);
+                procedure TSoilNailWallBase.setLoadCases(const loadCasesIn : TLoadCaseMap);
                     begin
-                        load := max(0, loadIn);
+                        loadCases := loadCasesIn;
                     end;
 
             //nails

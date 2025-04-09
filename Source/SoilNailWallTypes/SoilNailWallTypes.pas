@@ -4,6 +4,7 @@ interface
 
     uses
         System.SysUtils, system.Math,
+        system.Generics.Collections,
         Xml.XMLDoc, Xml.XMLIntf, Xml.xmldom,
         XMLDocumentMethods,
         InterpolatorClass,
@@ -119,6 +120,21 @@ interface
                         height,
                         thickness   : double;
                         concrete    : TConcrete;
+                    function tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
+                    procedure writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
+            end;
+
+        //load cases
+            TLoadCase = record
+                factor, load        : double;
+                name, description   : string;
+                procedure setvalues(const factorIn, loadIn      : double;
+                                    const nameIn, descriptionIn : string);
+            end;
+
+            TLoadCaseMap = class(TDictionary<string, TLoadCase>)
+                public
+                    procedure copyOther(const otherLoadCaseMapIn : TLoadCaseMap);
                     function tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
                     procedure writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
             end;
@@ -421,5 +437,43 @@ implementation
                 writeDoubleToXMLNode( wallNode, WALL_HEIGHT, height );
                 writeDoubleToXMLNode( wallNode, WALL_THICKNESS, thickness );
             end;
+    //--------------------------------------------------------------------------------------------------------------
+
+    //TLoadCaseMap--------------------------------------------------------------------------------------------------
+        procedure TLoadCase.setvalues(  const factorIn, loadIn      : double;
+                                        const nameIn, descriptionIn : string    );
+            begin
+                factor      := factorIn;
+                load        := loadIn;
+                name        := nameIn;
+                description := descriptionIn;
+            end;
+
+        procedure TLoadCaseMap.copyOther(const otherLoadCaseMapIn : TLoadCaseMap);
+            var
+                itemKey     : string;
+                loadCase    : TLoadCase;
+            begin
+                self.Clear();
+
+                for itemKey in otherLoadCaseMapIn.Keys do
+                    begin
+                        if NOT( otherLoadCaseMapIn.TryGetValue( itemKey, loadCase ) ) then
+                            Continue;
+
+                        self.AddOrSetValue( itemKey, loadCase );
+                    end;
+            end;
+
+        function TLoadCaseMap.tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
+            begin
+                // to do
+            end;
+
+        procedure TLoadCaseMap.writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
+            begin
+                // to do
+            end;
+
 
 end.

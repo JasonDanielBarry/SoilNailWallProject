@@ -3,7 +3,7 @@ unit MaterialParametersInputManagerClass;
 interface
 
     uses
-        system.SysUtils, system.Math, System.Classes, system.Generics.Collections, System.UITypes,
+        system.SysUtils, system.Math, System.Classes, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
         StringGridHelperClass, LimitStateMaterialClass,
         InputManagerClass, SoilNailWallInputManagerClass,

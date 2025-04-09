@@ -3,9 +3,9 @@ unit LoadCasesInputManagerClass;
 interface
 
     uses
-        system.SysUtils, system.Math, System.Classes, system.Generics.Collections, System.UITypes,
+        system.SysUtils, system.Math, System.Classes, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-        StringGridHelperClass, LimitStateMaterialClass,
+        StringGridHelperClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes,
         SoilNailWallMasterClass
@@ -70,7 +70,7 @@ implementation
         //setup input controls
             procedure TLoadCasesInputManager.setupInputControls();
                 const
-                    COLUMN_SIZES : TArray<integer> = [45, 75, 75, 75];
+                    COLUMN_SIZES : TArray<integer> = [80, 250, 80, 80];
                 var
                     i               : integer;
                     ctrlScaleFactor : double;
@@ -98,16 +98,19 @@ implementation
                         loadInputGrid.Width     := round( (SumInt( COLUMN_SIZES ) + 10) * ctrlScaleFactor );
                         loadInputGrid.ColCount  := 4;
                         loadInputGrid.RowCount  := 2;
-                        loadInputGrid.FixedCols := 1;
+                        loadInputGrid.FixedCols := 0;
                         loadInputGrid.FixedRows := 1;
 
                         for i := 0 to ( length( COLUMN_SIZES ) - 1 ) do
                             loadInputGrid.ColWidths[i] := round( COLUMN_SIZES[i] * ctrlScaleFactor );
 
-                        loadInputGrid.Cells[0, 0] := 'No.';
-                        loadInputGrid.Cells[1, 0] := 'Name';
+                        loadInputGrid.Cells[0, 0] := 'Name';
+                        loadInputGrid.Cells[1, 0] := 'Description';
                         loadInputGrid.Cells[2, 0] := 'Factor';
                         loadInputGrid.Cells[3, 0] := 'Load (kN/m)';
+
+                        loadInputGrid.minSize();
+                        loadInputGrid.createBorder( 1, clSilver );
                 end;
 
         //reset controls
