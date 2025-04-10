@@ -851,7 +851,7 @@ object SNWForm: TSNWForm
         ParentColor = True
         TabOrder = 1
         OnKeyPress = GridInputKeyPress
-        OnSelectCell = GridInputSelectCell
+        OnSelectCell = GridMaterialInputSelectCell
       end
       object GridSteelParInput: TStringGrid
         Left = 23
@@ -869,7 +869,7 @@ object SNWForm: TSNWForm
         ParentColor = True
         TabOrder = 2
         OnKeyPress = GridInputKeyPress
-        OnSelectCell = GridInputSelectCell
+        OnSelectCell = GridMaterialInputSelectCell
       end
       object GridConcreteParInput: TStringGrid
         Left = 23
@@ -887,7 +887,7 @@ object SNWForm: TSNWForm
         ParentColor = True
         TabOrder = 3
         OnKeyPress = GridInputKeyPress
-        OnSelectCell = GridInputSelectCell
+        OnSelectCell = GridMaterialInputSelectCell
       end
       object ListBoxMaterialProperties: TListBox
         AlignWithMargins = True
@@ -992,8 +992,7 @@ object SNWForm: TSNWForm
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goFixedRowDefAlign]
         ParentColor = True
         TabOrder = 0
-        OnKeyPress = GridNailLayoutKeyPress
-        OnSelectCell = GridNailLayoutSelectCell
+        OnSelectCell = GridInputSelectCell
       end
       object GridNailProperties: TStringGrid
         Left = 7
@@ -1045,6 +1044,8 @@ object SNWForm: TSNWForm
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goFixedRowDefAlign]
         ParentColor = True
         TabOrder = 0
+        OnKeyPress = GridInputKeyPress
+        OnSelectCell = GridInputSelectCell
       end
       object ListBoxLoadCases: TListBox
         AlignWithMargins = True
@@ -1059,9 +1060,6 @@ object SNWForm: TSNWForm
         Align = alBottom
         ItemHeight = 15
         TabOrder = 1
-        ExplicitLeft = 0
-        ExplicitTop = 476
-        ExplicitWidth = 697
       end
     end
   end

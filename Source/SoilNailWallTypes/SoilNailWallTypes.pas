@@ -132,7 +132,7 @@ interface
                                     const nameIn, descriptionIn : string);
             end;
 
-            TLoadCaseMap = class(TDictionary<string, TLoadCase>)
+            TLoadCaseMap = class(TDictionary<integer, TLoadCase>)
                 public
                     procedure copyOther(const otherLoadCaseMapIn : TLoadCaseMap);
                     function tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
@@ -451,7 +451,7 @@ implementation
 
         procedure TLoadCaseMap.copyOther(const otherLoadCaseMapIn : TLoadCaseMap);
             var
-                itemKey     : string;
+                itemKey     : integer;
                 loadCase    : TLoadCase;
             begin
                 self.Clear();

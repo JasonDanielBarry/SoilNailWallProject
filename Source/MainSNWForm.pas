@@ -152,18 +152,14 @@ interface
                 procedure ActionDarkThemeExecute(Sender: TObject);
         //general events
             //input tab
-                //parameters
-                    procedure GridInputSelectCell(  Sender          : TObject;
-                                                    ACol, ARow      : Integer;
-                                                    var CanSelect   : Boolean);
-                    procedure GridInputKeyPress(Sender  : TObject;
-                                                var Key : Char  );
-                //nail properties
-                    procedure GridNailLayoutKeyPress(   Sender  : TObject;
-                                                        var Key : Char  );
-                    procedure GridNailLayoutSelectCell( Sender          : TObject;
+                procedure GridMaterialInputSelectCell(  Sender          : TObject;
                                                         ACol, ARow      : Integer;
                                                         var CanSelect   : Boolean);
+                procedure GridInputKeyPress(Sender  : TObject;
+                                            var Key : Char  );
+                procedure GridInputSelectCell(  Sender          : TObject;
+                                                ACol, ARow      : Integer;
+                                                var CanSelect   : Boolean);
             //theme
                 procedure ComboBoxThemeChange(Sender: TObject);
             //ribbon
@@ -258,7 +254,7 @@ implementation
                     begin
                         FreeAndNil( SoilNailWallDesign );
 
-                        TInputManager.resetInputControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager ] );
+                        TInputManager.resetInputControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager, loadCasesInputManager ] );
 
                         SoilNailWallDesign := TSoilNailWall.create();
 
@@ -406,41 +402,33 @@ implementation
 
         //general events
             //input
-                //parameters
-                    procedure TSNWForm.GridInputSelectCell( Sender          : TObject;
-                                                            ACol, ARow      : Integer;
-                                                            var CanSelect   : Boolean);
-                        begin
-                            if (PageControlProgrammeFlow.ActivePageIndex = PageMaterialParameters.PageIndex) then
-                                begin
-                                    //fixed rows are 4 and 6 for parameters grids
-                                        if (ACol in [4, 6]) then
-                                            CanSelect := false;
-                                end;
-
-                            readFromAndWriteToInputGrids();
-                        end;
-
-                    procedure TSNWForm.GridInputKeyPress(   Sender  : TObject;
-                                                            var Key : Char      );
-                        begin
-                            if (ord(Key) in [VK_RETURN]) then
-                                gridCellEnterPressed();
-                        end;
-
-                //nail properties
-                    procedure TSNWForm.GridNailLayoutKeyPress(Sender: TObject; var Key: Char);
-                        begin
-                            if (ord(key) = VK_RETURN) then
-                                gridCellEnterPressed();
-                        end;
-
-                    procedure TSNWForm.GridNailLayoutSelectCell(Sender          : TObject;
+                procedure TSNWForm.GridMaterialInputSelectCell( Sender          : TObject;
                                                                 ACol, ARow      : Integer;
                                                                 var CanSelect   : Boolean);
-                        begin
-                            readFromAndWriteToInputGrids()
-                        end;
+                    begin
+                        if (PageControlProgrammeFlow.ActivePageIndex = PageMaterialParameters.PageIndex) then
+                            begin
+                                //fixed rows are 4 and 6 for parameters grids
+                                    if (ACol in [4, 6]) then
+                                        CanSelect := false;
+                            end;
+
+                        readFromAndWriteToInputGrids();
+                    end;
+
+                procedure TSNWForm.GridInputKeyPress(   Sender  : TObject;
+                                                        var Key : Char      );
+                    begin
+                        if (ord(Key) in [VK_RETURN]) then
+                            gridCellEnterPressed();
+                    end;
+
+                procedure TSNWForm.GridInputSelectCell( Sender          : TObject;
+                                                        ACol, ARow      : Integer;
+                                                        var CanSelect   : Boolean);
+                    begin
+                        readFromAndWriteToInputGrids()
+                    end;
 
             //theme
                 procedure TSNWForm.ComboBoxThemeChange(Sender: TObject);
@@ -725,18 +713,18 @@ implementation
         //check if grids are populated
             function TSNWForm.readFromAllInputGrids() : boolean;
                 begin
-                    result := TInputManager.readFromAllControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager ] );
+                    result := TInputManager.readFromAllControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager, loadCasesInputManager ] );
                 end;
 
             procedure TSNWForm.writeToAllInputGrids(const updateEmptyCellsIn : boolean);
                 var
                     inputErrorCount : integer;
                 begin
-                    TInputManager.writeToAllControls( [materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager], updateEmptyCellsIn );
+                    TInputManager.writeToAllControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager, loadCasesInputManager ], updateEmptyCellsIn );
 
                     JDBGraphic2DDiagram.updateGeometry();
 
-                    inputErrorCount := TInputManager.countInputErrors( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager ] );
+                    inputErrorCount := TInputManager.countInputErrors( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager, loadCasesInputManager ] );
 
 //                    if (inputErrorCount = 0) then
 //                        SoilNailWallDesign.calculateNailGroupTensionVSSlipAngleCurve( 0, 1 );

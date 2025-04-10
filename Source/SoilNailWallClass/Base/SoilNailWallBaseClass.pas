@@ -135,7 +135,7 @@ implementation
             procedure TSoilNailWallBase.deepCopy(const otherSNWIn : TSoilNailWallBase);
 
                 begin
-//                    self.setLoadCases( otherSNWIn.load );
+                    self.loadCases.copyOther( otherSNWIn.loadCases );
                     self.setNails( otherSNWIn.nails );
                     self.setSlipWedge( otherSNWIn.slipWedge );
                     self.setSoil( otherSNWIn.soil );
@@ -352,7 +352,7 @@ implementation
             //load
                 procedure TSoilNailWallBase.setLoadCases(const loadCasesIn : TLoadCaseMap);
                     begin
-                        loadCases := loadCasesIn;
+                        self.loadCases := loadCasesIn;
                     end;
 
             //nails
