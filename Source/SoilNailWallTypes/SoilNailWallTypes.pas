@@ -130,6 +130,7 @@ interface
                 name, description   : string;
                 procedure setvalues(const factorIn, loadIn      : double;
                                     const nameIn, descriptionIn : string);
+                function calculateFactoredLoad() : double;
             end;
 
             TLoadCaseMap = class(TDictionary<integer, TLoadCase>)
@@ -439,7 +440,7 @@ implementation
             end;
     //--------------------------------------------------------------------------------------------------------------
 
-    //TLoadCaseMap--------------------------------------------------------------------------------------------------
+    //TLoadCase--------------------------------------------------------------------------------------------------
         procedure TLoadCase.setvalues(  const factorIn, loadIn      : double;
                                         const nameIn, descriptionIn : string    );
             begin
@@ -449,6 +450,13 @@ implementation
                 description := descriptionIn;
             end;
 
+        function TLoadCase.calculateFactoredLoad() : double;
+            begin
+                result := factor * load;
+            end;
+    //--------------------------------------------------------------------------------------------------------------
+
+    //TLoadCaseMap--------------------------------------------------------------------------------------------------
         procedure TLoadCaseMap.copyOther(const otherLoadCaseMapIn : TLoadCaseMap);
             var
                 itemKey     : integer;

@@ -26,7 +26,7 @@ interface
                 //read load case data from grid
                     function tryReadLoadCase(   const gridRowIn : integer;
                                                 out loadCaseOut : TLoadCase ) : boolean;
-                    procedure readLoadCases();
+                    function readLoadCases() : boolean;
                 //write load case data to grid
                     procedure writeLoadCaseToGrid(  const updateEmptyCellsIn    : boolean;
                                                     const gridRowIn             : integer;
@@ -83,7 +83,7 @@ implementation
                     result := validLoadCase;
                 end;
 
-            procedure TLoadCasesInputManager.readLoadCases();
+            function TLoadCasesInputManager.readLoadCases() : boolean;
                 var
                     row         : integer;
                     loadCase    : TLoadCase;
@@ -101,6 +101,8 @@ implementation
                         end;
 
                     soilNailWallDesign.setLoadCases( loadCaseMap );
+
+                    result := True;
                 end;
 
         //write load case data to grid
@@ -247,7 +249,7 @@ implementation
             //read input
                 function TLoadCasesInputManager.readFromInputControls() : boolean;
                     begin
-                        readLoadCases();
+                        result := readLoadCases();
                     end;
 
             //write to input controls
