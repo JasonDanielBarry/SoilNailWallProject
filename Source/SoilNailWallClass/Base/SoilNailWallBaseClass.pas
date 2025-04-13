@@ -74,6 +74,7 @@ interface
                         function getWall() : TWall;
                 //modifiers
                     //load
+                        procedure setActiveLoadCase(const loadCaseNumberIn : integer);
                         procedure setLoadCases(const loadCasesIn : TLoadCaseMap);
                     //nails
                         procedure addNail(const heightIn, lengthIn : double);
@@ -350,6 +351,11 @@ implementation
 
         //modifiers
             //load
+                procedure TSoilNailWallBase.setActiveLoadCase(const loadCaseNumberIn : integer);
+                    begin
+                        loadCases.setActiveLoadCase( loadCaseNumberIn );
+                    end;
+
                 procedure TSoilNailWallBase.setLoadCases(const loadCasesIn : TLoadCaseMap);
                     begin
                         self.loadCases := loadCasesIn;

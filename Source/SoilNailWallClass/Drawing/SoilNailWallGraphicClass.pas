@@ -9,12 +9,15 @@ interface
         //custom
             GeometryTypes, GeomBox, GeomLineClass, GeomPolyLineClass, GeomPolygonClass,
             SoilNailWallTypes, SoilNailWallAnalysisClass,
-            GraphicDrawerObjectAdderClass;
+            GraphicDrawerObjectAdderClass,
+            GraphicDrawingTypes;
 
     type
         TSoilNailWallGraphic = class(TSoilNailWallAnalysis)
             private
                 //drawing methods
+                    //load cases
+                        procedure updateLoadCase(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
                     //nails
                         procedure updateNailGeometry(   const nailColourIn      : TAlphaColor;
                                                         var arrNailGeomInOut    : TArray<TGeomLine>;
@@ -41,6 +44,36 @@ implementation
 
     //private
         //drawing methods
+            //load cases
+                procedure TSoilNailWallGraphic.updateLoadCase(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                    var
+                        load            : double;
+                        activeLoadCase  : TLoadCase;
+                        loadCaseMap     : TLoadCaseMap;
+                        loadLine        : TGeomPolyLine;
+                    begin
+                        //get the active factored load
+                            loadCaseMap := getLoadCases();
+
+                            activeLoadCase := loadCaseMap.getActiveLoadCase();
+
+                            load := activeLoadCase.calculateFactoredLoad();
+
+                            if ( IsZero( load, 1e-3 ) ) then
+                                exit();
+
+                        //draw the load case
+                            graphicDrawerInOut.setCurrentDrawingLayer('Load');
+
+                            loadLine := determineSoilSurface();
+
+                            loadLine.shift( 0, 0.2 );
+
+                            graphicDrawerInOut.addArrowGroup( 2, loadLine, EArrowOrigin.aoHead, EArrowGroupDirection.agdDown, 0, True, 3, clSilver, clSilver );
+
+                            FreeAndNil( loadLine );
+                    end;
+
             //nails
                 procedure TSoilNailWallGraphic.updateNailGeometry(  const nailColourIn      : TAlphaColor;
                                                                     var arrNailGeomInOut    : TArray<TGeomLine>;
@@ -57,7 +90,7 @@ implementation
                                 graphicDrawerInOut.addLine( arrNailGeomInOut[i], 4 );
                             end;
 
-                        freeNailGeometry(arrNailGeomInOut);
+                        freeNailGeometry( arrNailGeomInOut );
                     end;
 
                 procedure TSoilNailWallGraphic.updateNails(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
@@ -188,6 +221,8 @@ implementation
                     updateSlipLine( graphicDrawerInOut );
 
                     updateWall( graphicDrawerInOut );
+
+                    updateLoadCase( graphicDrawerInOut );
                 end;
 
 end.

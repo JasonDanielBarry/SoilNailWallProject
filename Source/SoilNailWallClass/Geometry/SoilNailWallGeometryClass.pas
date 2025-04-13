@@ -71,6 +71,7 @@ interface
                     function getSlipWedge(const updateSlipWedgeIn : boolean = False) : TSlipWedge; override;
                 //soil
                     function determineSoilGeometry() : TGeomPolygon;
+                    function determineSoilSurface() : TGeomPolyLine;
                 //wall
                     function determineWallGeometry() : TGeomPolygon;
             public
@@ -558,6 +559,19 @@ implementation
                         soilGeometry.addVertex( wallTopRightPoint()                         );  //wall top
 
                     result := soilGeometry;
+                end;
+
+            function TSoilNailWallGeometry.determineSoilSurface() : TGeomPolyLine;
+                var
+                    polyLineOut : TGeomPolyLine;
+                begin
+                    polyLineOut := TGeomPolyLine.create();
+
+                    polyLineOut.addVertex( wallTopRightPoint() );
+                    polyLineOut.addVertex( determineSlopeToFlatPoint() );
+                    polyLineOut.addVertex( determineSoilTopRightPoint() );
+
+                    result := polyLineOut;
                 end;
 
         //wall

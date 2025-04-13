@@ -51,6 +51,8 @@ interface
                         function readFromInputControls() : boolean; override;
                     //write to input controls
                         procedure writeToInputControls(const updateEmptyControlsIn : boolean = False); override;
+                //set active load case
+                    procedure setActiveLoadCase(const loadCaseNumberIn : integer);
         end;
 
 implementation
@@ -85,6 +87,7 @@ implementation
 
             function TLoadCasesInputManager.readLoadCases() : boolean;
                 var
+                    activeRow,
                     row         : integer;
                     loadCase    : TLoadCase;
                     loadCaseMap : TLoadCaseMap;
@@ -266,5 +269,11 @@ implementation
 
                         controlParent.UnlockDrawing();
                     end;
+
+        //set active load case
+            procedure TLoadCasesInputManager.setActiveLoadCase(const loadCaseNumberIn : integer);
+                begin
+
+                end;
 
 end.

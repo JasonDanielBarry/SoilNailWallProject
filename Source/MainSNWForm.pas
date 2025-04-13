@@ -160,6 +160,9 @@ interface
                 procedure GridInputSelectCell(  Sender          : TObject;
                                                 ACol, ARow      : Integer;
                                                 var CanSelect   : Boolean);
+                procedure GridLoadCasesSelectCell(  Sender          : TObject;
+                                                    ACol, ARow      : LongInt;
+                                                    var CanSelect   : Boolean   );
             //theme
                 procedure ComboBoxThemeChange(Sender: TObject);
             //ribbon
@@ -427,7 +430,16 @@ implementation
                                                         ACol, ARow      : Integer;
                                                         var CanSelect   : Boolean);
                     begin
-                        readFromAndWriteToInputGrids()
+                        readFromAndWriteToInputGrids();
+                    end;
+
+                procedure TSNWForm.GridLoadCasesSelectCell( Sender          : TObject;
+                                                            ACol, ARow      : LongInt;
+                                                            var CanSelect   : Boolean );
+                    begin
+                        SoilNailWallDesign.setActiveLoadCase( ARow );
+
+                        readFromAndWriteToInputGrids();
                     end;
 
             //theme
