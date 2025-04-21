@@ -13,15 +13,23 @@ interface
         //load case record
             TLoadCase = record
                 strict private
+                    const
+                        DT_LOAD_CASE    : string = 'TLoadCase';
+                        NAME            : string = 'Name';
+                        DESCRIPTIONS    : string = 'Descriptions';
+                        FACTORS         : string = 'Factors';
+                        LOADS           : string = 'Loads';
                     var
                         arrFactors, arrLoads    : TArray<double>;
                         arrDescriptions         : TArray<string>;
                 public
                     var
-                        name : string;
+                        LCName : string;
                     //add load combination
                         procedure addLoadCombination(   const factorIn, loadIn  : double;
                                                         const descriptionIn     : string    );
+                    //count combinations
+                        function countCombinations() : integer;
                     //calculate load combination resultant load
                         function calculateFactoredLoad() : double;
                     //XML file read/write
@@ -32,8 +40,17 @@ interface
         //load case map
             TLoadCaseMap = class(TDictionary<string, TLoadCase>)
                 private
-                    activeLoadCaseKey : string;
+                    activeLoadCaseKey   : string;
+                    orderedKeysList     : TList<string>;
                 public
+                    //constructor
+                        constructor create();
+                    //destructor
+                        destructor destroy(); override;
+                    //clear items
+                        procedure clear();
+                    //add or set value
+                        procedure AddOrSetValue(const KeyIn : string; const ValueIn : TLoadCase);
                     //make copy
                         procedure copyOther(const otherLoadCaseMapIn : TLoadCaseMap);
                     //XML file read/write
@@ -45,59 +62,127 @@ interface
                     //critical load case
                         function getCriticalLoadCaseKey() : string;
                         function getCriticalLoadCase() : TLoadCase;
+                    //ordered keys
+                        function getOrderedKeys() : TList<string>;
             end;
 
 implementation
 
     //TLoadCase--------------------------------------------------------------------------------------------------
-        procedure TLoadCase.addLoadCombination( const factorIn, loadIn  : double;
-                                                const descriptionIn     : string );
-            var
-                arrLen : integer;
-            begin
-                //get the length of the arrays
-                    arrLen := length( arrFactors );
+        //add load combination
+            procedure TLoadCase.addLoadCombination( const factorIn, loadIn  : double;
+                                                    const descriptionIn     : string );
+                var
+                    arrLen : integer;
+                begin
+                    //get the length of the arrays
+                        arrLen := countCombinations();
 
-                //increment array lengths
-                    SetLength( arrFactors, arrLen + 1 );
-                    SetLength( arrLoads, arrLen + 1 );
-                    SetLength( arrDescriptions, arrLen + 1 );
+                    //increment array lengths
+                        SetLength( arrFactors, arrLen + 1 );
+                        SetLength( arrLoads, arrLen + 1 );
+                        SetLength( arrDescriptions, arrLen + 1 );
 
-                //assign values
-                    arrFactors[ arrLen ]        := factorIn;
-                    arrLoads[ arrLen ]          := loadIn;
-                    arrDescriptions[ arrLen ]   := descriptionIn;
-            end;
+                    //assign values
+                        arrFactors[ arrLen ]        := factorIn;
+                        arrLoads[ arrLen ]          := loadIn;
+                        arrDescriptions[ arrLen ]   := descriptionIn;
+                end;
 
-        function TLoadCase.calculateFactoredLoad() : double;
-            var
-                i, arrLen           : integer;
-                factoredLoad_i,
-                factoredLoadSumOut  : double;
-            begin
-                result := 0;
+        //count combinations
+            function TLoadCase.countCombinations() : integer;
+                begin
+                    result := length( arrFactors );
+                end;
 
-                //get the length of the arrays
-                    arrLen := length( arrFactors );
+        //calculate load combination resultant load
+            function TLoadCase.calculateFactoredLoad() : double;
+                var
+                    i, arrLen           : integer;
+                    factoredLoad_i,
+                    factoredLoadSumOut  : double;
+                begin
+                    result := 0;
 
-                    if ( arrLen < 0 ) then
-                        exit( 0 );
+                    //get the length of the arrays
+                        arrLen := countCombinations();
 
-                //calculate sum of factored loads
-                    factoredLoadSumOut := 0;
+                        if ( arrLen < 1 ) then
+                            exit( 0 );
 
-                    for i := 0 to arrLen do
-                        begin
-                            factoredLoad_i := arrFactors[i] * arrLoads[i];
+                    //calculate sum of factored loads
+                        factoredLoadSumOut := 0;
 
-                            factoredLoadSumOut := factoredLoadSumOut + factoredLoad_i;
-                        end;
+                        for i := 0 to arrLen do
+                            begin
+                                factoredLoad_i := arrFactors[i] * arrLoads[i];
 
-                result := factoredLoadSumOut;
-            end;
-    //--------------------------------------------------------------------------------------------------------------
+                                factoredLoadSumOut := factoredLoadSumOut + factoredLoad_i;
+                            end;
+
+                    result := factoredLoadSumOut;
+                end;
+
+        //XML file read/write
+            function TLoadCase.tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
+                begin
+
+                end;
+
+            procedure TLoadCase.writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
+                var
+                    loadCaseNode : IXMLNode;
+                begin
+                    if NOT( tryCreateNewXMLChildNode( XMLNodeInOut, identifierIn, loadCaseNode ) ) then
+                        exit();
+
+                    //write name
+                        writeStringToXMLNode( loadCaseNode, NAME, LCName );
+
+                    //write descriptions
+                        writeStringArrayToXMLNode( loadCaseNode, DESCRIPTIONS, arrDescriptions );
+
+                    //write factors
+                        writeDoubleArrayToXMLNode( loadCaseNode, FACTORS, arrFactors );
+
+                    //write loads
+                        writeDoubleArrayToXMLNode( loadCaseNode, LOADS, arrLoads );
+                end;
 
     //TLoadCaseMap--------------------------------------------------------------------------------------------------
+        //constructor
+            constructor TLoadCaseMap.create();
+                begin
+                    inherited Create();
+
+                    orderedKeysList := TList<string>.Create();
+                end;
+
+        //destructor
+            destructor TLoadCaseMap.destroy();
+                begin
+                    FreeAndNil( orderedKeysList );
+
+                    inherited destroy();
+                end;
+
+        //clear items
+            procedure TLoadCaseMap.clear();
+                begin
+                    orderedKeysList.Clear();
+
+                    inherited Clear();
+                end;
+
+        //add or set value
+            procedure TLoadCaseMap.AddOrSetValue(const KeyIn : string; const ValueIn : TLoadCase);
+                begin
+                    inherited AddOrSetValue( KeyIn, ValueIn );
+
+                    if NOT( orderedKeysList.Contains( KeyIn ) ) then
+                        orderedKeysList.add( KeyIn );
+                end;
+
         //make copy
             procedure TLoadCaseMap.copyOther(const otherLoadCaseMapIn : TLoadCaseMap);
                 var
@@ -185,5 +270,10 @@ implementation
                     result := loadCaseOut;
                 end;
 
+            //ordered keys
+                function TLoadCaseMap.getOrderedKeys() : TList<string>;
+                    begin
+                        result := orderedKeysList;
+                    end;
 
 end.

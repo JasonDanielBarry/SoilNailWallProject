@@ -437,7 +437,7 @@ implementation
                                                             ACol, ARow      : LongInt;
                                                             var CanSelect   : Boolean );
                     begin
-                        SoilNailWallDesign.setActiveLoadCase( ARow );
+//                        SoilNailWallDesign.setActiveLoadCase( ARow );
 
                         readFromAndWriteToInputGrids();
                     end;

@@ -6,7 +6,7 @@ interface
         System.SysUtils, Math,
         LimitStateMaterialClass,
         LimitStateAngleClass,
-        SoilNailWallTypes;
+        SoilNailWallTypes, LoadCaseTypes;
 
     type
         TSoilNailWallBase = class
@@ -74,7 +74,7 @@ interface
                         function getWall() : TWall;
                 //modifiers
                     //load
-                        procedure setActiveLoadCase(const loadCaseNumberIn : integer);
+                        procedure setActiveLoadCase(const loadCaseKeyIn : string);
                         procedure setLoadCases(const loadCasesIn : TLoadCaseMap);
                     //nails
                         procedure addNail(const heightIn, lengthIn : double);
@@ -351,9 +351,9 @@ implementation
 
         //modifiers
             //load
-                procedure TSoilNailWallBase.setActiveLoadCase(const loadCaseNumberIn : integer);
+                procedure TSoilNailWallBase.setActiveLoadCase(const loadCaseKeyIn : string);
                     begin
-                        loadCases.setActiveLoadCase( loadCaseNumberIn );
+                        loadCases.setActiveLoadCase( loadCaseKeyIn );
                     end;
 
                 procedure TSoilNailWallBase.setLoadCases(const loadCasesIn : TLoadCaseMap);
