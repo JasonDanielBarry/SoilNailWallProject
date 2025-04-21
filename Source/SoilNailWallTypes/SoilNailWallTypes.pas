@@ -124,32 +124,7 @@ interface
                     procedure writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
             end;
 
-        //load cases
-            TLoadCase = record
-                factor, load        : double;
-                name, description   : string;
-                procedure setvalues(const factorIn, loadIn      : double;
-                                    const nameIn, descriptionIn : string);
-                function calculateFactoredLoad() : double;
-            end;
-
-            TLoadCaseMap = class(TDictionary<integer, TLoadCase>)
-                private
-                    activeLoadCaseNumber : integer;
-                public
-                    //make copy
-                        procedure copyOther(const otherLoadCaseMapIn : TLoadCaseMap);
-                    //XML file read/write
-                        function tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
-                        procedure writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
-                    //active load case
-                        function getActiveLoadCase() : TLoadCase;
-                        procedure setActiveLoadCase(const loadCaseNumberIn : integer);
-                    //critical load case
-                        function getCriticalLoadCase() : integer;
-
-
-            end;
+        
 
 implementation
 
@@ -451,97 +426,6 @@ implementation
             end;
     //--------------------------------------------------------------------------------------------------------------
 
-    //TLoadCase--------------------------------------------------------------------------------------------------
-        procedure TLoadCase.setvalues(  const factorIn, loadIn      : double;
-                                        const nameIn, descriptionIn : string    );
-            begin
-                factor      := factorIn;
-                load        := loadIn;
-                name        := nameIn;
-                description := descriptionIn;
-            end;
-
-        function TLoadCase.calculateFactoredLoad() : double;
-            begin
-                result := factor * load;
-            end;
-    //--------------------------------------------------------------------------------------------------------------
-
-    //TLoadCaseMap--------------------------------------------------------------------------------------------------
-        //make copy
-            procedure TLoadCaseMap.copyOther(const otherLoadCaseMapIn : TLoadCaseMap);
-                var
-                    itemKey     : integer;
-                    loadCase    : TLoadCase;
-                begin
-                    self.Clear();
-
-                    for itemKey in otherLoadCaseMapIn.Keys do
-                        begin
-                            if NOT( otherLoadCaseMapIn.TryGetValue( itemKey, loadCase ) ) then
-                                Continue;
-
-                            self.AddOrSetValue( itemKey, loadCase );
-                        end;
-                end;
-
-        //XML file read/write
-            function TLoadCaseMap.tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
-                begin
-                    // to do
-                end;
-
-            procedure TLoadCaseMap.writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
-                begin
-                    // to do
-                end;
-
-        //active load case
-            function TLoadCaseMap.getActiveLoadCase() : TLoadCase;
-                var
-                    loadCaseOut : TLoadCase;
-                begin
-                    if NOT( TryGetValue( activeLoadCaseNumber, loadCaseOut ) ) then
-                        exit( loadCaseOut );
-
-                    result := loadCaseOut;
-                end;
-
-            procedure TLoadCaseMap.setActiveLoadCase(const loadCaseNumberIn : integer);
-                begin
-                    if NOT( ContainsKey( loadCaseNumberIn ) ) then
-                        exit();
-
-                    activeLoadCaseNumber := loadCaseNumberIn
-                end;
-
-        //critical load case
-            function TLoadCaseMap.getCriticalLoadCase() : integer;
-                var
-                    criticalKey,
-                    LCKey       : integer;
-                    currentLoad,
-                    maxLoad     : double;
-                    loadCase    : TLoadCase;
-                begin
-                    maxLoad := 0;
-
-                    for LCKey in Keys do
-                        begin
-                            if NOT( TryGetValue( LCKey, loadCase ) ) then
-                                Continue;
-
-                            currentLoad := loadCase.calculateFactoredLoad();
-
-                            if ( currentLoad < maxLoad ) then
-                                Continue;
-
-                            criticalKey := LCKey;
-                            maxLoad     := currentLoad;
-                        end;
-
-                    result := criticalKey;
-                end;
-
+    
 
 end.

@@ -24,7 +24,8 @@ uses
   WallGeometryInputManagerClass in 'Source\UserInterface\InputTab\WallGeometryInputManagerClass.pas',
   SoilNailWallInputManagerClass in 'Source\UserInterface\SoilNailWallInputManagerClass.pas',
   NailPropertiesInputManagerClass in 'Source\UserInterface\InputTab\NailPropertiesInputManagerClass.pas',
-  LoadCasesInputManagerClass in 'Source\UserInterface\InputTab\LoadCasesInputManagerClass.pas';
+  LoadCasesInputManagerClass in 'Source\UserInterface\InputTab\LoadCasesInputManagerClass.pas',
+  LoadCaseTypes in 'Source\SoilNailWallTypes\LoadCaseTypes.pas';
 
 {$R *.res}
 

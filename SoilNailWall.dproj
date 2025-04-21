@@ -169,6 +169,7 @@
         <DCCReference Include="Source\UserInterface\SoilNailWallInputManagerClass.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\NailPropertiesInputManagerClass.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\LoadCasesInputManagerClass.pas"/>
+        <DCCReference Include="Source\SoilNailWallTypes\LoadCaseTypes.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
