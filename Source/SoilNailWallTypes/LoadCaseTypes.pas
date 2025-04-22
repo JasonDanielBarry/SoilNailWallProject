@@ -25,6 +25,10 @@ interface
                 public
                     var
                         LCName : string;
+                    //accessors
+                        function getArrFactors() : TArray<double>; inline;
+                        function getArrLoads() : TArray<double>; inline;
+                        function getArrDescriptions() : TArray<string>; inline;
                     //add load combination
                         procedure addLoadCombination(   const factorIn, loadIn  : double;
                                                         const descriptionIn     : string    );
@@ -74,6 +78,22 @@ interface
 implementation
 
     //TLoadCase--------------------------------------------------------------------------------------------------
+        //accessors
+            function TLoadCase.getArrFactors() : TArray<double>;
+                begin
+                    result := arrFactors;
+                end;
+
+            function TLoadCase.getArrLoads() : TArray<double>;
+                begin
+                    result := arrLoads;
+                end;
+
+            function TLoadCase.getArrDescriptions() : TArray<string>;
+                begin
+                    result := arrDescriptions;
+                end;
+
         //add load combination
             procedure TLoadCase.addLoadCombination( const factorIn, loadIn  : double;
                                                     const descriptionIn     : string );
@@ -118,7 +138,7 @@ implementation
                     //calculate sum of factored loads
                         factoredLoadSumOut := 0;
 
-                        for i := 0 to arrLen do
+                        for i := 0 to ( arrLen - 1 ) do
                             begin
                                 factoredLoad_i := arrFactors[i] * arrLoads[i];
 
@@ -130,8 +150,19 @@ implementation
 
         //XML file read/write
             function TLoadCase.tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
+                var
+                    readSuccessful  : boolean;
+                    loadCaseNode    : IXMLNode;
                 begin
+                    if NOT( tryGetXMLChildNode( XMLNodeIn, identifierIn, DT_LOAD_CASE, loadCaseNode ) ) then
+                        exit( False );
 
+                    readSuccessful := tryReadStringFromXMLNode( loadCaseNode, NAME, LCName );
+                    readSuccessful := readSuccessful AND TryReadStringArrayFromXMLNode( loadCaseNode, DESCRIPTIONS, arrDescriptions );
+                    readSuccessful := readSuccessful AND TryReadDoubleArrayFromXMLNode( loadCaseNode, FACTORS, arrFactors );
+                    readSuccessful := readSuccessful AND TryReadDoubleArrayFromXMLNode( loadCaseNode, LOADS, arrLoads );
+
+                    result := readSuccessful;
                 end;
 
             procedure TLoadCase.writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
@@ -141,17 +172,10 @@ implementation
                     if NOT( tryCreateNewXMLChildNode( XMLNodeInOut, identifierIn, DT_LOAD_CASE, loadCaseNode ) ) then
                         exit();
 
-                    //write name
-                        writeStringToXMLNode( loadCaseNode, NAME, LCName );
-
-                    //write descriptions
-                        writeStringArrayToXMLNode( loadCaseNode, DESCRIPTIONS, arrDescriptions );
-
-                    //write factors
-                        writeDoubleArrayToXMLNode( loadCaseNode, FACTORS, arrFactors );
-
-                    //write loads
-                        writeDoubleArrayToXMLNode( loadCaseNode, LOADS, arrLoads );
+                    writeStringToXMLNode( loadCaseNode, NAME, LCName );
+                    writeStringArrayToXMLNode( loadCaseNode, DESCRIPTIONS, arrDescriptions );
+                    writeDoubleArrayToXMLNode( loadCaseNode, FACTORS, arrFactors );
+                    writeDoubleArrayToXMLNode( loadCaseNode, LOADS, arrLoads );
                 end;
 
     //TLoadCaseMap--------------------------------------------------------------------------------------------------
@@ -207,8 +231,35 @@ implementation
 
         //XML file read/write
             function TLoadCaseMap.tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
+                var
+                    readSuccessful  : boolean;
+                    LCName          : string;
+                    loadCaseMapNode : IXMLNode;
+                    arrOrderedKeys  : TArray<string>;
                 begin
-                    // to do
+                    if NOT( tryGetXMLChildNode( XMLNodeIn, identifierIn, DT_LOAD_CASE_MAP, loadCaseMapNode ) ) then
+                        exit( False );
+
+                    self.clear();
+
+                    //read ordered keys
+                        orderedKeysList.Clear();
+
+                        readSuccessful := TryReadStringArrayFromXMLNode( loadCaseMapNode, LOAD_CASE_KEYS, arrOrderedKeys );
+
+                    //read all load cases
+                        for LCName in arrOrderedKeys do
+                            begin
+                                var newLoadCase : TLoadCase;
+
+                                orderedKeysList.Add( LCName );
+
+                                readSuccessful := readSuccessful AND newLoadCase.tryReadFromXMLNode( loadCaseMapNode, LC_PREFIX + LCName );
+
+                                AddOrSetValue( LCName, newLoadCase );
+                            end;
+
+                    result := readSuccessful;
                 end;
 
             procedure TLoadCaseMap.writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);

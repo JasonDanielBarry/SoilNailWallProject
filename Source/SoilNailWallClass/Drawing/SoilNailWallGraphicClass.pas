@@ -16,6 +16,15 @@ interface
     type
         TSoilNailWallGraphic = class(TSoilNailWallAnalysis)
             private
+                const
+                    ANCHORED_LENGTH_LAYER   : string = 'Anchored Length';
+                    LOAD_LAYER              : string = 'Load';
+                    NAIL_LAYER              : string = 'Nails';
+                    SLIP_WEDGE_LAYER        : string = 'Slip Wedge';
+                    SOIL_LAYER              : string = 'Soil';
+                    WALL_LAYER              : string = 'Wall';
+                var
+                    loadsVisible, slipWedgeVisible : boolean;
                 //drawing methods
                     //load cases
                         procedure updateLoadCase(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
@@ -37,6 +46,9 @@ interface
                     constructor create();
                 //destructor
                     destructor destroy(); override;
+                //set optional graphics visibility
+                    procedure setLoadsVisible(const visibleIn : boolean);
+                    procedure setSlipWedgeVisible(const visibleIn : boolean);
                 //drawing
                     procedure updateSoilNailWallGeomtry(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
         end;
@@ -48,11 +60,16 @@ implementation
             //load cases
                 procedure TSoilNailWallGraphic.updateLoadCase(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
                     var
-                        load            : double;
+                        load,
+                        textCentreX     : double;
+                        loadCaseText    : string;
                         activeLoadCase  : TLoadCase;
                         loadCaseMap     : TLoadCaseMap;
                         loadLine        : TGeomPolyLine;
                     begin
+                        if NOT( loadsVisible ) then
+                            exit();
+
                         //get the active factored load
                             loadCaseMap := getLoadCases();
 
@@ -64,7 +81,7 @@ implementation
                                 exit();
 
                         //draw the load case
-                            graphicDrawerInOut.setCurrentDrawingLayer('Load');
+                            graphicDrawerInOut.setCurrentDrawingLayer( LOAD_LAYER );
 
                             loadLine := determineSoilSurface();
 
@@ -72,7 +89,15 @@ implementation
 
                             graphicDrawerInOut.addArrowGroup( 2, loadLine, EArrowOrigin.aoHead, EArrowGroupDirection.agdDown, 0, True, 3, clSilver, clSilver );
 
-                            FreeAndNil( loadLine );
+                        //load case text
+                            loadCaseText :=     'Load Case: ' + activeLoadCase.LCName
+                                            +   ', Resultant = ' + FloatToStrF( load, ffFixed, 5, 2 ) + ' kN/m';
+
+                            textCentreX := loadLine.getDrawingPoints()[0].x;
+
+                            graphicDrawerInOut.addText( textCentreX, loadLine.getDrawingPoints()[0].y + 3, loadCaseText, 10 );
+
+                        FreeAndNil( loadLine );
                     end;
 
             //nails
@@ -98,7 +123,7 @@ implementation
                     var
                         arrNailGeom : TArray<TGeomLine>;
                     begin
-                        graphicDrawerInOut.setCurrentDrawingLayer('Nails');
+                        graphicDrawerInOut.setCurrentDrawingLayer( NAIL_LAYER );
 
                         arrNailGeom := determineNailGeometry();
 
@@ -109,10 +134,10 @@ implementation
                     var
                         arrAnchoredNailGeom : TArray<TGeomLine>;
                     begin
-                        if ( NOT(getSlipWedge().visible) ) then
+                        if NOT( slipWedgeVisible ) then
                             exit();
 
-                        graphicDrawerInOut.setCurrentDrawingLayer('Anchored Length');
+                        graphicDrawerInOut.setCurrentDrawingLayer( ANCHORED_LENGTH_LAYER );
 
                         arrAnchoredNailGeom := determineAnchoredNailGeometry();
 
@@ -124,10 +149,10 @@ implementation
                     var
                         slipWedgePolygon : TGeomPolygon;
                     begin
-                        if (getSlipWedge().visible = False) then
+                        if NOT( slipWedgeVisible ) then
                             exit();
 
-                        graphicDrawerInOut.setCurrentDrawingLayer('Slip Wedge');
+                        graphicDrawerInOut.setCurrentDrawingLayer( SLIP_WEDGE_LAYER );
 
                         slipWedgePolygon := determineSlipWedgeGeometry();
 
@@ -143,12 +168,12 @@ implementation
                     var
                         slipLine : TGeomLine;
                     begin
-                        if (getSlipWedge().visible = False) then
+                        if NOT( slipWedgeVisible ) then
                             exit();
 
                         slipLine := determineSlipLine();
 
-                        graphicDrawerInOut.setCurrentDrawingLayer('Slip Wedge');
+                        graphicDrawerInOut.setCurrentDrawingLayer( SLIP_WEDGE_LAYER );
 
                         graphicDrawerInOut.addLine( slipLine,
                                                     5,
@@ -162,7 +187,7 @@ implementation
                     var
                         soilPolygon : TGeomPolygon;
                     begin
-                        graphicDrawerInOut.setCurrentDrawingLayer('Soil');
+                        graphicDrawerInOut.setCurrentDrawingLayer( SOIL_LAYER );
 
                         soilPolygon := determineSoilGeometry();
 
@@ -180,7 +205,7 @@ implementation
                     var
                         wallPolygon : TGeomPolygon;
                     begin
-                        graphicDrawerInOut.setCurrentDrawingLayer('Wall');
+                        graphicDrawerInOut.setCurrentDrawingLayer( WALL_LAYER );
 
                         wallPolygon := determineWallGeometry();
 
@@ -205,12 +230,23 @@ implementation
                     inherited destroy();
                 end;
 
+        //set optional graphics visibility
+            procedure TSoilNailWallGraphic.setLoadsVisible(const visibleIn : boolean);
+                begin
+                    loadsVisible := visibleIn;
+                end;
+
+            procedure TSoilNailWallGraphic.setSlipWedgeVisible(const visibleIn : boolean);
+                begin
+                    slipWedgeVisible := visibleIn;
+                end;
+
         //drawing
             procedure TSoilNailWallGraphic.updateSoilNailWallGeomtry(var graphicDrawerInOut: TGraphicDrawerObjectAdder);
                 begin
                     //for now set a value to the wedge angle for testing
                         setSlipWedgeAngle(35);
-                        setslipWedgevisible(True);
+//                        setslipWedgevisible(True);
 
                     updateSoil( graphicDrawerInOut );
 

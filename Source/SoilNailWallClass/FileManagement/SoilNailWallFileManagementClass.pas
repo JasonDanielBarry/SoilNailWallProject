@@ -49,10 +49,18 @@ implementation
                 function TSoilNailWallFileManager.readFromFile(var fileReadWriteInOut : TSoilNailWallFileReaderWriter) : boolean;
                     var
                         readSuccessful  : boolean;
+                        loadCases       : TLoadCaseMap;
                         soil            : TSoil;
                         soilNails       : TSoilNails;
                         wall            : TWall;
                     begin
+                        //load cases
+                            loadCases := getLoadCases();
+
+                            readSuccessful := fileReadWriteInOut.tryReadLoadCases( LOAD_CASES, loadCases );
+
+                            setLoadCases( loadCases );
+
                         //soil
                             soil := getSoil();
 

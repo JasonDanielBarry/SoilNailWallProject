@@ -14,7 +14,6 @@ interface
         //failure slip wedge
             TSlipWedge = record
                 var
-                    visible     : boolean;
                     angle,
                     length,
                     selfWeight  : double;

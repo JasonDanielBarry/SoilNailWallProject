@@ -18,6 +18,7 @@ interface
                 //destructor
                     destructor destroy(); override;
                 //read
+                    function tryReadLoadCases(const identifierIn : string; var LoadCaseMapOut : TLoadCaseMap) : boolean;
                     function tryReadLimitStateMaterial(const identifierIn : string; out LSMOut : TLimitStateMaterial) : boolean;
                     function tryReadSoil(const identifierIn : string; out soilOut : TSoil) : boolean;
                     function tryReadSoilNails(const identifierIn : string; out soilNailsOut : TSoilNails) : boolean;
@@ -46,10 +47,12 @@ implementation
                 end;
 
         //read
+            function TSoilNailWallFileReaderWriter.tryReadLoadCases(const identifierIn : string; var LoadCaseMapOut : TLoadCaseMap) : boolean;
+                begin
+                    result := LoadCaseMapOut.tryReadFromXMLNode( rootNode, identifierIn );
+                end;
+
             function TSoilNailWallFileReaderWriter.tryReadLimitStateMaterial(const identifierIn : string; out LSMOut : TLimitStateMaterial) : boolean;
-                var
-                    nodeDataType    : string;
-                    itemNode        : IXMLNode;
                 begin
                     //initialise the value of the material
                         LSMOut.setValues( 0, 0, 0, 1 );

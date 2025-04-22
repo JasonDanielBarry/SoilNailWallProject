@@ -18,9 +18,10 @@ interface
                     slipWedge   : TSlipWedge;
                     loadCases   : TLoadCaseMap;
                 //instantiate material classes
-                    procedure instantiateMaterialClasses();
+                    procedure instantiateAllMemberClasses();
+                    procedure setDefaultValues();
                 //destroy material classes
-                    procedure destroyMaterialClasses();
+                    procedure freeAllMemberClasses();
                 //deep copy
                     procedure deepCopy(const otherSNWIn : TSoilNailWallBase);
             protected
@@ -36,7 +37,6 @@ interface
                             procedure setNailGroutSoilInterfaceStrength(const averageIn, coefVarIn, downgradeFactorIn, partialFacIn : double);
                             procedure setNailTensileStrength(const averageIn, coefVarIn, downgradeFactorIn, partialFacIn : double);
                     //slip wedge
-                        procedure setSlipWedgeVisible(const visibleIn : boolean);
                         procedure setSlipWedgeAngle(const angleIn : double);
                         procedure setSlipWedgeLength(const lengthIn : double);
                         procedure setSlipWedgeWeight(const selfWeightIn : double);
@@ -93,14 +93,19 @@ interface
                                                             topLengthIn, bottomLengthIn     : double);
                     procedure getNailLayout(out topSpaceOut,    verticalSpacingOut,
                                                 topLengthOut,   bottomLengthOut     : double);
+                //reset
+                    procedure reset();
         end;
 
 implementation
 
     //private
         //instantiate all classes
-            procedure TSoilNailWallBase.instantiateMaterialClasses();
+            procedure TSoilNailWallBase.instantiateAllMemberClasses();
                 begin
+                    //load cases
+                        loadCases := TLoadCaseMap.Create();
+
                     //nails
                         nails.strength.groutSoilInterface   := TLimitStateMaterial.create();
                         nails.strength.tensile              := TLimitStateMaterial.create();
@@ -115,10 +120,41 @@ implementation
                         wall.concrete.strength.reinforcement    := TLimitStateMaterial.create();
                 end;
 
-        //destroy material classes
-            procedure TSoilNailWallBase.destroyMaterialClasses();
+            procedure TSoilNailWallBase.setDefaultValues();
                 begin
                     //nails
+                        clearNailLayout();
+                        setNailAngle(0);
+                        setNailGroutSoilInterfaceStrength(0, 0, 0, 1);
+                        setNailTensileStrength(0, 0, 0, 1);
+
+                    //soil
+                        //parameters
+                            setSoilCohesion(0, 0, 0, 1);
+                            setSoilFrictionAngle(0, 0, 0, 1);
+                            setSoilUnitWeight(0, 0, 0, 1);
+
+                        //slope
+                            setSoilSlopeAngle(0);
+                            setSoilSlopeMaxHeight(0);
+
+                    //wall
+                        //concrete
+                            setConcreteCompressiveStrength(0, 0, 0, 1);
+                            setConcreteReinforcementStrength(0, 0, 0, 1);
+
+                        //geometry
+                            setWallAngle(0);
+                            setWallHeight(0);
+                end;
+
+        //destroy material classes
+            procedure TSoilNailWallBase.freeAllMemberClasses();
+                begin
+                    //load cases
+                        FreeAndNil( loadCases );
+
+                     //nails
                         FreeAndNil( nails.strength.groutSoilInterface );
                         FreeAndNil( nails.strength.tensile );
 
@@ -180,11 +216,6 @@ implementation
                         end;
 
             //slip wedge
-                procedure TSoilNailWallBase.setSlipWedgeVisible(const visibleIn : boolean);
-                    begin
-                        slipWedge.visible := visibleIn;
-                    end;
-
                 procedure TSoilNailWallBase.setSlipWedgeAngle(const angleIn : double);
                     begin
                         slipWedge.angle := max(1, angleIn);
@@ -277,43 +308,17 @@ implementation
                 begin
                     inherited create();
 
-                    instantiateMaterialClasses();
+                    instantiateAllMemberClasses();
 
-                    //load cases
-                        loadCases := TLoadCaseMap.Create();
-
-                    //nails
-                        clearNailLayout();
-                        setNailAngle(0);
-                        setNailGroutSoilInterfaceStrength(0, 0, 0, 1);
-                        setNailTensileStrength(0, 0, 0, 1);
-
-                    //soil
-                        //parameters
-                            setSoilCohesion(0, 0, 0, 1);
-                            setSoilFrictionAngle(0, 0, 0, 1);
-                            setSoilUnitWeight(0, 0, 0, 1);
-
-                        //slope
-                            setSoilSlopeAngle(0);
-                            setSoilSlopeMaxHeight(0);
-
-                    //wall
-                        //concrete
-                            setConcreteCompressiveStrength(0, 0, 0, 1);
-                            setConcreteReinforcementStrength(0, 0, 0, 1);
-
-                        //geometry
-                            setWallAngle(0);
-                            setWallHeight(0);
+                    setDefaultValues();
                 end;
 
         //destructor
             destructor TSoilNailWallBase.destroy();
                 begin
-                    destroyMaterialClasses();
+                    freeAllMemberClasses();
 
-                    FreeAndNil( loadCases );
+
 
                     inherited destroy();
                 end;
@@ -393,7 +398,6 @@ implementation
             //slip-wedge
                 procedure TSoilNailWallBase.setSlipWedge(const slipWedgeIn : TSlipWedge);
                     begin
-                        setSlipWedgeVisible(slipWedgeIn.visible);
                         setSlipWedgeAngle(slipWedgeIn.angle);
                         setSlipWedgeLength(slipWedgeIn.length);
                         setSlipWedgeWeight(slipWedgeIn.selfWeight);
@@ -445,5 +449,15 @@ implementation
                                         topSpaceOut,    verticalSpacingOut,
                                         topLengthOut,   bottomLengthOut     );
                 end;
+
+        //reset
+            procedure TSoilNailWallBase.reset();
+                begin
+                    freeAllMemberClasses();
+
+                    instantiateAllMemberClasses();
+                    setDefaultValues();
+                end;
+
 
 end.

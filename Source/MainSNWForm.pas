@@ -111,7 +111,7 @@ interface
             ActionSaveAs: TAction;
             OpenFileDialog: TFileOpenDialog;
             SaveFileDialog: TFileSaveDialog;
-            JDBGraphic2DDiagram: TJDBGraphic2D;
+    SNWGraphic: TJDBGraphic2D;
             PageLoads: TTabSheet;
             GridLoadCases: TStringGrid;
             SpeedButtonLoadCases: TSpeedButton;
@@ -168,7 +168,7 @@ interface
             //ribbon
                 procedure PageControlRibbonChange(Sender: TObject);
             //update geometry
-                procedure JDBGraphic2DDiagramUpdateGeometry(ASender         : TObject;
+                procedure SNWGraphicUpdateGeometry(ASender         : TObject;
                                                             var AGeomDrawer : TGraphicDrawerObjectAdder);
 
         private
@@ -236,7 +236,7 @@ implementation
             //destruction
                 procedure TSNWForm.FormClose(Sender: TObject; var Action: TCloseAction);
                     begin
-                        FreeAndNil(SoilNailWallDesign);
+                        FreeAndNil( SoilNailWallDesign );
                         FreeAndNil( materialsInputManager );
                         FreeAndNil( wallGeometryInputManager );
                         FreeAndNil( nailPropertiesInputManager );
@@ -255,13 +255,11 @@ implementation
             //file menu
                 procedure TSNWForm.ActionNewExecute(Sender: TObject);
                     begin
-                        FreeAndNil( SoilNailWallDesign );
+                        SoilNailWallDesign.reset();
 
                         TInputManager.resetInputControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager, loadCasesInputManager ] );
 
-                        SoilNailWallDesign := TSoilNailWall.create();
-
-                        JDBGraphic2DDiagram.updateGeometry();
+                        SNWGraphic.updateGeometry();
 
                         writeToAllInputGrids( False );
                     end;
@@ -383,7 +381,7 @@ implementation
 
                             writeToAndReadFromInputGrids();
 
-                            JDBGraphic2DDiagram.zoomAll();
+                            SNWGraphic.zoomAll();
                         end;
 
             //analysis & design tab
@@ -436,8 +434,12 @@ implementation
                 procedure TSNWForm.GridLoadCasesSelectCell( Sender          : TObject;
                                                             ACol, ARow      : LongInt;
                                                             var CanSelect   : Boolean );
+                    var
+                        activeLoadCase : string;
                     begin
-//                        SoilNailWallDesign.setActiveLoadCase( ARow );
+                        activeLoadCase := loadCasesInputManager.getActiveLoadCase( ARow );
+
+                        SoilNailWallDesign.setActiveLoadCase( activeLoadCase );
 
                         readFromAndWriteToInputGrids();
                     end;
@@ -477,7 +479,7 @@ implementation
                     end;
 
             //update geometry
-                procedure TSNWForm.JDBGraphic2DDiagramUpdateGeometry(   ASender         : TObject;
+                procedure TSNWForm.SNWGraphicUpdateGeometry(   ASender         : TObject;
                                                                         var AGeomDrawer : TGraphicDrawerObjectAdder );
                     begin
                         SoilNailWallDesign.updateSoilNailWallGeomtry( AGeomDrawer );
@@ -507,6 +509,8 @@ implementation
                         end;
                 begin
                     SoilNailWallDesign := TSoilNailWall.create();
+
+                    SoilNailWallDesign.setSlipWedgeVisible( False );
 
                     _pageConTabsVisiblity();
 
@@ -650,6 +654,9 @@ implementation
                             EInputPage.ipLoadCases:
                                 PageControlProgrammeFlow.ActivePage := PageLoads;
                         end;
+
+                        SoilNailWallDesign.setLoadsVisible( activeInputPage = EInputPage.ipLoadCases );
+                        SNWGraphic.updateGeometry();
                     end;
 
                 procedure TSNWForm.sortPage();
@@ -698,7 +705,7 @@ implementation
                                 TStyleManager.SetStyle( WINDOWS_11_THEME_DARK );
                         end;
 
-                        JDBGraphic2DDiagram.updateBackgroundColour();
+                        SNWGraphic.updateBackgroundColour();
                     end;
 
                 procedure TSNWForm.positionThemeDropMenu();
@@ -734,7 +741,7 @@ implementation
                 begin
                     TInputManager.writeToAllControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager, loadCasesInputManager ], updateEmptyCellsIn );
 
-                    JDBGraphic2DDiagram.updateGeometry();
+                    SNWGraphic.updateGeometry();
 
                     inputErrorCount := TInputManager.countInputErrors( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager, loadCasesInputManager ] );
 
