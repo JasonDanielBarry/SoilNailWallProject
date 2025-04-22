@@ -7,7 +7,7 @@ interface
         Xml.XMLDoc, Xml.XMLIntf,
         FileReaderWriterClass,
         LimitStateMaterialClass,
-        SoilNailWallTypes
+        SoilNailWallTypes, LoadCaseTypes
         ;
 
     type
@@ -23,6 +23,7 @@ interface
                     function tryReadSoilNails(const identifierIn : string; out soilNailsOut : TSoilNails) : boolean;
                     function tryReadWall(const identifierIn : string; out wallOut : TWall) : boolean;
                 //write
+                    procedure writeLoadCases(const identifierIn : string; const loadCaseMapIn : TLoadCaseMap);
                     procedure writeLimitStateMaterial(const identifierIn : string; const LSMIn : TlimitStateMaterial);
                     procedure writeSoil(const identifierIn : string; const soilIn : TSoil);
                     procedure writeSoilNails(const identifierIn : string; const soilNailsIn : TSoilNails);
@@ -73,6 +74,11 @@ implementation
                 end;
 
         //write
+            procedure TSoilNailWallFileReaderWriter.writeLoadCases(const identifierIn : string; const loadCaseMapIn : TLoadCaseMap);
+                begin
+                    loadCaseMapIn.writeToXMLNode( rootNode, identifierIn );
+                end;
+
             procedure TSoilNailWallFileReaderWriter.writeLimitStateMaterial(const identifierIn : string; const LSMIn : TlimitStateMaterial);
                 begin
                     LSMIn.writeToXMLNode( rootNode, identifierIn );

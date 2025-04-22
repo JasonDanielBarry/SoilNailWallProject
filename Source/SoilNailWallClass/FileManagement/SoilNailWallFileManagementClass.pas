@@ -5,7 +5,7 @@ interface
     uses
         SoilNailWallFileReaderWriterClass,
         LimitStateMaterialClass,
-        SoilNailWallTypes,
+        SoilNailWallTypes, LoadCaseTypes,
         SoilNailWallGraphicClass
         ;
 
@@ -13,6 +13,7 @@ interface
         TSoilNailWallFileManager = class(TSoilNailWallGraphic)
             private
                 const
+                    LOAD_CASES              : string = 'LoadCases';
                     SOIL_PROPERTIES         : string = 'SoilProperties';
                     SOIL_NAIL_PROPERTIES    : string = 'SoilNailProperties';
                     WALL_PROPERTIES         : string = 'WallProperties';
@@ -79,21 +80,30 @@ implementation
             //save to file
                 procedure TSoilNailWallFileManager.writeToFile(var fileReadWriteInOut : TSoilNailWallFileReaderWriter);
                     var
+                        loadCases   : TLoadCaseMap;
                         soil        : TSoil;
                         soilNails   : TSoilNails;
                         wall        : TWall;
                     begin
-                        soil := getSoil();
+                        //load cases
+                            loadCases := getLoadCases;
 
-                        fileReadWriteInOut.writeSoil( SOIL_PROPERTIES, soil );
+                            fileReadWriteInOut.writeLoadCases( LOAD_CASES, loadCases );
 
-                        soilNails := getNails();
+                        //soil
+                            soil := getSoil();
 
-                        fileReadWriteInOut.writeSoilNails( SOIL_NAIL_PROPERTIES, soilNails );
+                            fileReadWriteInOut.writeSoil( SOIL_PROPERTIES, soil );
 
-                        wall := getWall();
+                        //nails
+                            soilNails := getNails();
 
-                        fileReadWriteInOut.writeWall( WALL_PROPERTIES, wall );
+                            fileReadWriteInOut.writeSoilNails( SOIL_NAIL_PROPERTIES, soilNails );
+
+                        //wall
+                            wall := getWall();
+
+                            fileReadWriteInOut.writeWall( WALL_PROPERTIES, wall );
                     end;
 
 end.

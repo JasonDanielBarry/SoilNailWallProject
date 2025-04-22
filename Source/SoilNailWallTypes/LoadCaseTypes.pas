@@ -39,9 +39,14 @@ interface
 
         //load case map
             TLoadCaseMap = class(TDictionary<string, TLoadCase>)
-                private
-                    activeLoadCaseKey   : string;
-                    orderedKeysList     : TList<string>;
+                strict private
+                    const
+                        DT_LOAD_CASE_MAP    : string = 'TLoadCaseMap';
+                        LOAD_CASE_KEYS      : string = 'LoadCaseNames';
+                        LC_PREFIX           : string = 'LoadCase_';
+                    var
+                        activeLoadCaseKey   : string;
+                        orderedKeysList     : TList<string>;
                 public
                     //constructor
                         constructor create();
@@ -133,7 +138,7 @@ implementation
                 var
                     loadCaseNode : IXMLNode;
                 begin
-                    if NOT( tryCreateNewXMLChildNode( XMLNodeInOut, identifierIn, loadCaseNode ) ) then
+                    if NOT( tryCreateNewXMLChildNode( XMLNodeInOut, identifierIn, DT_LOAD_CASE, loadCaseNode ) ) then
                         exit();
 
                     //write name
@@ -207,8 +212,28 @@ implementation
                 end;
 
             procedure TLoadCaseMap.writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
+                var
+                    LCName          : string;
+                    loadCaseMapNode : IXMLNode;
+                    loadCase        : TLoadCase;
+                    arrOrderedKeys  : TArray<string>;
                 begin
-                    // to do
+                    if NOT( tryCreateNewXMLChildNode( XMLNodeInOut, identifierIn, DT_LOAD_CASE_MAP, loadCaseMapNode ) ) then
+                        exit();
+
+                    //write ordered keys
+                        arrOrderedKeys := orderedKeysList.ToArray();
+
+                        writeStringArrayToXMLNode( loadCaseMapNode, LOAD_CASE_KEYS, arrOrderedKeys );
+
+                    //write load cases
+                        for LCName in arrOrderedKeys do
+                            begin
+                                if NOT( TryGetValue( LCName, loadCase ) ) then
+                                    Continue;
+
+                                loadCase.writeToXMLNode( loadCaseMapNode, LC_PREFIX + LCName );
+                            end;
                 end;
 
         //active load case
