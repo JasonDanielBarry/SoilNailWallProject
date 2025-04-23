@@ -87,7 +87,7 @@ implementation
 
                             loadLine.shift( 0, 0.2 );
 
-                            graphicDrawerInOut.addArrowGroup( 2, loadLine, EArrowOrigin.aoHead, EArrowGroupDirection.agdDown, 0, True, 3, clSilver, clSilver );
+                            graphicDrawerInOut.addArrowGroup( 2, loadLine, EArrowOrigin.aoHead, EArrowGroupDirection.agdDown, 0, True, 2, clSilver, clSilver );
 
                         //load case text
                             loadCaseText :=     'Load Case: ' + activeLoadCase.LCName
