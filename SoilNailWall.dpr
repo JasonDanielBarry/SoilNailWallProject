@@ -25,7 +25,8 @@ uses
   SoilNailWallInputManagerClass in 'Source\UserInterface\SoilNailWallInputManagerClass.pas',
   NailPropertiesInputManagerClass in 'Source\UserInterface\InputTab\NailPropertiesInputManagerClass.pas',
   LoadCasesInputManagerClass in 'Source\UserInterface\InputTab\LoadCasesInputManagerClass.pas',
-  LoadCaseTypes in 'Source\SoilNailWallTypes\LoadCaseTypes.pas';
+  LoadCaseTypes in 'Source\SoilNailWallTypes\LoadCaseTypes.pas',
+  LoadCaseEditorWizard in 'Source\UserInterface\InputTab\LoadCaseEditorWizard.pas' {LoadCaseEditor};
 
 {$R *.res}
 
@@ -33,5 +34,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TSNWForm, SNWForm);
+  Application.CreateForm(TLoadCaseEditor, LoadCaseEditor);
   Application.Run;
 end.

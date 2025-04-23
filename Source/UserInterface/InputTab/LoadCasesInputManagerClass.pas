@@ -8,7 +8,8 @@ interface
         StringGridHelperClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes, LoadCaseTypes,
-        SoilNailWallMasterClass
+        SoilNailWallMasterClass,
+        LoadCaseEditorWizard
         ;
 
     type
@@ -60,6 +61,8 @@ interface
                         procedure writeToInputControls(const updateEmptyControlsIn : boolean = False); override;
                 //get active load case
                     function getActiveLoadCase(const selectedGridRowIn : integer) : string;
+                //launch load case editor
+                    function loadLoadCaseEditor() : boolean;
         end;
 
 implementation
@@ -458,6 +461,20 @@ implementation
                         until ( canExitLoop );
 
                     result := currentLoadCase;
+                end;
+
+        //launch load case editor
+            function TLoadCasesInputManager.loadLoadCaseEditor() : boolean;
+                var
+                    loadCaseEditor : TLoadCaseEditor;
+                begin
+                    loadCaseEditor := TLoadCaseEditor.Create( nil );
+
+                    loadCaseEditor.ShowModal();
+
+                    result := loadCaseEditor.ModalResult = mrOk;
+
+                    freeandNil( loadCaseEditor );
                 end;
 
 end.

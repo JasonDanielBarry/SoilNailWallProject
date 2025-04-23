@@ -4,7 +4,7 @@
         <ProjectVersion>20.3</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <ProjectName Condition="'$(ProjectName)'==''">SoilNailWall</ProjectName>
         <TargetedPlatforms>3</TargetedPlatforms>
@@ -170,6 +170,10 @@
         <DCCReference Include="Source\UserInterface\InputTab\NailPropertiesInputManagerClass.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\LoadCasesInputManagerClass.pas"/>
         <DCCReference Include="Source\SoilNailWallTypes\LoadCaseTypes.pas"/>
+        <DCCReference Include="Source\UserInterface\InputTab\LoadCaseEditorWizard.pas">
+            <Form>LoadCaseEditor</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -205,12 +209,6 @@
                 <DeployFile LocalName="..\BuildOutput\SoilNailWall.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win64">
                         <RemoteName>SoilNailWall.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="..\BuildOutput\SoilNailWall.rsm" Configuration="Debug" Class="DebugSymbols">
-                    <Platform Name="Win64">
-                        <RemoteName>SoilNailWall.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

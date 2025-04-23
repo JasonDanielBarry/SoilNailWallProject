@@ -476,7 +476,7 @@ object SNWForm: TSNWForm
           end
           item
             Column = 0
-            Control = SpeedButton1
+            Control = SpeedButtonExample1
             Row = 0
           end
           item
@@ -510,7 +510,7 @@ object SNWForm: TSNWForm
           TabOrder = 0
           StyleElements = [seFont, seBorder]
         end
-        object SpeedButton1: TSpeedButton
+        object SpeedButtonExample1: TSpeedButton
           Left = 0
           Top = 0
           Width = 74
@@ -533,6 +533,83 @@ object SNWForm: TSNWForm
           Caption = 'Examples'
           Layout = tlCenter
           ExplicitWidth = 49
+          ExplicitHeight = 15
+        end
+      end
+      object GridPanelLoadCaseOptions: TGridPanel
+        Left = 750
+        Top = 0
+        Width = 75
+        Height = 95
+        Align = alLeft
+        BevelOuter = bvNone
+        ColumnCollection = <
+          item
+            Value = 100.000000000000000000
+          end
+          item
+            SizeStyle = ssAbsolute
+            Value = 1.000000000000000000
+          end>
+        ControlCollection = <
+          item
+            Column = 0
+            Control = SpeedButtonLCEditor
+            Row = 0
+          end
+          item
+            Column = 1
+            Control = PanelLCSeparator
+            Row = 0
+            RowSpan = 2
+          end
+          item
+            Column = 0
+            Control = LabelLCOptions
+            Row = 1
+          end>
+        RowCollection = <
+          item
+            Value = 100.000000000000000000
+          end
+          item
+            SizeStyle = ssAbsolute
+            Value = 20.000000000000000000
+          end>
+        TabOrder = 4
+        object SpeedButtonLCEditor: TSpeedButton
+          Left = 0
+          Top = 0
+          Width = 74
+          Height = 75
+          Align = alClient
+          Caption = 'Load Case'#13#10'Editor'
+          ExplicitLeft = 64
+          ExplicitTop = 16
+          ExplicitWidth = 23
+          ExplicitHeight = 22
+        end
+        object PanelLCSeparator: TPanel
+          Left = 74
+          Top = 0
+          Width = 1
+          Height = 95
+          Align = alClient
+          Color = clSilver
+          ParentBackground = False
+          TabOrder = 0
+          StyleElements = [seFont, seBorder]
+        end
+        object LabelLCOptions: TLabel
+          Left = 0
+          Top = 75
+          Width = 74
+          Height = 20
+          Align = alClient
+          Alignment = taCenter
+          Caption = 'LC Options'
+          Layout = tlCenter
+          ExplicitWidth = 59
           ExplicitHeight = 15
         end
       end
@@ -623,12 +700,14 @@ object SNWForm: TSNWForm
         object LabelComputationType: TLabel
           Left = 0
           Top = 75
-          Width = 99
-          Height = 15
+          Width = 149
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'Computation Type'
           Layout = tlCenter
+          ExplicitWidth = 99
+          ExplicitHeight = 15
         end
         object PanelComputationTypeSeparator: TPanel
           Left = 149
@@ -733,8 +812,8 @@ object SNWForm: TSNWForm
         object LabelAveVal: TLabel
           Left = 0
           Top = 0
-          Width = 43
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -744,12 +823,14 @@ object SNWForm: TSNWForm
           Caption = 'Average'#13#10'Value'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 43
+          ExplicitHeight = 30
         end
         object LabelVarCoef: TLabel
           Left = 75
           Top = 0
-          Width = 58
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -759,12 +840,14 @@ object SNWForm: TSNWForm
           Caption = 'Variation Coefficient'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 58
+          ExplicitHeight = 30
         end
         object LabelDowngFact: TLabel
           Left = 150
           Top = 0
-          Width = 64
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -774,12 +857,14 @@ object SNWForm: TSNWForm
           Caption = 'Downgrade Factor'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 64
+          ExplicitHeight = 30
         end
         object LabelCauEst: TLabel
           Left = 225
           Top = 0
-          Width = 50
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -789,12 +874,14 @@ object SNWForm: TSNWForm
           Caption = 'Cautious Estimate'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 50
+          ExplicitHeight = 30
         end
         object LabelParFac: TLabel
           Left = 300
           Top = 0
-          Width = 33
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -804,12 +891,14 @@ object SNWForm: TSNWForm
           Caption = 'Partial'#13#10'Factor'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 33
+          ExplicitHeight = 30
         end
         object LabelDesVal: TLabel
           Left = 375
           Top = 0
-          Width = 36
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -819,6 +908,8 @@ object SNWForm: TSNWForm
           Caption = 'Design'#13#10'Value'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 36
+          ExplicitHeight = 30
         end
       end
       object GridSoilParInput: TStringGrid

@@ -78,7 +78,7 @@ interface
             SpeedButtonDesign: TSpeedButton;
             GridPanelExamples: TGridPanel;
             PanelExamplesSeparator: TPanel;
-            SpeedButton1: TSpeedButton;
+    SpeedButtonExample1: TSpeedButton;
             ActionExampleVerticalWallFlatSlope: TAction;
             ActionAnalysis: TAction;
             GridPanelTheme: TGridPanel;
@@ -117,6 +117,10 @@ interface
             SpeedButtonLoadCases: TSpeedButton;
             ActionLoads: TAction;
     ListBoxLoadCases: TListBox;
+    GridPanelLoadCaseOptions: TGridPanel;
+    SpeedButtonLCEditor: TSpeedButton;
+    PanelLCSeparator: TPanel;
+    LabelLCOptions: TLabel;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
