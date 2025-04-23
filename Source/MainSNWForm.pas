@@ -121,6 +121,7 @@ interface
     SpeedButtonLCEditor: TSpeedButton;
     PanelLCSeparator: TPanel;
     LabelLCOptions: TLabel;
+    ActionLoadCaseEditor: TAction;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
@@ -147,6 +148,7 @@ interface
                     procedure ActionClearLayoutExecute(Sender: TObject);
                 //load cases
                     procedure ActionLoadsExecute(Sender: TObject);
+                    procedure ActionLoadCaseEditorExecute(Sender: TObject);
                 //examples
                     procedure ActionExampleVerticalWallFlatSlopeExecute(Sender: TObject);
             //analysis & design tab
@@ -174,6 +176,7 @@ interface
             //update geometry
                 procedure SNWGraphicUpdateGeometry(ASender         : TObject;
                                                             var AGeomDrawer : TGraphicDrawerObjectAdder);
+
 
         private
             var
@@ -261,7 +264,7 @@ implementation
                     begin
                         SoilNailWallDesign.reset();
 
-                        TInputManager.resetInputControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager, loadCasesInputManager ] );
+                        TInputManager.resetAllInputControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager, loadCasesInputManager ] );
 
                         SNWGraphic.updateGeometry();
 
@@ -283,7 +286,7 @@ implementation
 
                         if ( fileReadWrite.loadFile() ) then
                             begin
-                                SoilNailWallDesign.readFromFile( fileReadWrite );
+                                readSuccessful := SoilNailWallDesign.readFromFile( fileReadWrite );
 
                                 writeToAllInputGrids( True );
                             end;
@@ -376,6 +379,11 @@ implementation
                             activeInputPage := EInputPage.ipLoadCases;
 
                             sortUI();
+                        end;
+
+                    procedure TSNWForm.ActionLoadCaseEditorExecute(Sender: TObject);
+                        begin
+                            loadCasesInputManager.loadCaseEditorExecute();
                         end;
 
                 //examples
@@ -579,7 +587,7 @@ implementation
                         gridPanel : TGridPanel;
                     begin
                         //hide dependent input grid panels
-                            for gridPanel in [GridPanelInputParOptions, GridPanelNailLayoutOptions] do
+                            for gridPanel in [GridPanelInputParOptions, GridPanelNailLayoutOptions, GridPanelLoadCaseOptions] do
                                 gridPanel.Visible := False;
 
                         //show elevant grid panels
@@ -598,17 +606,22 @@ implementation
                                 EInputPage.ipNailProperties:
                                     begin
                                         setSpeedButtonDown( 1, SpeedButtonNailLayout );
-                                        GridPanelNailLayoutOptions.Visible  := True;
+                                        GridPanelNailLayoutOptions.Visible := True;
                                     end;
 
                                 EInputPage.ipLoadCases:
                                     begin
                                         setSpeedButtonDown( 1, SpeedButtonLoadCases );
+                                        GridPanelLoadCaseOptions.Visible := True;
                                     end;
                             end;
 
                         //order panels
-                            orderComponentsLeftToRight( [GridPanelInputType, GridPanelInputParOptions, GridPanelNailLayoutOptions, GridPanelExamples] );
+                            orderComponentsLeftToRight( [   GridPanelInputType,
+                                                            GridPanelInputParOptions,
+                                                            GridPanelNailLayoutOptions,
+                                                            GridPanelLoadCaseOptions,
+                                                            GridPanelExamples           ] );
                     end;
 
                 procedure TSNWForm.sortComputationRibbon();

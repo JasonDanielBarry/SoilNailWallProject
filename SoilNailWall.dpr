@@ -7,7 +7,6 @@ uses
   SoilNailWallGeneralMethods in 'Source\SoilNailWallGeneralMethods.pas',
   SNWUITypes in 'Source\UserInterface\SNWUITypes.pas',
   UISetupMethods in 'Source\UserInterface\UISetupMethods.pas',
-  NailLayoutGeneratorWizard in 'Source\UserInterface\InputTab\NailLayoutGeneratorWizard.pas' {NailLayoutGenForm},
   SoilNailWallTypes in 'Source\SoilNailWallTypes\SoilNailWallTypes.pas',
   SoilNailWallMasterClass in 'Source\SoilNailWallClass\SoilNailWallMasterClass.pas',
   SoilNailWallBaseClass in 'Source\SoilNailWallClass\Base\SoilNailWallBaseClass.pas',
@@ -20,13 +19,15 @@ uses
   SoilNailWallFileManagementClass in 'Source\SoilNailWallClass\FileManagement\SoilNailWallFileManagementClass.pas',
   SoilNailWallFileReaderWriterClass in 'Source\SoilNailWallTypes\SoilNailWallFileReaderWriterClass.pas',
   MaterialParametersInputManagerClass in 'Source\UserInterface\InputTab\MaterialParametersInputManagerClass.pas',
-  NailLayoutGeneratorInputManagerClass in 'Source\UserInterface\InputTab\NailLayoutGeneratorInputManagerClass.pas',
   WallGeometryInputManagerClass in 'Source\UserInterface\InputTab\WallGeometryInputManagerClass.pas',
   SoilNailWallInputManagerClass in 'Source\UserInterface\SoilNailWallInputManagerClass.pas',
-  NailPropertiesInputManagerClass in 'Source\UserInterface\InputTab\NailPropertiesInputManagerClass.pas',
-  LoadCasesInputManagerClass in 'Source\UserInterface\InputTab\LoadCasesInputManagerClass.pas',
   LoadCaseTypes in 'Source\SoilNailWallTypes\LoadCaseTypes.pas',
-  LoadCaseEditorWizard in 'Source\UserInterface\InputTab\LoadCaseEditorWizard.pas' {LoadCaseEditor};
+  LoadCaseEditorInputManagerClass in 'Source\UserInterface\InputTab\Loads\LoadCaseEditorInputManagerClass.pas',
+  LoadCaseEditorWizard in 'Source\UserInterface\InputTab\Loads\LoadCaseEditorWizard.pas' {LoadCaseEditor},
+  LoadCasesInputManagerClass in 'Source\UserInterface\InputTab\Loads\LoadCasesInputManagerClass.pas',
+  NailLayoutGeneratorInputManagerClass in 'Source\UserInterface\InputTab\Nails\NailLayoutGeneratorInputManagerClass.pas',
+  NailLayoutGeneratorWizard in 'Source\UserInterface\InputTab\Nails\NailLayoutGeneratorWizard.pas' {NailLayoutGenForm},
+  NailPropertiesInputManagerClass in 'Source\UserInterface\InputTab\Nails\NailPropertiesInputManagerClass.pas';
 
 {$R *.res}
 
@@ -34,6 +35,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TSNWForm, SNWForm);
-  Application.CreateForm(TLoadCaseEditor, LoadCaseEditor);
   Application.Run;
 end.

@@ -36,17 +36,15 @@ interface
                                                     var AGeomDrawer : TGraphicDrawerObjectAdder);
       private
         { Private declarations }
-        soilNailWallDesign      : TSoilNailWall;
-        nailLayoutInputManager  : TNailLayoutGeneratorInputManager;
+        var
+            soilNailWallDesign      : TSoilNailWall;
+            nailLayoutInputManager  : TNailLayoutGeneratorInputManager;
         procedure generateLayout();
       public
         constructor create(const soilNailWallIn : TSoilNailWall);
         destructor destroy(); override;
         function getSoilNailWallDesign() : TSoilNailWall;
       end;
-
-    var
-      NailLayoutGenForm: TNailLayoutGenForm;
 
 implementation
 
@@ -76,17 +74,15 @@ implementation
 
     //public
         constructor TNailLayoutGenForm.create(const soilNailWallIn : TSoilNailWall);
-            var
-                topSpace,       nailToNailSpace,
-                bottomLength,   topLength       : double;
             begin
                 inherited create( nil );
 
-                soilNailWallDesign := TSoilNailWall.create();
+                //soil nail wall class
+                    soilNailWallDesign := TSoilNailWall.create();
 
-                soilNailWallDesign.copySNW( soilNailWallIn );
+                    soilNailWallDesign.copySNW( soilNailWallIn );
 
-                //get the layout from the class
+                //input manager
                     nailLayoutInputManager := TNailLayoutGeneratorInputManager.create(  ListBoxErrors,
                                                                                         ComboBoxTopSpace, ComboBoxNailSpacing,
                                                                                         ComboBoxTopLength, ComboBoxBottomLength,
@@ -94,7 +90,7 @@ implementation
 
                     nailLayoutInputManager.writeToInputControls( True );
 
-                    ButtonOK.Enabled := ( nailLayoutInputManager.errorCount() = 0 );
+                ButtonOK.Enabled := ( nailLayoutInputManager.errorCount() = 0 );
 
                 //draw wall
                     JDBGraphic2DDrawing.updateGeometry();

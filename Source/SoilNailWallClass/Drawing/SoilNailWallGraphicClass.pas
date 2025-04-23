@@ -16,13 +16,6 @@ interface
     type
         TSoilNailWallGraphic = class(TSoilNailWallAnalysis)
             private
-                const
-                    ANCHORED_LENGTH_LAYER   : string = 'Anchored Length';
-                    LOAD_LAYER              : string = 'Load';
-                    NAIL_LAYER              : string = 'Nails';
-                    SLIP_WEDGE_LAYER        : string = 'Slip Wedge';
-                    SOIL_LAYER              : string = 'Soil';
-                    WALL_LAYER              : string = 'Wall';
                 var
                     loadsVisible, slipWedgeVisible : boolean;
                 //drawing methods
@@ -54,6 +47,14 @@ interface
         end;
 
 implementation
+
+    const
+        ANCHORED_LENGTH_LAYER   : string = 'Anchored Length';
+        LOAD_LAYER              : string = 'Load';
+        NAIL_LAYER              : string = 'Nails';
+        SLIP_WEDGE_LAYER        : string = 'Slip Wedge';
+        SOIL_LAYER              : string = 'Soil';
+        WALL_LAYER              : string = 'Wall';
 
     //private
         //drawing methods
@@ -222,6 +223,9 @@ implementation
             constructor TSoilNailWallGraphic.create();
                 begin
                     inherited create();
+
+                    loadsVisible        := False;
+                    slipWedgeVisible    := False;
                 end;
 
         //destructor

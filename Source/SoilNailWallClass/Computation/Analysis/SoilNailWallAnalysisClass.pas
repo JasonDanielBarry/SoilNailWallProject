@@ -38,7 +38,7 @@ implementation
         //maximum nail tension
             function TSoilNailWallAnalysis.calculateNailGroupMaxTension() : double;
                 var
-                    i, arrLen           : integer;
+                    i                   : integer;
                     nailAnchoredLength,
                     maxTensionOut       : double;
                     nails               : TSoilNails;

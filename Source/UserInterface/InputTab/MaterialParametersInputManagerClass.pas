@@ -533,8 +533,7 @@ implementation
         //clear factors
             procedure TMaterialParametersInputManager.clearLimitStateFactors();
                 var
-                    row, col    : integer;
-                    tempGrid    : TStringGrid;
+                    tempGrid : TStringGrid;
                 begin
                     for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
                         tempGrid.clearColumns( 2 );

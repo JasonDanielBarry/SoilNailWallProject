@@ -62,7 +62,7 @@ interface
                 //get active load case
                     function getActiveLoadCase(const selectedGridRowIn : integer) : string;
                 //launch load case editor
-                    function loadLoadCaseEditor() : boolean;
+                    function loadCaseEditorExecute() : boolean;
         end;
 
 implementation
@@ -131,7 +131,6 @@ implementation
             function TLoadCasesInputManager.readLoadCases() : boolean;
                 var
                     newLoadCaseFound    : boolean;
-                    activeRow,
                     row                 : integer;
                     newLoadCase         : TLoadCase;
                     loadCaseMap         : TLoadCaseMap;
@@ -197,6 +196,8 @@ implementation
                 begin
                     arrLen := loadCaseIn.countCombinations();
 
+                    row := startRowIn;
+
                     for i := 0 to ( arrLen - 1 ) do
                         begin
                             row := startRowIn + i;
@@ -234,7 +235,6 @@ implementation
                 var
                     localUpdateEmptyCells   : boolean;
                     totalCombinations,
-                    requiredRowCount,
                     loadCaseStartRow,
                     loadCaseEndRow          : integer;
                     LCKey                   : string;
@@ -464,15 +464,24 @@ implementation
                 end;
 
         //launch load case editor
-            function TLoadCasesInputManager.loadLoadCaseEditor() : boolean;
+            function TLoadCasesInputManager.loadCaseEditorExecute() : boolean;
                 var
                     loadCaseEditor : TLoadCaseEditor;
                 begin
-                    loadCaseEditor := TLoadCaseEditor.Create( nil );
+                    loadCaseEditor := TLoadCaseEditor.Create( soilNailWallDesign );
 
                     loadCaseEditor.ShowModal();
 
-                    result := loadCaseEditor.ModalResult = mrOk;
+                    if ( loadCaseEditor.ModalResult = mrOk ) then
+                        begin
+                            var newSNW : TSoilNailWall := loadCaseEditor.getSoilNailWallDesign();
+
+                            soilNailWallDesign.copySNW( newSNW );
+
+                            result := True;
+                        end
+                    else
+                        result := False;
 
                     freeandNil( loadCaseEditor );
                 end;

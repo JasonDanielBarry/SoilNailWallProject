@@ -51,7 +51,7 @@ interface
                     //write to input controls
                         procedure writeToInputControls(const updateEmptyControlsIn : boolean = False); override;
                 //launch layout generator
-                    function NailLayoutGeneratorExecute() : boolean;
+                    function nailLayoutGeneratorExecute() : boolean;
         end;
 
 implementation
@@ -372,7 +372,7 @@ implementation
                     end;
 
         //launch layout generator
-            function TNailPropertiesInputManager.NailLayoutGeneratorExecute() : boolean;
+            function TNailPropertiesInputManager.nailLayoutGeneratorExecute() : boolean;
                 var
                     formModalResult     : TModalResult;
                     generateLayoutForm  : TNailLayoutGenForm;

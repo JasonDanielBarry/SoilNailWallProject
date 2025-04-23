@@ -1,9 +1,10 @@
 object LoadCaseEditor: TLoadCaseEditor
   Left = 0
   Top = 0
+  BorderStyle = bsDialog
   Caption = 'Load Case Editor'
-  ClientHeight = 769
-  ClientWidth = 1446
+  ClientHeight = 711
+  ClientWidth = 1484
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,8 +15,8 @@ object LoadCaseEditor: TLoadCaseEditor
   object GridPanelMain: TGridPanel
     Left = 395
     Top = 0
-    Width = 1051
-    Height = 769
+    Width = 1089
+    Height = 711
     Align = alClient
     BevelOuter = bvNone
     ColumnCollection = <
@@ -59,8 +60,8 @@ object LoadCaseEditor: TLoadCaseEditor
     object JDBGraphic2D: TJDBGraphic2D
       Left = 0
       Top = 0
-      Width = 1051
-      Height = 734
+      Width = 1089
+      Height = 676
       Align = alClient
       BevelEdges = []
       BevelOuter = bvNone
@@ -69,11 +70,12 @@ object LoadCaseEditor: TLoadCaseEditor
       ShowCaption = False
       ShowHint = True
       TabOrder = 0
+      OnUpdateGeometry = JDBGraphic2DUpdateGeometry
     end
     object ButtonCancel: TButton
       AlignWithMargins = True
-      Left = 971
-      Top = 739
+      Left = 1009
+      Top = 681
       Width = 75
       Height = 25
       Margins.Left = 5
@@ -87,8 +89,8 @@ object LoadCaseEditor: TLoadCaseEditor
     end
     object ButtonOK: TButton
       AlignWithMargins = True
-      Left = 886
-      Top = 739
+      Left = 924
+      Top = 681
       Width = 75
       Height = 25
       Margins.Left = 5
@@ -105,7 +107,7 @@ object LoadCaseEditor: TLoadCaseEditor
     Left = 0
     Top = 0
     Width = 395
-    Height = 769
+    Height = 711
     Margins.Right = 5
     Align = alLeft
     BevelOuter = bvNone
@@ -166,15 +168,13 @@ object LoadCaseEditor: TLoadCaseEditor
       Align = alLeft
       Style = csDropDownList
       TabOrder = 0
-      ExplicitLeft = 6
-      ExplicitTop = 6
     end
     object PanelInputGrid: TPanel
       AlignWithMargins = True
       Left = 5
       Top = 38
-      Width = 383
-      Height = 589
+      Width = 385
+      Height = 533
       Margins.Left = 5
       Margins.Top = 5
       Margins.Right = 5
@@ -182,8 +182,6 @@ object LoadCaseEditor: TLoadCaseEditor
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitLeft = 6
-      ExplicitTop = 39
       object LCInputGrid: TStringGrid
         Left = 0
         Top = 0
@@ -196,8 +194,8 @@ object LoadCaseEditor: TLoadCaseEditor
     object ListBoxErrors: TListBox
       AlignWithMargins = True
       Left = 5
-      Top = 637
-      Width = 383
+      Top = 581
+      Width = 385
       Height = 125
       Margins.Left = 5
       Margins.Top = 5
@@ -206,12 +204,10 @@ object LoadCaseEditor: TLoadCaseEditor
       Align = alClient
       ItemHeight = 15
       TabOrder = 2
-      ExplicitLeft = 6
-      ExplicitTop = 638
     end
     object SpeedButtonNewLC: TSpeedButton
       AlignWithMargins = True
-      Left = 303
+      Left = 305
       Top = 5
       Width = 85
       Height = 23

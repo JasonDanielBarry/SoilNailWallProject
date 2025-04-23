@@ -25,6 +25,8 @@ interface
                 public
                     var
                         LCName : string;
+                    //make a copy
+                        procedure copyOther(const otherLoadCaseIn : TLoadCase);
                     //accessors
                         function getArrFactors() : TArray<double>; inline;
                         function getArrLoads() : TArray<double>; inline;
@@ -78,6 +80,27 @@ interface
 implementation
 
     //TLoadCase--------------------------------------------------------------------------------------------------
+        //make a copy
+            procedure TLoadCase.copyOther(const otherLoadCaseIn : TLoadCase);
+                var
+                    i, arrLen : integer;
+                begin
+                    self.LCName := otherLoadCaseIn.LCName;
+
+                    arrLen := otherLoadCaseIn.countCombinations();
+
+                    SetLength( self.arrDescriptions, arrLen );
+                    SetLength( self.arrFactors, arrLen );
+                    SetLength( self.arrLoads, arrLen );
+
+                    for i := 0 to ( otherLoadCaseIn.countCombinations() - 1 ) do
+                        begin
+                            self.arrDescriptions[i] := otherLoadCaseIn.arrDescriptions[i];
+                            self.arrFactors[i]      := otherLoadCaseIn.arrFactors[i];
+                            self.arrLoads[i]        := otherLoadCaseIn.arrLoads[i];
+                        end;
+                end;
+
         //accessors
             function TLoadCase.getArrFactors() : TArray<double>;
                 begin
@@ -215,17 +238,24 @@ implementation
         //make copy
             procedure TLoadCaseMap.copyOther(const otherLoadCaseMapIn : TLoadCaseMap);
                 var
-                    itemKey     : string;
-                    loadCase    : TLoadCase;
+                    itemKey         : string;
+                    otherLoadCase   : TLoadCase;
                 begin
                     self.Clear();
+                    self.orderedKeysList.Clear();
 
-                    for itemKey in otherLoadCaseMapIn.Keys do
+                    for itemKey in otherLoadCaseMapIn.orderedKeysList do
                         begin
-                            if NOT( otherLoadCaseMapIn.TryGetValue( itemKey, loadCase ) ) then
+                            if NOT( otherLoadCaseMapIn.TryGetValue( itemKey, otherLoadCase ) ) then
                                 Continue;
 
-                            self.AddOrSetValue( itemKey, loadCase );
+                            self.orderedKeysList.Add( itemKey );
+
+                            var newLoadCase : TLoadCase;
+
+                            newLoadCase.copyOther( otherLoadCase );
+
+                            self.AddOrSetValue( itemKey, newLoadCase );
                         end;
                 end;
 

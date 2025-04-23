@@ -64,7 +64,7 @@ implementation
                         //soil
                             soil := getSoil();
 
-                            readSuccessful := fileReadWriteInOut.tryReadSoil( SOIL_PROPERTIES, soil );
+                            readSuccessful := readSuccessful AND fileReadWriteInOut.tryReadSoil( SOIL_PROPERTIES, soil );
 
                             setSoil( soil );
 

@@ -150,10 +150,6 @@
         <DCCReference Include="Source\SoilNailWallGeneralMethods.pas"/>
         <DCCReference Include="Source\UserInterface\SNWUITypes.pas"/>
         <DCCReference Include="Source\UserInterface\UISetupMethods.pas"/>
-        <DCCReference Include="Source\UserInterface\InputTab\NailLayoutGeneratorWizard.pas">
-            <Form>NailLayoutGenForm</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="Source\SoilNailWallTypes\SoilNailWallTypes.pas"/>
         <DCCReference Include="Source\SoilNailWallClass\SoilNailWallMasterClass.pas"/>
         <DCCReference Include="Source\SoilNailWallClass\Base\SoilNailWallBaseClass.pas"/>
@@ -164,16 +160,21 @@
         <DCCReference Include="Source\SoilNailWallClass\FileManagement\SoilNailWallFileManagementClass.pas"/>
         <DCCReference Include="Source\SoilNailWallTypes\SoilNailWallFileReaderWriterClass.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\MaterialParametersInputManagerClass.pas"/>
-        <DCCReference Include="Source\UserInterface\InputTab\NailLayoutGeneratorInputManagerClass.pas"/>
         <DCCReference Include="Source\UserInterface\InputTab\WallGeometryInputManagerClass.pas"/>
         <DCCReference Include="Source\UserInterface\SoilNailWallInputManagerClass.pas"/>
-        <DCCReference Include="Source\UserInterface\InputTab\NailPropertiesInputManagerClass.pas"/>
-        <DCCReference Include="Source\UserInterface\InputTab\LoadCasesInputManagerClass.pas"/>
         <DCCReference Include="Source\SoilNailWallTypes\LoadCaseTypes.pas"/>
-        <DCCReference Include="Source\UserInterface\InputTab\LoadCaseEditorWizard.pas">
+        <DCCReference Include="Source\UserInterface\InputTab\Loads\LoadCaseEditorInputManagerClass.pas"/>
+        <DCCReference Include="Source\UserInterface\InputTab\Loads\LoadCaseEditorWizard.pas">
             <Form>LoadCaseEditor</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Source\UserInterface\InputTab\Loads\LoadCasesInputManagerClass.pas"/>
+        <DCCReference Include="Source\UserInterface\InputTab\Nails\NailLayoutGeneratorInputManagerClass.pas"/>
+        <DCCReference Include="Source\UserInterface\InputTab\Nails\NailLayoutGeneratorWizard.pas">
+            <Form>NailLayoutGenForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Source\UserInterface\InputTab\Nails\NailPropertiesInputManagerClass.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -209,6 +210,12 @@
                 <DeployFile LocalName="..\BuildOutput\SoilNailWall.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win64">
                         <RemoteName>SoilNailWall.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\BuildOutput\SoilNailWall.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win64">
+                        <RemoteName>SoilNailWall.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

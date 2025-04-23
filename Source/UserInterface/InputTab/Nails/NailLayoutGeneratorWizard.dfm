@@ -3,8 +3,8 @@ object NailLayoutGenForm: TNailLayoutGenForm
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Nail Layout Generator'
-  ClientHeight = 700
-  ClientWidth = 1400
+  ClientHeight = 711
+  ClientWidth = 1484
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,8 +16,8 @@ object NailLayoutGenForm: TNailLayoutGenForm
   object GridPanelMain: TGridPanel
     Left = 0
     Top = 0
-    Width = 1400
-    Height = 700
+    Width = 1484
+    Height = 711
     Align = alClient
     BevelOuter = bvNone
     ColumnCollection = <
@@ -59,7 +59,7 @@ object NailLayoutGenForm: TNailLayoutGenForm
       Left = 0
       Top = 0
       Width = 250
-      Height = 700
+      Height = 711
       Align = alClient
       BevelOuter = bvNone
       ParentColor = True
@@ -235,7 +235,7 @@ object NailLayoutGenForm: TNailLayoutGenForm
       object ListBoxErrors: TListBox
         AlignWithMargins = True
         Left = 5
-        Top = 570
+        Top = 581
         Width = 240
         Height = 125
         Margins.Left = 5
@@ -250,8 +250,8 @@ object NailLayoutGenForm: TNailLayoutGenForm
     object JDBGraphic2DDrawing: TJDBGraphic2D
       Left = 250
       Top = 0
-      Width = 1150
-      Height = 665
+      Width = 1234
+      Height = 676
       Align = alClient
       BevelEdges = []
       BevelOuter = bvNone
@@ -261,13 +261,11 @@ object NailLayoutGenForm: TNailLayoutGenForm
       ShowHint = True
       TabOrder = 1
       OnUpdateGeometry = JDBGraphic2DDrawingUpdateGeometry
-      ExplicitLeft = 298
-      ExplicitTop = -24
     end
     object GridPanelCancelOK: TGridPanel
       Left = 250
-      Top = 665
-      Width = 1150
+      Top = 676
+      Width = 1234
       Height = 35
       Align = alClient
       BevelOuter = bvNone
@@ -302,7 +300,7 @@ object NailLayoutGenForm: TNailLayoutGenForm
       TabOrder = 2
       object ButtonCancel: TButton
         AlignWithMargins = True
-        Left = 1070
+        Left = 1154
         Top = 5
         Width = 75
         Height = 25
@@ -317,7 +315,7 @@ object NailLayoutGenForm: TNailLayoutGenForm
       end
       object ButtonOK: TButton
         AlignWithMargins = True
-        Left = 985
+        Left = 1069
         Top = 5
         Width = 75
         Height = 25
