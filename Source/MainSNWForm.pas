@@ -78,7 +78,7 @@ interface
             SpeedButtonDesign: TSpeedButton;
             GridPanelExamples: TGridPanel;
             PanelExamplesSeparator: TPanel;
-    SpeedButtonExample1: TSpeedButton;
+            SpeedButtonExample1: TSpeedButton;
             ActionExampleVerticalWallFlatSlope: TAction;
             ActionAnalysis: TAction;
             GridPanelTheme: TGridPanel;
@@ -111,17 +111,17 @@ interface
             ActionSaveAs: TAction;
             OpenFileDialog: TFileOpenDialog;
             SaveFileDialog: TFileSaveDialog;
-    SNWGraphic: TJDBGraphic2D;
+            SNWGraphic: TJDBGraphic2D;
             PageLoads: TTabSheet;
             GridLoadCases: TStringGrid;
             SpeedButtonLoadCases: TSpeedButton;
             ActionLoads: TAction;
-    ListBoxLoadCases: TListBox;
-    GridPanelLoadCaseOptions: TGridPanel;
-    SpeedButtonLCEditor: TSpeedButton;
-    PanelLCSeparator: TPanel;
-    LabelLCOptions: TLabel;
-    ActionLoadCaseEditor: TAction;
+            ListBoxLoadCases: TListBox;
+            GridPanelLoadCaseOptions: TGridPanel;
+            SpeedButtonLCEditor: TSpeedButton;
+            PanelLCSeparator: TPanel;
+            LabelLCOptions: TLabel;
+            ActionLoadCaseEditor: TAction;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
