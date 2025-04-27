@@ -5,7 +5,7 @@ interface
     uses
         system.SysUtils, system.Math, System.Classes, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-        StringGridHelperClass,
+        StringGridInterposerClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes,
         SoilNailWallMasterClass
@@ -28,6 +28,8 @@ interface
                         procedure writeWallParameters(const updateEmptyCellsIn : boolean);
                     //slope
                         procedure writeSlopeParameters(const updateEmptyCellsIn : boolean);
+                //setup input controls
+                    procedure setupInputControls(); override;
             protected
                 //check for input errors
                     procedure checkForInputErrors(); override;
@@ -39,8 +41,6 @@ interface
                                         const   soilNailWallDesignIn    : TSoilNailWall );
                 //destructor
                     destructor destroy(); override;
-                //setup input controls
-                    procedure setupInputControls(); override;
                 //reset controls
                     procedure resetInputControls(); override;
                 //process input
@@ -139,50 +139,6 @@ implementation
                             end;
                     end;
 
-    //protected
-        //check for input errors
-            procedure TWallGeometryInputManager.checkForInputErrors();
-                var
-                    wall : TWall;
-                begin
-                    inherited checkForInputErrors();
-
-                    wall := soilNailWallDesign.getWall();
-
-                    if ( (wall.height < 0) OR IsZero( wall.height, 1e-3 ) ) then
-                        addError('Wall height must be non-zero');
-
-                    if ( (wall.thickness < 0) OR IsZero( wall.thickness, 1e-3 ) ) then
-                        addError('Wall thickness must be non-zero');
-                end;
-
-    //public
-        //constructor
-            constructor TWallGeometryInputManager.create(   const   errorListBoxIn          : TListBox;
-                                                            const   wallParametersGridIn,
-                                                                    slopeParametersGridIn   : TStringGrid;
-                                                            const   soilNailWallDesignIn    : TSoilNailWall );
-                begin
-                    //input grids
-                        wallParametersGrid  := wallParametersGridIn;
-                        slopeParametersGrid := slopeParametersGridIn;
-
-                    //create labels
-                        wallLabel   := TLabel.Create( nil );
-                        slopeLabel  := TLabel.Create( nil );
-
-                    inherited create( errorListBoxIn, soilNailWallDesignIn );
-                end;
-
-        //destructor
-            destructor TWallGeometryInputManager.destroy();
-                begin
-                    FreeAndNil( wallLabel );
-                    FreeAndNil( slopeLabel );
-
-                    inherited destroy();
-                end;
-
         //setup input controls
             procedure TWallGeometryInputManager.setupInputControls();
                 const
@@ -244,7 +200,51 @@ implementation
                             slopeParametersGrid.minSize();
 
                         for tempGrid in [ wallParametersGrid, slopeParametersGrid ] do
-                            tempGrid.createBorder( 1, clSilver );
+                            tempGrid.setBorderProperties( 1, clSilver );
+                end;
+
+    //protected
+        //check for input errors
+            procedure TWallGeometryInputManager.checkForInputErrors();
+                var
+                    wall : TWall;
+                begin
+                    inherited checkForInputErrors();
+
+                    wall := soilNailWallDesign.getWall();
+
+                    if ( (wall.height < 0) OR IsZero( wall.height, 1e-3 ) ) then
+                        addError('Wall height must be non-zero');
+
+                    if ( (wall.thickness < 0) OR IsZero( wall.thickness, 1e-3 ) ) then
+                        addError('Wall thickness must be non-zero');
+                end;
+
+    //public
+        //constructor
+            constructor TWallGeometryInputManager.create(   const   errorListBoxIn          : TListBox;
+                                                            const   wallParametersGridIn,
+                                                                    slopeParametersGridIn   : TStringGrid;
+                                                            const   soilNailWallDesignIn    : TSoilNailWall );
+                begin
+                    //input grids
+                        wallParametersGrid  := wallParametersGridIn;
+                        slopeParametersGrid := slopeParametersGridIn;
+
+                    //create labels
+                        wallLabel   := TLabel.Create( nil );
+                        slopeLabel  := TLabel.Create( nil );
+
+                    inherited create( errorListBoxIn, soilNailWallDesignIn );
+                end;
+
+        //destructor
+            destructor TWallGeometryInputManager.destroy();
+                begin
+                    FreeAndNil( wallLabel );
+                    FreeAndNil( slopeLabel );
+
+                    inherited destroy();
                 end;
 
         //reset controls

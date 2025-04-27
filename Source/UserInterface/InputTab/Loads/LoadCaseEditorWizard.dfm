@@ -114,39 +114,48 @@ object LoadCaseEditor: TLoadCaseEditor
     BevelOuter = bvNone
     ColumnCollection = <
       item
+        SizeStyle = ssAbsolute
+        Value = 105.000000000000000000
+      end
+      item
         Value = 100.000000000000000000
       end
       item
         SizeStyle = ssAbsolute
-        Value = 95.000000000000000000
+        Value = 100.000000000000000000
       end>
     ControlCollection = <
       item
-        Column = 0
+        Column = 1
         Control = ComboBoxLoadCase
         Row = 0
       end
       item
         Column = 0
-        ColumnSpan = 2
+        ColumnSpan = 3
         Control = PanelInputGrid
         Row = 1
       end
       item
         Column = 0
-        ColumnSpan = 2
+        ColumnSpan = 3
         Control = ListBoxErrors
         Row = 2
       end
       item
-        Column = 1
-        Control = SpeedButtonNewLC
+        Column = 2
+        Control = ButtonNewLoadCase
+        Row = 0
+      end
+      item
+        Column = 0
+        Control = LabelCurrentLoadCase
         Row = 0
       end>
     RowCollection = <
       item
         SizeStyle = ssAbsolute
-        Value = 33.000000000000000000
+        Value = 35.000000000000000000
       end
       item
         Value = 100.000000000000000000
@@ -158,24 +167,27 @@ object LoadCaseEditor: TLoadCaseEditor
     TabOrder = 1
     object ComboBoxLoadCase: TComboBox
       AlignWithMargins = True
-      Left = 5
+      Left = 110
       Top = 5
-      Width = 175
+      Width = 180
       Height = 23
       Margins.Left = 5
       Margins.Top = 5
       Margins.Right = 5
       Margins.Bottom = 5
-      Align = alLeft
+      Align = alClient
       Style = csDropDownList
       TabOrder = 0
+      OnChange = ComboBoxLoadCaseChange
+      ExplicitLeft = 105
+      ExplicitWidth = 185
     end
     object PanelInputGrid: TPanel
       AlignWithMargins = True
       Left = 5
-      Top = 38
+      Top = 40
       Width = 385
-      Height = 533
+      Height = 531
       Margins.Left = 5
       Margins.Top = 5
       Margins.Right = 5
@@ -189,7 +201,10 @@ object LoadCaseEditor: TLoadCaseEditor
         Width = 353
         Height = 145
         Margins.Bottom = 5
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goFixedRowDefAlign]
         TabOrder = 0
+        OnKeyPress = LCInputGridKeyPress
+        OnSelectCell = LCInputGridSelectCell
       end
     end
     object ListBoxErrors: TListBox
@@ -206,22 +221,36 @@ object LoadCaseEditor: TLoadCaseEditor
       ItemHeight = 15
       TabOrder = 2
     end
-    object SpeedButtonNewLC: TSpeedButton
+    object ButtonNewLoadCase: TButton
       AlignWithMargins = True
-      Left = 305
+      Left = 300
       Top = 5
-      Width = 85
-      Height = 23
+      Width = 90
+      Height = 25
       Margins.Left = 5
       Margins.Top = 5
       Margins.Right = 5
       Margins.Bottom = 5
       Align = alClient
-      Caption = 'Add Load Case'
-      ExplicitLeft = 336
-      ExplicitTop = 8
-      ExplicitWidth = 23
-      ExplicitHeight = 22
+      Caption = 'New Load Case'
+      TabOrder = 3
+      OnClick = ButtonNewLCClick
+    end
+    object LabelCurrentLoadCase: TLabel
+      AlignWithMargins = True
+      Left = 5
+      Top = 5
+      Width = 100
+      Height = 23
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 0
+      Margins.Bottom = 5
+      Align = alTop
+      AutoSize = False
+      Caption = 'Current Load Case'
+      Layout = tlCenter
+      ExplicitWidth = 90
     end
   end
 end

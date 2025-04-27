@@ -15,7 +15,7 @@ interface
             Vcl.ExtDlgs,
         //custom
             GeneralComponentHelperMethods,
-            StringGridHelperClass,
+            StringGridInterposerClass,
             PageControlHelperClass,
             SoilNailWallMasterClass,
             UISetupMethods,
@@ -211,10 +211,9 @@ interface
                     procedure positionThemeDropMenu();
                 procedure sortUI();
             //check if grids are populated
-                function readFromAllInputGrids() : boolean;
-                procedure writeToAllInputGrids(const updateEmptyCellsIn : boolean);
-                function readFromAndWriteToInputGrids() : boolean;
-                procedure writeToAndReadFromInputGrids();
+                function readFromAllInputControls() : boolean;
+                procedure writeToAllInputControls(const updateEmptyCellsIn : boolean);
+                function readFromAndWriteToInputControls() : boolean;
         protected
             procedure wndproc(var messageInOut : TMessage); override;
         public
@@ -268,7 +267,7 @@ implementation
 
                         SNWGraphic.updateGeometry();
 
-                        writeToAllInputGrids( False );
+                        writeToAllInputControls( False );
                     end;
 
                 procedure TSNWForm.ActionOpenExecute(Sender: TObject);
@@ -288,7 +287,9 @@ implementation
                             begin
                                 readSuccessful := SoilNailWallDesign.readFromFile( fileReadWrite );
 
-                                writeToAllInputGrids( True );
+                                writeToAllInputControls( True );
+
+                                SNWGraphic.zoomAll();
                             end;
 
                         FreeAndNil( fileReadWrite );
@@ -361,7 +362,7 @@ implementation
                     procedure TSNWForm.ActionGenerateLayoutExecute(Sender: TObject);
                         begin
                             if ( nailPropertiesInputManager.NailLayoutGeneratorExecute() ) then
-                                writeToAllInputGrids( False );
+                                writeToAllInputControls( False );
 
                             sortUI();
                         end;
@@ -370,7 +371,7 @@ implementation
                         begin
                             SoilNailWallDesign.clearNailLayout();
 
-                            writeToAndReadFromInputGrids();
+                            writeToAllInputControls( True );
                         end;
 
                 //load cases
@@ -391,7 +392,7 @@ implementation
                         begin
                             loadExample( ESNWExample.seVerticalWallFlatSlope, SoilNailWallDesign );
 
-                            writeToAndReadFromInputGrids();
+                            writeToAllInputControls( True );
 
                             SNWGraphic.zoomAll();
                         end;
@@ -399,7 +400,7 @@ implementation
             //analysis & design tab
                 procedure TSNWForm.ActionAnalysisExecute(Sender: TObject);
                     begin
-                        setSpeedButtonDown(2, SpeedButtonAnalysis);
+                        setSpeedButtonDown( 2, SpeedButtonAnalysis );
                     end;
 
             //theme
@@ -426,7 +427,7 @@ implementation
                                         CanSelect := false;
                             end;
 
-                        readFromAndWriteToInputGrids();
+                        readFromAndWriteToInputControls();
                     end;
 
                 procedure TSNWForm.GridInputKeyPress(   Sender  : TObject;
@@ -440,7 +441,7 @@ implementation
                                                         ACol, ARow      : Integer;
                                                         var CanSelect   : Boolean);
                     begin
-                        readFromAndWriteToInputGrids();
+                        readFromAndWriteToInputControls();
                     end;
 
                 procedure TSNWForm.GridLoadCasesSelectCell( Sender          : TObject;
@@ -453,7 +454,7 @@ implementation
 
                         SoilNailWallDesign.setActiveLoadCase( activeLoadCase );
 
-                        readFromAndWriteToInputGrids();
+                        readFromAndWriteToInputControls();
                     end;
 
             //theme
@@ -502,7 +503,7 @@ implementation
             //enter pressed on grid
                 procedure TSNWForm.gridCellEnterPressed();
                     begin
-                        readFromAndWriteToInputGrids();
+                        readFromAndWriteToInputControls();
                     end;
 
         //set up form
@@ -560,7 +561,7 @@ implementation
 
                     positionThemeDropMenu();
 
-                    readFromAndWriteToInputGrids();
+                    readFromAndWriteToInputControls();
                 end;
 
         //UI management
@@ -747,12 +748,12 @@ implementation
                 end;
 
         //check if grids are populated
-            function TSNWForm.readFromAllInputGrids() : boolean;
+            function TSNWForm.readFromAllInputControls() : boolean;
                 begin
                     result := TInputManager.readFromAllControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager, loadCasesInputManager ] );
                 end;
 
-            procedure TSNWForm.writeToAllInputGrids(const updateEmptyCellsIn : boolean);
+            procedure TSNWForm.writeToAllInputControls(const updateEmptyCellsIn : boolean);
                 var
                     inputErrorCount : integer;
                 begin
@@ -774,22 +775,15 @@ implementation
                     {$endif}
                 end;
 
-            function TSNWForm.readFromAndWriteToInputGrids() : boolean;
+            function TSNWForm.readFromAndWriteToInputControls() : boolean;
                 var
                     inputIsPopulated : boolean;
                 begin
-                    inputIsPopulated := readFromAllInputGrids();
+                    inputIsPopulated := readFromAllInputControls();
 
-                    writeToAllInputGrids( False );
+                    writeToAllInputControls( False );
 
                     result := inputIsPopulated;
-                end;
-
-            procedure TSNWForm.writeToAndReadFromInputGrids();
-                begin
-                    writeToAllInputGrids( True );
-
-                    readFromAllInputGrids();
                 end;
 
     //protected

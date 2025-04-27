@@ -4,7 +4,7 @@
         <ProjectVersion>20.3</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <ProjectName Condition="'$(ProjectName)'==''">SoilNailWall</ProjectName>
         <TargetedPlatforms>3</TargetedPlatforms>
@@ -106,6 +106,7 @@
         <DCC_IntegerOverflowCheck>true</DCC_IntegerOverflowCheck>
         <DCC_RangeChecking>true</DCC_RangeChecking>
         <DCC_Inlining>off</DCC_Inlining>
+        <DCC_MapFile>3</DCC_MapFile>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
@@ -172,6 +173,7 @@
             <Form>NailLayoutGenForm</Form>
         </DCCReference>
         <DCCReference Include="Source\UserInterface\InputTab\Nails\NailPropertiesInputManagerClass.pas"/>
+        <DCCReference Include="Source\UserInterface\InputTab\Loads\LoadCaseUIMethods.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -7,6 +7,7 @@ interface
         Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,
         CustomComponentPanelClass, Graphic2DComponent, Vcl.StdCtrls, Vcl.Grids,
         Vcl.Buttons,
+        StringGridInterposerClass,
         GraphicDrawerObjectAdderClass,
         SoilNailWallMasterClass, LoadCaseEditorInputManagerClass
         ;
@@ -22,13 +23,19 @@ interface
             LCInputGrid: TStringGrid;
             PanelInputGrid: TPanel;
             ListBoxErrors: TListBox;
-            SpeedButtonNewLC: TSpeedButton;
+            ButtonNewLoadCase: TButton;
+            LabelCurrentLoadCase: TLabel;
             procedure JDBGraphic2DUpdateGeometry(   ASender: TObject;
                                                     var AGeomDrawer: TGraphicDrawerObjectAdder  );
+            procedure ButtonNewLCClick(Sender: TObject);
+            procedure ComboBoxLoadCaseChange(Sender: TObject);
+            procedure LCInputGridKeyPress(Sender: TObject; var Key: Char);
+            procedure LCInputGridSelectCell(Sender: TObject; ACol, ARow: LongInt; var CanSelect: Boolean);
             private
                 var
                     loadCaseEditorInputManager  : TLoadCaseEditorInputManager;
                     soilNailWall                : TSoilNailWall;
+                procedure readFromAndWriteToAllInputControls();
             public
                 constructor create(const soilNailWallDesignIn : TSoilNailWall);
                 destructor destroy(); override;
@@ -46,6 +53,39 @@ implementation
             soilNailWall.updateSoilNailWallGeomtry( AGeomDrawer );
         end;
 
+    procedure TLoadCaseEditor.LCInputGridKeyPress(  Sender: TObject;
+                                                    var Key: Char   );
+        begin
+            if (ord(Key) in [VK_RETURN]) then
+                readFromAndWriteToAllInputControls
+        end;
+
+    procedure TLoadCaseEditor.LCInputGridSelectCell(Sender: TObject; ACol, ARow: LongInt; var CanSelect: Boolean);
+        begin
+            readFromAndWriteToAllInputControls();
+        end;
+
+    procedure TLoadCaseEditor.ButtonNewLCClick(Sender: TObject);
+        begin
+            loadCaseEditorInputManager.addNewLoadCase()
+        end;
+
+    procedure TLoadCaseEditor.ComboBoxLoadCaseChange(Sender: TObject);
+        begin
+            loadCaseEditorInputManager.loadCaseComboBoxChanged();
+
+            JDBGraphic2D.updateGeometry;
+        end;
+
+    //private
+        procedure TLoadCaseEditor.readFromAndWriteToAllInputControls();
+            begin
+                loadCaseEditorInputManager.readFromInputControls();
+                loadCaseEditorInputManager.writeToInputControls( false );
+
+                JDBGraphic2D.updateGeometry();
+            end;
+
     //public
         constructor TLoadCaseEditor.create(const soilNailWallDesignIn : TSoilNailWall);
             begin
@@ -59,7 +99,9 @@ implementation
                     soilNailWall.setLoadsVisible( True );
 
                 //input manager
-                    loadCaseEditorInputManager := TLoadCaseEditorInputManager.create( ListBoxErrors, ComboBoxLoadCase, LCInputGrid, soilNailWall );
+                    loadCaseEditorInputManager := TLoadCaseEditorInputManager.create( ListBoxErrors, GridPanelControls, ComboBoxLoadCase, LCInputGrid, soilNailWall );
+
+                    loadCaseEditorInputManager.writeToInputControls( True );
 
                 //draw graphic
                     JDBGraphic2D.updateGeometry();

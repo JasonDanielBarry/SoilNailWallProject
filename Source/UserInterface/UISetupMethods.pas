@@ -7,7 +7,7 @@ interface
             Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
             Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
         //custom
-            StringGridHelperClass;
+            StringGridInterposerClass;
 
     //set up input tab
         procedure setupInputTab(var GridPanelLabelsInOut                                                            : TGridPanel;
@@ -49,7 +49,7 @@ implementation
                     strGrdInOut.minSize();
 
                 //border
-                    strGrdInOut.createBorder(1, clSilver);
+                    strGrdInOut.setBorderProperties(1, clSilver);
             end;
 
     //nail layout tab

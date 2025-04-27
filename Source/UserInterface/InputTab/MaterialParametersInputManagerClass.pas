@@ -5,7 +5,7 @@ interface
     uses
         system.SysUtils, system.Math, System.Classes, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-        StringGridHelperClass, LimitStateMaterialClass,
+        StringGridInterposerClass, LimitStateMaterialClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes,
         SoilNailWallMasterClass
@@ -35,6 +35,8 @@ interface
                         procedure writeNailParameters(const updateEmptyCellsIn : boolean);
                     //concrete
                         procedure writeConcreteParameters(const updateEmptyCellsIn : boolean);
+                //setup input controls
+                    procedure setupInputControls(); override;
             protected
                 //check for input errors
                     procedure checkForInputErrors(); override;
@@ -48,8 +50,6 @@ interface
                                         const   soilNailWallDesignIn        : TSoilNailWall );
                 //destructor
                     destructor destroy(); override;
-                //setup input controls
-                    procedure setupInputControls(); override;
                 //reset controls
                     procedure resetInputControls(); override;
                 //process input
@@ -273,6 +273,81 @@ implementation
                                                         concreteParametersGrid              );
                     end;
 
+        //setup input controls
+            procedure TMaterialParametersInputManager.setupInputControls();
+                var
+                    ctrlScaleFactor : double;
+                    tempComponent   : Tcontrol;
+                    tempLabel       : TLabel;
+                    tempGrid        : TStringGrid;
+                    controlParent   : TWinControl;
+                begin
+                    inherited setupInputControls();
+
+                    controlParent := soilParametersGrid.Parent;
+
+                    for tempLabel in [ soilLabel, nailsLabel, concreteLabel ] do
+                        begin
+                            tempLabel.Parent    := controlParent;
+                            tempLabel.AutoSize  := True;
+                        end;
+
+                    //position controls
+                        ctrlScaleFactor := controlParent.ScaleFactor;
+
+                        for tempComponent in [ soilLabel, nailsLabel, concreteLabel, soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
+                            tempComponent.Left := round( CONTROL_MARGIN * ctrlScaleFactor );
+
+                        gridPanelLabels.left := round( (CONTROL_MARGIN + 249) * ctrlScaleFactor );
+
+                    //setup grids
+                        for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
+                            begin
+                                tempGrid.ColWidths[0] := round( 249 * ctrlScaleFactor );
+
+                                tempGrid.ColCount := 7;
+
+                                tempGrid.FixedCols := 1;
+                                tempGrid.FixedRows := 0;
+                            end;
+
+                        gridPanelLabels.top := round( 5 * ctrlScaleFactor );
+
+                        //soil input
+                            soilLabel.Caption   := 'Soil Parameters';
+                            soilLabel.Top       := gridPanelLabels.top + gridPanelLabels.Height + round( 5 * ctrlScaleFactor );
+
+                            soilParametersGrid.top      := soilLabel.Top + round( 1.25 * soilLabel.Height );
+                            soilParametersGrid.RowCount := 3;
+                            soilParametersGrid.Cells[0, 0] := 'Cohesion - c'' (kPa)';
+                            soilParametersGrid.Cells[0, 1] := 'Friction Angle - '#966' ('#176')';
+                            soilParametersGrid.Cells[0, 2] := 'Soil Unit Weight - '#947' (kN/m'#179')';
+                            soilParametersGrid.minSize();
+
+                        //nail input
+                            nailsLabel.Caption  := 'Nail Parameters';
+                            nailsLabel.top      := soilParametersGrid.top + soilParametersGrid.Height + round( CATEGORY_SPACE * ctrlScaleFactor );
+
+                            nailParametersGrid.top      := nailsLabel.Top + round( 1.25 * nailsLabel.Height );
+                            nailParametersGrid.RowCount := 2;
+                            nailParametersGrid.Cells[0, 0] := 'Nail Tensile Strength - fu (MPa)';
+                            nailParametersGrid.Cells[0, 1] := 'Grout-Soil Interface Bond Strength (kPa)';
+                            nailParametersGrid.minSize();
+
+                        //concrete input
+                            concreteLabel.Caption   := 'Nail Parameters';
+                            concreteLabel.top       := nailParametersGrid.top + nailParametersGrid.Height + round( CATEGORY_SPACE * ctrlScaleFactor );
+
+                            concreteParametersGrid.top      := concreteLabel.Top + round( 1.25 * concreteLabel.Height );
+                            concreteParametersGrid.RowCount := 2;
+                            concreteParametersGrid.Cells[0, 0] := 'Steel Reinforcement Strength  - fy (MPa)';
+                            concreteParametersGrid.Cells[0, 1] := 'Concrete Compressive Strength - fcu (MPa)';
+                            concreteParametersGrid.minSize();
+
+                        for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
+                            tempGrid.setBorderProperties( 1, clSilver );
+                end;
+
     //protected
         //check for input errors
             procedure TMaterialParametersInputManager.checkForInputErrors();
@@ -347,81 +422,6 @@ implementation
                     FreeAndNil( concreteLabel );
 
                     inherited destroy();
-                end;
-
-        //setup input controls
-            procedure TMaterialParametersInputManager.setupInputControls();
-                var
-                    ctrlScaleFactor : double;
-                    tempComponent   : Tcontrol;
-                    tempLabel       : TLabel;
-                    tempGrid        : TStringGrid;
-                    controlParent   : TWinControl;
-                begin
-                    inherited setupInputControls();
-
-                    controlParent := soilParametersGrid.Parent;
-
-                    for tempLabel in [ soilLabel, nailsLabel, concreteLabel ] do
-                        begin
-                            tempLabel.Parent    := controlParent;
-                            tempLabel.AutoSize  := True;
-                        end;
-
-                    //position controls
-                        ctrlScaleFactor := controlParent.ScaleFactor;
-
-                        for tempComponent in [ soilLabel, nailsLabel, concreteLabel, soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
-                            tempComponent.Left := round( CONTROL_MARGIN * ctrlScaleFactor );
-
-                        gridPanelLabels.left := round( (CONTROL_MARGIN + 249) * ctrlScaleFactor );
-
-                    //setup grids
-                        for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
-                            begin
-                                tempGrid.ColWidths[0] := round( 249 * ctrlScaleFactor );
-
-                                tempGrid.ColCount := 7;
-
-                                tempGrid.FixedCols := 1;
-                                tempGrid.FixedRows := 0;
-                            end;
-
-                        gridPanelLabels.top := round( 5 * ctrlScaleFactor );
-
-                        //soil input
-                            soilLabel.Caption   := 'Soil Parameters';
-                            soilLabel.Top       := gridPanelLabels.top + gridPanelLabels.Height + round( 5 * ctrlScaleFactor );
-
-                            soilParametersGrid.top      := soilLabel.Top + round( 1.25 * soilLabel.Height );
-                            soilParametersGrid.RowCount := 3;
-                            soilParametersGrid.Cells[0, 0] := 'Cohesion - c'' (kPa)';
-                            soilParametersGrid.Cells[0, 1] := 'Friction Angle - '#966' ('#176')';
-                            soilParametersGrid.Cells[0, 2] := 'Soil Unit Weight - '#947' (kN/m'#179')';
-                            soilParametersGrid.minSize();
-
-                        //nail input
-                            nailsLabel.Caption  := 'Nail Parameters';
-                            nailsLabel.top      := soilParametersGrid.top + soilParametersGrid.Height + round( CATEGORY_SPACE * ctrlScaleFactor );
-
-                            nailParametersGrid.top      := nailsLabel.Top + round( 1.25 * nailsLabel.Height );
-                            nailParametersGrid.RowCount := 2;
-                            nailParametersGrid.Cells[0, 0] := 'Nail Tensile Strength - fu (MPa)';
-                            nailParametersGrid.Cells[0, 1] := 'Grout-Soil Interface Bond Strength (kPa)';
-                            nailParametersGrid.minSize();
-
-                        //concrete input
-                            concreteLabel.Caption   := 'Nail Parameters';
-                            concreteLabel.top       := nailParametersGrid.top + nailParametersGrid.Height + round( CATEGORY_SPACE * ctrlScaleFactor );
-
-                            concreteParametersGrid.top      := concreteLabel.Top + round( 1.25 * concreteLabel.Height );
-                            concreteParametersGrid.RowCount := 2;
-                            concreteParametersGrid.Cells[0, 0] := 'Steel Reinforcement Strength  - fy (MPa)';
-                            concreteParametersGrid.Cells[0, 1] := 'Concrete Compressive Strength - fcu (MPa)';
-                            concreteParametersGrid.minSize();
-
-                        for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
-                            tempGrid.createBorder( 1, clSilver );
                 end;
 
         //reset controls

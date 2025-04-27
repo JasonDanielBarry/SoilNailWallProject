@@ -39,6 +39,8 @@ interface
                     constructor create();
                 //destructor
                     destructor destroy(); override;
+                //copy other soil nail wall
+                    procedure copySNW(const otherSoilNailWallIn : TSoilNailWallGraphic);
                 //set optional graphics visibility
                     procedure setLoadsVisible(const visibleIn : boolean);
                     procedure setSlipWedgeVisible(const visibleIn : boolean);
@@ -232,6 +234,15 @@ implementation
             destructor TSoilNailWallGraphic.destroy();
                 begin
                     inherited destroy();
+                end;
+
+        //copy other soil nail wall
+            procedure TSoilNailWallGraphic.copySNW(const otherSoilNailWallIn : TSoilNailWallGraphic);
+                begin
+                    inherited copySNW( otherSoilNailWallIn );
+
+                    self.loadsVisible       := otherSoilNailWallIn.loadsVisible;
+                    self.slipWedgeVisible   := otherSoilNailWallIn.slipWedgeVisible;
                 end;
 
         //set optional graphics visibility

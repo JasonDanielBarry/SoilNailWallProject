@@ -5,7 +5,7 @@ interface
     uses
         system.SysUtils, system.Math, System.Classes, system.Generics.Collections, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-        StringGridHelperClass,
+        StringGridInterposerClass,
         InputManagerClass,
         SoilNailWallTypes,
         SoilNailWallMasterClass
@@ -20,8 +20,8 @@ interface
                     soilNailWallDesign : TSoilNailWall;
             public
                 //constructor
-                    constructor create( const errorListBoxIn        : TListBox;
-                                        const soilNailWallDesignIn  : TSoilNailWall );
+                    constructor create( const errorListBoxIn    : TListBox;
+                                        const soilNailWallIn    : TSoilNailWall );
                 //destructor
                     destructor destroy(); override;
         end;
@@ -30,12 +30,12 @@ implementation
 
     //public
         //constructor
-            constructor TSoilNailWallInputManager.create(   const errorListBoxIn        : TListBox;
-                                                            const soilNailWallDesignIn  : TSoilNailWall );
+            constructor TSoilNailWallInputManager.create(   const errorListBoxIn    : TListBox;
+                                                            const soilNailWallIn    : TSoilNailWall );
                 begin
-                    inherited create( errorListBoxIn );
+                    soilNailWallDesign := soilNailWallIn;
 
-                    soilNailWallDesign := soilNailWallDesignIn;
+                    inherited create( errorListBoxIn );
                 end;
 
         //destructor

@@ -22,6 +22,7 @@ interface
                     var
                         arrFactors, arrLoads    : TArray<double>;
                         arrDescriptions         : TArray<string>;
+                    procedure checkLoadCaseCombinationForErrors(const arrayIndexIn : integer; var arrErrorsInOut : TArray<string>);
                 public
                     var
                         LCName : string;
@@ -41,6 +42,8 @@ interface
                     //XML file read/write
                         function tryReadFromXMLNode(var XMLNodeIn : IXMLNode; const identifierIn : string) : boolean;
                         procedure writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
+                    //check for errors
+                        function checkForErrors() : TArray<string>;
             end;
 
         //load case map
@@ -69,17 +72,56 @@ interface
                         procedure writeToXMLNode(var XMLNodeInOut : IXMLNode; const identifierIn : string);
                     //active load case
                         function getActiveLoadCase() : TLoadCase;
+                        function getActiveLoadCaseIndex() : integer;
+                        function getActiveLoadCaseName() : string;
                         procedure setActiveLoadCase(const loadCaseKeyIn : string);
                     //critical load case
                         function getCriticalLoadCaseKey() : string;
                         function getCriticalLoadCase() : TLoadCase;
                     //ordered keys
-                        function getOrderedKeys() : TList<string>;
+                        function getOrderedKeys() : TArray<string>;
+                    //count total load combinations
+                        function countLoadCaseCombinations(const loadCaseKeyIn : string) : integer;
+                        function countTotalLoadCaseCombinations() : integer;
+                    //check for errors
+                        function checkForErrors() : TArray<string>;
+
             end;
 
 implementation
 
     //TLoadCase--------------------------------------------------------------------------------------------------
+        //check for errors
+            procedure TLoadCase.checkLoadCaseCombinationForErrors(const arrayIndexIn : integer; var arrErrorsInOut : TArray<string>);
+                var
+                arrLen          : integer;
+                factor, load    : double;
+                description     : string;
+                procedure _addError(const errorMessageIn : string);
+                    begin
+                        inc( arrLen );
+
+                        SetLength( arrErrorsInOut, arrLen );
+
+                        arrErrorsInOut[arrLen - 1] := errorMessageIn;
+                    end;
+                begin
+                    arrLen := length( arrErrorsInOut );
+
+                    factor      := arrFactors[ arrayIndexIn ];
+                    load        := arrLoads[ arrayIndexIn ];
+                    description := arrDescriptions[ arrayIndexIn ];
+
+                    if ( description = '' ) then
+                        _addError( LCName + ' must have descriptions for all combinations');
+
+                    if ( IsZero( factor, 1e-3) OR (factor < 0) ) then
+                        _addError( LCName + ' - ' + description + ': factor must be greater than zero' );
+
+                    if ( IsZero( load, 1e-3) OR (load < 0) ) then
+                        _addError( LCName + ' - ' + description + ': load must be greater than zero' );
+                end;
+
         //make a copy
             procedure TLoadCase.copyOther(const otherLoadCaseIn : TLoadCase);
                 var
@@ -201,11 +243,27 @@ implementation
                     writeDoubleArrayToXMLNode( loadCaseNode, LOADS, arrLoads );
                 end;
 
+        //check for errors
+            function TLoadCase.checkForErrors() : TArray<string>;
+                var
+                    i               : integer;
+                    arrErrorsOut    : TArray<string>;
+                begin
+                    SetLength( arrErrorsOut, 0 );
+
+                    for i := 0 to ( countCombinations() - 1 ) do
+                        checkLoadCaseCombinationForErrors( i, arrErrorsOut );
+
+                    result := arrErrorsOut;
+                end;
+
     //TLoadCaseMap--------------------------------------------------------------------------------------------------
         //constructor
             constructor TLoadCaseMap.create();
                 begin
                     inherited Create();
+
+                    activeLoadCaseKey := 'NONE';
 
                     orderedKeysList := TList<string>.Create();
                 end;
@@ -229,6 +287,9 @@ implementation
         //add or set value
             procedure TLoadCaseMap.AddOrSetValue(const KeyIn : string; const ValueIn : TLoadCase);
                 begin
+                    if NOT( KeyIn = ValueIn.LCName ) then
+                        exit();
+
                     inherited AddOrSetValue( KeyIn, ValueIn );
 
                     if NOT( orderedKeysList.Contains( KeyIn ) ) then
@@ -257,6 +318,8 @@ implementation
 
                             self.AddOrSetValue( itemKey, newLoadCase );
                         end;
+
+                    self.activeLoadCaseKey := otherLoadCaseMapIn.activeLoadCaseKey;
                 end;
 
         //XML file read/write
@@ -322,10 +385,22 @@ implementation
                 var
                     loadCaseOut : TLoadCase;
                 begin
-                    if NOT( TryGetValue( activeLoadCaseKey, loadCaseOut ) ) then
-                        exit( loadCaseOut );
+                    TryGetValue( activeLoadCaseKey, loadCaseOut );//if the active load case key has no load case then an empty load case is returned
 
                     result := loadCaseOut;
+                end;
+
+            function TLoadCaseMap.getActiveLoadCaseIndex() : integer;
+                begin
+                    if NOT( orderedKeysList.Contains( activeLoadCaseKey ) ) then
+                        exit( -1 );
+
+                    result := orderedKeysList.IndexOf( activeLoadCaseKey );
+                end;
+
+            function TLoadCaseMap.getActiveLoadCaseName() : string;
+                begin
+                    result := activeLoadCaseKey;
                 end;
 
             procedure TLoadCaseMap.setActiveLoadCase(const loadCaseKeyIn : string);
@@ -377,9 +452,71 @@ implementation
                 end;
 
             //ordered keys
-                function TLoadCaseMap.getOrderedKeys() : TList<string>;
+                function TLoadCaseMap.getOrderedKeys() : TArray<string>;
                     begin
-                        result := orderedKeysList;
+                        result := orderedKeysList.ToArray();
+                    end;
+
+            //count total load combinations
+                function TLoadCaseMap.countLoadCaseCombinations(const loadCaseKeyIn : string) : integer;
+                    var
+                        loadCase : TLoadCase;
+                    begin
+                        result := 0;
+
+                        if NOT( TryGetValue( loadCaseKeyIn, loadCase ) ) then
+                            exit( 0 );
+
+                        result := loadCase.countCombinations();
+                    end;
+
+                function TLoadCaseMap.countTotalLoadCaseCombinations() : integer;
+                    var
+                        loadCaseCombinations,
+                        totalCombinations       : integer;
+                        LCKey                   : string;
+                    begin
+                        totalCombinations := 0;
+
+                        for LCKey in orderedKeysList do
+                            begin
+                                loadCaseCombinations := countLoadCaseCombinations( LCKey );
+
+                                inc( totalCombinations, loadCaseCombinations );
+                            end;
+
+                        result := totalCombinations;
+                    end;
+
+            //check for errors
+                function TLoadCaseMap.checkForErrors() : TArray<string>;
+                    var
+                        i, arrLen   : integer;
+                        errorString,
+                        LCKey       : string;
+                        loadCase    : TLoadCase;
+                        loadCaseMap : TLoadCaseMap;
+                        arrErrors   : TArray<string>;
+                    begin
+                        inherited checkForInputErrors();
+
+                        loadCaseMap := soilNailWallDesign.getLoadCases();
+
+                        for LCKey in loadCaseMap.getOrderedKeys() do
+                            begin
+                                if NOT( loadCaseMap.TryGetValue( LCKey, loadCase ) ) then
+                                    Continue;
+
+                                arrErrors := loadCase.checkForErrors();
+
+                                arrLen := length( arrErrors );
+
+                                if ( arrLen < 1 ) then
+                                    Continue;
+
+                                for i := 0 to ( arrLen - 1 ) do
+                                    addError( arrErrors[i] );
+                            end;
                     end;
 
 end.

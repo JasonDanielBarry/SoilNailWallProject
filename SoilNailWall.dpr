@@ -27,7 +27,8 @@ uses
   LoadCasesInputManagerClass in 'Source\UserInterface\InputTab\Loads\LoadCasesInputManagerClass.pas',
   NailLayoutGeneratorInputManagerClass in 'Source\UserInterface\InputTab\Nails\NailLayoutGeneratorInputManagerClass.pas',
   NailLayoutGeneratorWizard in 'Source\UserInterface\InputTab\Nails\NailLayoutGeneratorWizard.pas' {NailLayoutGenForm},
-  NailPropertiesInputManagerClass in 'Source\UserInterface\InputTab\Nails\NailPropertiesInputManagerClass.pas';
+  NailPropertiesInputManagerClass in 'Source\UserInterface\InputTab\Nails\NailPropertiesInputManagerClass.pas',
+  LoadCaseUIMethods in 'Source\UserInterface\InputTab\Loads\LoadCaseUIMethods.pas';
 
 {$R *.res}
 

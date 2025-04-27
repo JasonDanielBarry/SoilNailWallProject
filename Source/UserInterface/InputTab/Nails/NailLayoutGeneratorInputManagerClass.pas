@@ -5,7 +5,7 @@ interface
     uses
         system.SysUtils, system.Math, System.Classes, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-        StringGridHelperClass,
+        StringGridInterposerClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes,
         SoilNailWallMasterClass
@@ -21,6 +21,8 @@ interface
                     NailSpacingComboBox,
                     topLengthComboBox,
                     bottomLengthComboBox            : TComboBox;
+                //setup input controls
+                    procedure setupInputControls(); override;
             protected
                 //check for input errors
                     procedure checkForInputErrors(); override;
@@ -34,8 +36,6 @@ interface
                                         const   soilNailWallDesignIn    : TSoilNailWall );
                 //destructor
                     destructor destroy(); override;
-                //setup input controls
-                    procedure setupInputControls(); override;
                 //process input
                     //read input
                         function readFromInputControls() : boolean; override;
@@ -44,6 +44,25 @@ interface
         end;
 
 implementation
+
+    //private
+        //setup input controls
+            procedure TNailLayoutGeneratorInputManager.setupInputControls();
+                var
+                    i           : integer;
+                    nailLength  : string;
+                begin
+                    inherited setupInputControls();
+
+                    //add items to combo boxes
+                        for i := 5 to 35 do
+                            begin
+                                nailLength := IntToStr( i );
+
+                                topLengthComboBox.Items.Add(nailLength);
+                                bottomLengthComboBox.Items.Add(nailLength);
+                            end;
+                end;
 
     //protected
         //check for input errors
@@ -87,24 +106,6 @@ implementation
             destructor TNailLayoutGeneratorInputManager.destroy();
                 begin
                     inherited destroy();
-                end;
-
-        //setup input controls
-            procedure TNailLayoutGeneratorInputManager.setupInputControls();
-                var
-                    i           : integer;
-                    nailLength  : string;
-                begin
-                    inherited setupInputControls();
-
-                    //add items to combo boxes
-                        for i := 5 to 35 do
-                            begin
-                                nailLength := IntToStr( i );
-
-                                topLengthComboBox.Items.Add(nailLength);
-                                bottomLengthComboBox.Items.Add(nailLength);
-                            end;
                 end;
 
         //process input

@@ -5,7 +5,7 @@ interface
     uses
         system.SysUtils, system.Math, System.Classes, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-        StringGridHelperClass,
+        StringGridInterposerClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes,
         SoilNailWallMasterClass,
@@ -30,6 +30,8 @@ interface
                         procedure writeNailParameters(const updateEmptyCellsIn : boolean);
                     //nail layout
                         procedure writeNailLayout();
+                //setup input controls
+                    procedure setupInputControls(); override;
             protected
                 //check for input errors
                     procedure checkForInputErrors(); override;
@@ -41,8 +43,6 @@ interface
                                         const   soilNailWallDesignIn    : TSoilNailWall );
                 //destructor
                     destructor destroy(); override;
-                //setup input controls
-                    procedure setupInputControls(); override;
                 //reset controls
                     procedure resetInputControls(); override;
                 //process input
@@ -207,69 +207,10 @@ implementation
                         nailLayoutGrid.FixedCols := 2;
                         nailLayoutGrid.FixedRows := 1;
 
-                        nailLayoutGrid.editBorder(1, clSilver);
+                        nailLayoutGrid.setBorderProperties(1, clSilver);
 
                         nailLayoutGrid.Parent.UnlockDrawing();
                     end;
-
-    //protected
-        //check for input errors
-            procedure TNailPropertiesInputManager.checkForInputErrors();
-                var
-                    i               : integer;
-                    arrNaillengths  : TArray<double>;
-                    nails           : TSoilNails;
-                begin
-                    inherited checkForInputErrors();
-
-                    //nail parameters
-                        nails := soilNailWallDesign.getNails();
-
-                        if ( ( nails.angle < 0 ) OR IsZero( nails.angle, 1e-3 ) ) then
-                            addError('Nail angle must be non-zero');
-
-                        if ( ( nails.horizontalSpacing < 0 ) OR IsZero( nails.horizontalSpacing, 1e-3 ) ) then
-                            addError('Out of plane spacing must be non-zero');
-
-                        if ( ( nails.diameter.groutHole < 0 ) OR IsZero( nails.diameter.groutHole, 1e-3 ) ) then
-                            addError('Grout hole diameter must be non-zero');
-
-                    //nail layout
-                        if ( nails.determineNailCount() < 2 ) then
-                            addError('At least 2 nails are required for a valid layout');
-
-                        arrNaillengths := nails.getArrLengths();
-
-                        for i := 0 to (nails.determineNailCount() - 1) do
-                            if ( IsZero( arrNaillengths[i], 1e-3 ) ) then
-                                addError('Nail ' + IntToStr(i+1) + ' length must be non-zero');
-                end;
-
-    //public
-        //constructor
-            constructor TNailPropertiesInputManager.create( const   errorListBoxIn          : TListBox;
-                                                            const   nailParametersGridIn,
-                                                                    nailLayoutGridIn        : TStringGrid;
-                                                            const   soilNailWallDesignIn    : TSoilNailWall );
-                begin
-                    nailParametersGrid  := nailParametersGridIn;
-                    nailLayoutGrid      := nailLayoutGridIn;
-
-                    //create labels
-                        nailPropertiesLabel := TLabel.Create( nil );
-                        nailLayoutLabel     := TLabel.Create( nil );
-
-                    inherited create( errorListBoxIn, soilNailWallDesignIn );
-                end;
-
-        //destructor
-            destructor TNailPropertiesInputManager.destroy();
-                begin
-                    FreeAndNil( nailPropertiesLabel );
-                    FreeAndNil( nailLayoutLabel );
-
-                    inherited destroy();
-                end;
 
         //setup input controls
             procedure TNailPropertiesInputManager.setupInputControls();
@@ -338,7 +279,66 @@ implementation
                             nailLayoutGrid.minSize();
 
                         for tempGrid in [ nailParametersGrid, nailLayoutGrid ] do
-                            tempGrid.createBorder( 1, clSilver );
+                            tempGrid.setBorderProperties( 1, clSilver );
+                end;
+
+    //protected
+        //check for input errors
+            procedure TNailPropertiesInputManager.checkForInputErrors();
+                var
+                    i               : integer;
+                    arrNaillengths  : TArray<double>;
+                    nails           : TSoilNails;
+                begin
+                    inherited checkForInputErrors();
+
+                    //nail parameters
+                        nails := soilNailWallDesign.getNails();
+
+                        if ( ( nails.angle < 0 ) OR IsZero( nails.angle, 1e-3 ) ) then
+                            addError('Nail angle must be non-zero');
+
+                        if ( ( nails.horizontalSpacing < 0 ) OR IsZero( nails.horizontalSpacing, 1e-3 ) ) then
+                            addError('Out of plane spacing must be non-zero');
+
+                        if ( ( nails.diameter.groutHole < 0 ) OR IsZero( nails.diameter.groutHole, 1e-3 ) ) then
+                            addError('Grout hole diameter must be non-zero');
+
+                    //nail layout
+                        if ( nails.determineNailCount() < 2 ) then
+                            addError('At least 2 nails are required for a valid layout');
+
+                        arrNaillengths := nails.getArrLengths();
+
+                        for i := 0 to (nails.determineNailCount() - 1) do
+                            if ( IsZero( arrNaillengths[i], 1e-3 ) ) then
+                                addError('Nail ' + IntToStr(i+1) + ' length must be non-zero');
+                end;
+
+    //public
+        //constructor
+            constructor TNailPropertiesInputManager.create( const   errorListBoxIn          : TListBox;
+                                                            const   nailParametersGridIn,
+                                                                    nailLayoutGridIn        : TStringGrid;
+                                                            const   soilNailWallDesignIn    : TSoilNailWall );
+                begin
+                    nailParametersGrid  := nailParametersGridIn;
+                    nailLayoutGrid      := nailLayoutGridIn;
+
+                    //create labels
+                        nailPropertiesLabel := TLabel.Create( nil );
+                        nailLayoutLabel     := TLabel.Create( nil );
+
+                    inherited create( errorListBoxIn, soilNailWallDesignIn );
+                end;
+
+        //destructor
+            destructor TNailPropertiesInputManager.destroy();
+                begin
+                    FreeAndNil( nailPropertiesLabel );
+                    FreeAndNil( nailLayoutLabel );
+
+                    inherited destroy();
                 end;
 
         //reset controls

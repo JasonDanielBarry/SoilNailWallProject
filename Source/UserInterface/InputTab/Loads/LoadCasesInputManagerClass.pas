@@ -5,10 +5,11 @@ interface
     uses
         system.SysUtils, system.Math, System.Classes, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-        StringGridHelperClass,
+        StringGridInterposerClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes, LoadCaseTypes,
         SoilNailWallMasterClass,
+        LoadCaseUIMethods,
         LoadCaseEditorWizard
         ;
 
@@ -24,24 +25,14 @@ interface
                     loadCasesLabel  : TLabel;
                     loadInputGrid   : TStringGrid;
                 //read load case data from grid
-                    function tryReadLoadCaseCombination(const gridRowIn : integer;
-                                                        var loadCaseOut : TLoadCase) : boolean;
-                    function tryReadLoadCase(const startRowIn : integer; out endRowOut : integer; out newLoadCaseOut : TLoadCase) : boolean;
                     function readLoadCases() : boolean;
                 //write load case data to grid
-                    procedure writeLoadCaseCombinationToGrid(   const updateEmptyCellsIn        : boolean;
-                                                                const arrayIndexIn, gridRowIn   : integer;
-                                                                const loadCaseIn                : TLoadCase );
-                    procedure writeLoadCaseToGrid(  const updateEmptyCellsIn    : boolean;
-                                                    const startRowIn            : integer;
-                                                    out endRowOut               : integer;
-                                                    const loadCaseIn            : TLoadCase );
                     function emptyCombinationPresent() : boolean;
                     procedure writeLoadCasesToGrid(const updateEmptyCellsIn : boolean);
+                //setup input controls
+                    procedure setupInputControls(); override;
             protected
                 //check for input errors
-                    procedure checkLoadCaseCombinationForErrors(const arrayIndexIn : integer; const loadCaseIn : TLoadCase);
-                    procedure checkLoadCaseForErrors(const loadCaseIn : TLoadCase);
                     procedure checkForInputErrors(); override;
             public
                 //constructor
@@ -50,8 +41,6 @@ interface
                                         const soilNailWallDesignIn  : TSoilNailWall );
                 //destructor
                     destructor destroy(); override;
-                //setup input controls
-                    procedure setupInputControls(); override;
                 //reset controls
                     procedure resetInputControls(); override;
                 //process input
@@ -69,71 +58,37 @@ implementation
 
     //private
         //read load case data from grid
-            function TLoadCasesInputManager.tryReadLoadCaseCombination( const gridRowIn : integer;
-                                                                        var loadCaseOut : TLoadCase ) : boolean;
-                var
-                    validCombination    : boolean;
-                    factor, load        : double;
-                    description         : string;
-                begin
-                    //extract load case from grid
-                        description := loadInputGrid.Cells[ DESC_COL, gridRowIn ];
-                        loadInputGrid.tryCellToDouble( FACT_COL, gridRowIn, factor );
-                        loadInputGrid.tryCellToDouble( LOAD_COL, gridRowIn, load );
-
-                    //test if load case is valid - this does not mean it will not raise an input error
-                        validCombination := (description <> '');
-                        validCombination := validCombination OR NOT( IsZero( factor, 1e-3 ) );
-                        validCombination := validCombination OR NOT( IsZero( load, 1e-3 ) );
-
-                    //send to load case record
-                        if ( validCombination ) then
-                            loadCaseOut.addLoadCombination( factor, load, description );
-
-                    result := validCombination;
-                end;
-
-            function TLoadCasesInputManager.tryReadLoadCase(const startRowIn : integer; out endRowOut : integer; out newLoadCaseOut : TLoadCase) : boolean;
-                var
-                    gridFinished,
-                    newLoadCaseFound,
-                    canExitLoop         : boolean;
-                    currentRow          : integer;
-                begin
-                    currentRow := startRowIn;
-
-                    //read the load case
-                        repeat
-                            begin
-                                //read the load combination
-                                    tryReadLoadCaseCombination( currentRow, newLoadCaseOut );
-
-                                //go to next row
-                                    inc( currentRow );
-
-                                //check if the loop must repeat
-                                    newLoadCaseFound    := NOT( loadInputGrid.cellIsEmpty( NAME_COL, currentRow ) );
-                                    gridFinished        := (loadInputGrid.RowCount - 1) < currentRow;
-
-                                    canExitLoop := newLoadCaseFound OR gridFinished
-                            end;
-                        until ( canExitLoop );
-
-                    //return the end row
-                        endRowOut := currentRow - 1; //current row is the first row of the next load case
-
-                    //get name
-                        newLoadCaseOut.LCName := loadInputGrid.Cells[ NAME_COL, startRowIn ];
-
-                    result := ( 0 < newLoadCaseOut.countCombinations() );
-                end;
-
             function TLoadCasesInputManager.readLoadCases() : boolean;
                 var
                     newLoadCaseFound    : boolean;
+                    startRow, endRow,
                     row                 : integer;
-                    newLoadCase         : TLoadCase;
+                    currentLCName       : string;
                     loadCaseMap         : TLoadCaseMap;
+                function _findLoadCaseEndRow(const startRowIn : integer) : integer;
+                    var
+                        gridFinished,
+                        nextLoadCaseFound : boolean;
+                    begin
+                        _findLoadCaseEndRow := startRowIn;
+
+                        repeat
+                            inc( row );
+
+                            //check if the next load case is found
+                                nextLoadCaseFound := NOT( loadInputGrid.cellIsEmpty( NAME_COL, row ) );
+                                if ( nextLoadCaseFound ) then
+                                    begin
+                                        dec( row ); //push the row back by 1 for when the loop comes around and inc( row ) is called
+                                        exit( row );
+                                    end;
+
+                            //check if the end of the grid is reached
+                                gridFinished := (loadInputGrid.RowCount - 1) < row;
+                                if ( gridFinished ) then
+                                    exit( row - 1 );
+                        until False;
+                    end;
                 begin
                     loadCaseMap := soilNailWallDesign.getLoadCases();
                     loadCaseMap.Clear();
@@ -141,6 +96,8 @@ implementation
                     row := 0;
                     while ( row < loadInputGrid.RowCount ) do
                         begin
+                            var loadCase : TLoadCase;
+
                             inc( row );
 
                             //check if a new load case is needed
@@ -150,11 +107,19 @@ implementation
                                     Continue;
 
                             //read the load case
-                                if NOT( tryReadLoadCase( row, row, newLoadCase ) ) then
+                                startRow    := row;
+                                endRow      := _findLoadCaseEndRow( startRow );
+
+                                currentLCName := loadInputGrid.Cells[ NAME_COL, startRow ];
+
+                                if NOT( tryReadLoadCase( DESC_COL, startRow, endRow, loadInputGrid, loadCase ) ) then
                                     Continue;
 
+                            //get name
+                                loadCase.LCName := currentLCName;
+
                             //place load case in map
-                                loadCaseMap.AddOrSetValue( newLoadCase.LCName, newLoadCase );
+                                loadCaseMap.AddOrSetValue( currentLCName, loadCase );
                         end;
 
                     soilNailWallDesign.setLoadCases( loadCaseMap );
@@ -163,51 +128,6 @@ implementation
                 end;
 
         //write load case data to grid
-            procedure TLoadCasesInputManager.writeLoadCaseCombinationToGrid(const updateEmptyCellsIn        : boolean;
-                                                                            const arrayIndexIn, gridRowIn   : integer;
-                                                                            const loadCaseIn                : TLoadCase);
-                function _mustUpdateCell(const colIn : integer) : boolean;
-                    var
-                        cellIsEmptyAndMustBeUpdated,
-                        cellIsEmpty                 : boolean;
-                    begin
-                        cellIsEmpty                 := ( loadInputGrid.cellIsEmpty( colIn, gridRowIn ) );
-                        cellIsEmptyAndMustBeUpdated := updateEmptyCellsIn AND cellIsEmpty;
-
-                        result := NOT( cellIsEmpty ) OR cellIsEmptyAndMustBeUpdated;
-                    end;
-                begin
-                    if ( _mustUpdateCell( DESC_COL ) ) then
-                        loadInputGrid.Cells[ DESC_COL, gridRowIn ] := loadCaseIn.getArrDescriptions()[ arrayIndexIn ];
-
-                    if ( _mustUpdateCell( FACT_COL ) ) then
-                        loadInputGrid.Cells[ FACT_COL, gridRowIn ] := FloatToStrF( loadCaseIn.getArrFactors()[ arrayIndexIn ], ffFixed, 5, 2 );
-
-                    if ( _mustUpdateCell( LOAD_COL ) ) then
-                        loadInputGrid.Cells[ LOAD_COL, gridRowIn ] := FloatToStrF( loadCaseIn.getArrLoads()[ arrayIndexIn ], ffFixed, 5, 2 );
-                end;
-
-            procedure TLoadCasesInputManager.writeLoadCaseToGrid(   const updateEmptyCellsIn    : boolean;
-                                                                    const startRowIn            : integer;
-                                                                    out endRowOut               : integer;
-                                                                    const loadCaseIn            : TLoadCase );
-                var
-                    i, row, arrLen : integer;
-                begin
-                    arrLen := loadCaseIn.countCombinations();
-
-                    row := startRowIn;
-
-                    for i := 0 to ( arrLen - 1 ) do
-                        begin
-                            row := startRowIn + i;
-
-                            writeLoadCaseCombinationToGrid( updateEmptyCellsIn, i, row, loadCaseIn );
-                        end;
-
-                    endRowOut := row;
-                end;
-
             function TLoadCasesInputManager.emptyCombinationPresent() : boolean;
                 var
                     descriptionEmpty,
@@ -233,6 +153,7 @@ implementation
 
             procedure TLoadCasesInputManager.writeLoadCasesToGrid(const updateEmptyCellsIn : boolean);
                 var
+                    firstLoadCaseDeleted,
                     localUpdateEmptyCells   : boolean;
                     totalCombinations,
                     loadCaseStartRow,
@@ -246,22 +167,19 @@ implementation
                         loadCaseMap := soilNailWallDesign.getLoadCases();
 
                     //size the grid
-                        totalCombinations := 0;
-
-                        for LCKey in loadCaseMap.Keys do
-                            begin
-                                loadCaseMap.TryGetValue( LCKey, loadCase );
-
-                                inc( totalCombinations, loadCase.countCombinations() );
-                            end;
+                        totalCombinations := loadCaseMap.countTotalLoadCaseCombinations();
 
                         loadInputGrid.RowCount := totalCombinations + 2;
 
                         loadInputGrid.minSize();
-                        loadInputGrid.editBorder( 1, clSilver );
+                        loadInputGrid.setBorderProperties( 1, clSilver );
+
+                    //check if a load case has been deleted
+                    //this is signified by loadInputGrid.cell[0, 1] being empty
+                        firstLoadCaseDeleted := loadInputGrid.cellIsEmpty( NAME_COL, 1 );
 
                     //check if empty combinations are present - a grid reset is required if true
-                        if ( emptyCombinationPresent() OR updateEmptyCellsIn ) then
+                        if ( emptyCombinationPresent() OR firstLoadCaseDeleted OR updateEmptyCellsIn ) then
                             begin
                                 loadInputGrid.clearRows( 1 );
                                 localUpdateEmptyCells := True;
@@ -270,7 +188,7 @@ implementation
                             localUpdateEmptyCells := False;
 
                     //write load cases
-                        orderedKeys := loadCaseMap.getOrderedKeys().ToArray;
+                        orderedKeys := loadCaseMap.getOrderedKeys();
 
                         loadCaseStartRow := 1;
 
@@ -282,79 +200,11 @@ implementation
                                 //write load case
                                     loadInputGrid.Cells[ NAME_COL, loadCaseStartRow ] := loadCase.LCName;
 
-                                    writeLoadCaseToGrid( localUpdateEmptyCells, loadCaseStartRow, loadCaseEndRow, loadCase );
+                                    writeLoadCaseToGrid( localUpdateEmptyCells, DESC_COL, loadCaseStartRow, loadCaseEndRow, loadCase, loadInputGrid );
 
                                 //set start for next load case
                                     loadCaseStartRow := loadCaseEndRow + 1;
                             end;
-                end;
-
-    //protected
-        //check for input errors
-            procedure TLoadCasesInputManager.checkLoadCaseCombinationForErrors(const arrayIndexIn : integer; const loadCaseIn : TLoadCase);
-                var
-                    factor, load    : double;
-                    description     : string;
-                begin
-                    factor      := loadCaseIn.getArrFactors()[ arrayIndexIn ];
-                    load        := loadCaseIn.getArrLoads()[ arrayIndexIn ];
-                    description := loadCaseIn.getArrDescriptions()[ arrayIndexIn ];
-
-                    if ( description = '' ) then
-                        addError( loadCaseIn.LCName + ' must have descriptions for all combinations');
-
-                    if ( IsZero( factor, 1e-3) OR (factor < 0) ) then
-                        addError( loadCaseIn.LCName + ' - ' + description + ': factor must be greater than zero' );
-
-                    if ( IsZero( load, 1e-3) OR (load < 0) ) then
-                        addError( loadCaseIn.LCName + ' - ' + description + ': load must be greater than zero' );
-                end;
-
-            procedure TLoadCasesInputManager.checkLoadCaseForErrors(const loadCaseIn : TLoadCase);
-                var
-                    i : integer;
-                begin
-                    for i := 0 to ( loadCaseIn.countCombinations() - 1 ) do
-                        checkLoadCaseCombinationForErrors( i, loadCaseIn );
-                end;
-
-            procedure TLoadCasesInputManager.checkForInputErrors();
-                var
-                    LCKey       : string;
-                    loadCase    : TLoadCase;
-                    loadCaseMap : TLoadCaseMap;
-                begin
-                    inherited checkForInputErrors();
-
-                    loadCaseMap := soilNailWallDesign.getLoadCases();
-
-                    for LCKey in loadCaseMap.getOrderedKeys() do
-                        begin
-                            if NOT( loadCaseMap.TryGetValue( LCKey, loadCase ) ) then
-                                Continue;
-
-                            checkLoadCaseForErrors( loadCase );
-                        end;
-                end;
-
-    //public
-        //constructor
-            constructor TLoadCasesInputManager.create(  const errorListBoxIn        : TListBox;
-                                                        const loadInputGridIn       : TStringGrid;
-                                                        const soilNailWallDesignIn  : TSoilNailWall );
-                begin
-                    loadInputGrid := loadInputGridIn;
-                    loadCasesLabel := TLabel.Create( nil );
-
-                    inherited create( errorListBoxIn, soilNailWallDesignIn );
-                end;
-
-        //destructor
-            destructor TLoadCasesInputManager.destroy();
-                begin
-                    FreeAndNil( loadCasesLabel );
-
-                    inherited destroy();
                 end;
 
         //setup input controls
@@ -395,12 +245,64 @@ implementation
                             loadInputGrid.ColWidths[i] := round( COLUMN_SIZES[i] * ctrlScaleFactor );
 
                         loadInputGrid.Cells[NAME_COL, 0] := 'Name';
-                        loadInputGrid.Cells[DESC_COL, 0] := 'Description';
-                        loadInputGrid.Cells[FACT_COL, 0] := 'Factor';
-                        loadInputGrid.Cells[LOAD_COL, 0] := 'Load (kN/m)';
+                        loadInputGrid.Cells[DESC_COL, 0] := LC_HEADING_DESCRIPTION;
+                        loadInputGrid.Cells[FACT_COL, 0] := LC_HEADING_FACTOR;
+                        loadInputGrid.Cells[LOAD_COL, 0] := LC_HEADING_LOAD;
 
                         loadInputGrid.minSize();
-                        loadInputGrid.createBorder( 1, clSilver );
+                        loadInputGrid.setBorderProperties( 1, clSilver );
+                end;
+
+    //protected
+        //check for input errors
+            procedure TLoadCasesInputManager.checkForInputErrors();
+                var
+                    i, arrLen   : integer;
+                    errorString,
+                    LCKey       : string;
+                    loadCase    : TLoadCase;
+                    loadCaseMap : TLoadCaseMap;
+                    arrErrors   : TArray<string>;
+                begin
+                    inherited checkForInputErrors();
+
+                    loadCaseMap := soilNailWallDesign.getLoadCases();
+
+                    for LCKey in loadCaseMap.getOrderedKeys() do
+                        begin
+                            if NOT( loadCaseMap.TryGetValue( LCKey, loadCase ) ) then
+                                Continue;
+
+                            arrErrors := loadCase.checkForErrors();
+
+                            arrLen := length( arrErrors );
+
+                            if ( arrLen < 1 ) then
+                                Continue;
+
+                            for i := 0 to ( arrLen - 1 ) do
+                                addError( arrErrors[i] );
+                        end;
+                end;
+
+    //public
+        //constructor
+            constructor TLoadCasesInputManager.create(  const errorListBoxIn        : TListBox;
+                                                        const loadInputGridIn       : TStringGrid;
+                                                        const soilNailWallDesignIn  : TSoilNailWall );
+                begin
+                    loadInputGrid := loadInputGridIn;
+                    loadCasesLabel := TLabel.Create( nil );
+
+                    inherited create( errorListBoxIn, soilNailWallDesignIn );
+                end;
+
+        //destructor
+            destructor TLoadCasesInputManager.destroy();
+                begin
+                    FreeAndNil( loadCasesLabel );
+
+                    inherited destroy();
                 end;
 
         //reset controls
@@ -477,6 +379,8 @@ implementation
                             var newSNW : TSoilNailWall := loadCaseEditor.getSoilNailWallDesign();
 
                             soilNailWallDesign.copySNW( newSNW );
+
+                            writeToInputControls( True );
 
                             result := True;
                         end
