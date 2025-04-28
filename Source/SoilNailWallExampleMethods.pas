@@ -66,6 +66,8 @@ implementation
                 //loads
                     loadCases := soilNailWallDesignInOut.getLoadCases();
 
+                    loadCases.clear();
+
                     loadCase.LCName := 'LC1';
                     loadCase.addLoadCombination(1.2, 10, 'Dead Load');
                     loadCase.addLoadCombination(1.6, 15, 'Live Load');
