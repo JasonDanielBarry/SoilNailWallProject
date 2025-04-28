@@ -258,9 +258,6 @@ implementation
             procedure TLoadCasesInputManager.checkForInputErrors();
                 var
                     i, arrLen   : integer;
-                    errorString,
-                    LCKey       : string;
-                    loadCase    : TLoadCase;
                     loadCaseMap : TLoadCaseMap;
                     arrErrors   : TArray<string>;
                 begin
@@ -268,21 +265,15 @@ implementation
 
                     loadCaseMap := soilNailWallDesign.getLoadCases();
 
-                    for LCKey in loadCaseMap.getOrderedKeys() do
-                        begin
-                            if NOT( loadCaseMap.TryGetValue( LCKey, loadCase ) ) then
-                                Continue;
+                    arrErrors := loadCaseMap.checkForErrors();
 
-                            arrErrors := loadCase.checkForErrors();
+                    arrLen := length( arrErrors );
 
-                            arrLen := length( arrErrors );
+                    if ( arrLen < 1 ) then
+                        exit();
 
-                            if ( arrLen < 1 ) then
-                                Continue;
-
-                            for i := 0 to ( arrLen - 1 ) do
-                                addError( arrErrors[i] );
-                        end;
+                    for i := 0 to ( arrLen - 1 ) do
+                        addError( arrErrors[i] );
                 end;
 
     //public

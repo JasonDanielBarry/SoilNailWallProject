@@ -25,12 +25,14 @@ interface
             ListBoxErrors: TListBox;
             ButtonNewLoadCase: TButton;
             LabelCurrentLoadCase: TLabel;
+            ButtonDeleteLoadCase: TButton;
             procedure JDBGraphic2DUpdateGeometry(   ASender: TObject;
                                                     var AGeomDrawer: TGraphicDrawerObjectAdder  );
             procedure ButtonNewLCClick(Sender: TObject);
             procedure ComboBoxLoadCaseChange(Sender: TObject);
             procedure LCInputGridKeyPress(Sender: TObject; var Key: Char);
             procedure LCInputGridSelectCell(Sender: TObject; ACol, ARow: LongInt; var CanSelect: Boolean);
+            procedure ButtonDeleteLoadCaseClick(Sender: TObject);
             private
                 var
                     loadCaseEditorInputManager  : TLoadCaseEditorInputManager;
@@ -63,6 +65,11 @@ implementation
     procedure TLoadCaseEditor.LCInputGridSelectCell(Sender: TObject; ACol, ARow: LongInt; var CanSelect: Boolean);
         begin
             readFromAndWriteToAllInputControls();
+        end;
+
+    procedure TLoadCaseEditor.ButtonDeleteLoadCaseClick(Sender: TObject);
+        begin
+            loadCaseEditorInputManager.deleteLoadCase();
         end;
 
     procedure TLoadCaseEditor.ButtonNewLCClick(Sender: TObject);

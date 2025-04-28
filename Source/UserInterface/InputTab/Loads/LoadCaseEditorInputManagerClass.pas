@@ -50,6 +50,9 @@ interface
                     procedure loadCaseComboBoxChanged();
                 //add new load case
                     function addNewLoadCase() : boolean;
+                //detele a load case
+                    procedure deleteLoadCase();
+
         end;
 
 implementation
@@ -119,8 +122,24 @@ implementation
     //protected
         //check for input errors
             procedure TLoadCaseEditorInputManager.checkForInputErrors();
+                var
+                    i, arrLen   : integer;
+                    loadCaseMap : TLoadCaseMap;
+                    arrErrors   : TArray<string>;
                 begin
-                    inherited checkForInputErrors()
+                    inherited checkForInputErrors();
+
+                    loadCaseMap := soilNailWallDesign.getLoadCases();
+
+                    arrErrors := loadCaseMap.checkForErrors();
+
+                    arrLen := length( arrErrors );
+
+                    if ( arrLen < 1 ) then
+                        exit();
+
+                    for i := 0 to ( arrLen - 1 ) do
+                        addError( arrErrors[i] );
                 end;
 
     //public
@@ -149,7 +168,7 @@ implementation
                 begin
                     controlGridPanel.LockDrawing();
 
-                        loadCaseComboBox.Text := '';
+                        loadCaseComboBox.ItemIndex := -1;
 
                         loadCaseInputGrid.clearRows( 1 );
 
@@ -167,12 +186,18 @@ implementation
                 function TLoadCaseEditorInputManager.readFromInputControls() : boolean;
                     var
                         activeLoadCaseName  : string;
-                        activeLoadCase,
                         newlyReadLoadCase   : TLoadCase;
                         loadCaseMap         : TLoadCaseMap;
                     begin
-                        if NOT( tryReadLoadCase( DESC_COL, 1, loadCaseInputGrid.RowCount - 1, loadCaseInputGrid, newlyReadLoadCase ) ) then
-                            exit( False );
+                        //get the selected load case name
+                            activeLoadCaseName := loadCaseComboBox.Text;
+
+                            if ( activeLoadCaseName = '' ) then
+                                exit( False );
+
+                        //try read the load case
+                            if NOT( tryReadLoadCase( DESC_COL, 1, loadCaseInputGrid.RowCount - 1, loadCaseInputGrid, newlyReadLoadCase ) ) then
+                                exit( False );
 
                         //get the selected load case name
                             activeLoadCaseName          := loadCaseComboBox.Text;
@@ -181,14 +206,8 @@ implementation
                         //get the load case map
                             loadCaseMap := soilNailWallDesign.getLoadCases();
 
-                        //get the active load case
-                            activeLoadCase := loadCaseMap.getActiveLoadCase();
-
-                        //copy the load case read from the grid
-                            activeLoadCase.copyOther( newlyReadLoadCase );
-
                         //store in map
-                            loadCaseMap.AddOrSetValue( activeLoadCaseName, activeLoadCase );
+                            loadCaseMap.AddOrSetValue( activeLoadCaseName, newlyReadLoadCase );
                             loadCaseMap.setActiveLoadCase( activeLoadCaseName );
 
                         result := True;
@@ -200,6 +219,8 @@ implementation
                         activeLoadCase      : TLoadCase;
                         loadCaseMap         : TLoadCaseMap;
                     begin
+                        inherited writeToInputControls( updateEmptyControlsIn );
+
                         //get the load case map
                             loadCaseMap := soilNailWallDesign.getLoadCases();
 
@@ -241,17 +262,44 @@ implementation
             function TLoadCaseEditorInputManager.addNewLoadCase() : boolean;
                 var
                     newLoadCaseName : string;
+                    newLoadCase     : TLoadCase;
+                    loadCaseMap     : TLoadCaseMap;
                 begin
                     result := True;
 
                     if NOT( InputQuery( 'New Load Case', 'Enter load case name', newLoadCaseName ) ) then
                         exit( False );
 
-                    resetInputControls();
+                    newLoadCaseName := trim( newLoadCaseName );
 
-                    loadCaseComboBox.Items.Add( newLoadCaseName );
+                    if ( newLoadCaseName = '' ) then
+                        exit();
 
-                    loadCaseComboBox.ItemIndex := loadCaseComboBox.Items.Count - 1;
+                    //add the new load case with default values
+                        loadCaseMap := soilNailWallDesign.getLoadCases();
+
+                        newLoadCase.LCName := newLoadCaseName;
+                        newLoadCase.addLoadCombination( 1.0, 0, 'C1' );
+
+                        loadCaseMap.AddOrSetValue( newLoadCaseName, newLoadCase );
+                        loadCaseMap.setActiveLoadCase( newLoadCaseName );
+
+                        soilNailWallDesign.setLoadCases( loadCaseMap );
+
+                    writeToInputControls( True );
+                end;
+
+        //detele a load case
+            procedure TLoadCaseEditorInputManager.deleteLoadCase();
+                var
+                    loadCaseMap : TLoadCaseMap;
+                begin
+                    //get the load case map
+                        loadCaseMap := soilNailWallDesign.getLoadCases();
+
+                        loadCaseMap.deleteActiveLoadCase();
+
+                        writeToInputControls( True );
                 end;
 
 

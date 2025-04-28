@@ -4,6 +4,7 @@ interface
 
     uses
         system.SysUtils, system.Math,
+        LoadCaseTypes,
         SoilNailWallTypes,
         SoilNailWallMasterClass
         ;
@@ -19,9 +20,11 @@ implementation
     //vertical wall, flat slope and limit state parameters
         procedure loadExampleVerticalWallAndFlatSlope(var soilNailWallDesignInOut : TSoilNailWall);
             var
-                nails   : TSoilNails;
-                soil    : TSoil;
-                wall    : TWall;
+                nails       : TSoilNails;
+                soil        : TSoil;
+                wall        : TWall;
+                loadCase    : TLoadCase;
+                loadCases   : TLoadCaseMap;
             begin
                 //set up nails
                     nails := soilNailWallDesignInOut.getNails();
@@ -59,6 +62,19 @@ implementation
 
                 //layout
                     soilNailWallDesignInOut.generateSoilNailLayout(0.5, 1.5, 20, 10);
+
+                //loads
+                    loadCases := soilNailWallDesignInOut.getLoadCases();
+
+                    loadCase.LCName := 'LC1';
+                    loadCase.addLoadCombination(1.2, 10, 'Dead Load');
+                    loadCase.addLoadCombination(1.6, 15, 'Live Load');
+
+                    loadCases.AddOrSetValue( loadCase.LCName, loadCase );
+
+                    loadCases.setActiveLoadCase( loadCase.LCName );
+
+                    soilNailWallDesignInOut.setLoadCases( loadCases );
             end;
 
     procedure loadExample(  const exampleIDIn           : ESNWExample;

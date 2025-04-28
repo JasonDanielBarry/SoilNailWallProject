@@ -122,37 +122,46 @@ object LoadCaseEditor: TLoadCaseEditor
       end
       item
         SizeStyle = ssAbsolute
-        Value = 100.000000000000000000
+        Value = 110.000000000000000000
       end>
     ControlCollection = <
       item
         Column = 1
         Control = ComboBoxLoadCase
-        Row = 0
-      end
-      item
-        Column = 0
-        ColumnSpan = 3
-        Control = PanelInputGrid
         Row = 1
       end
       item
         Column = 0
         ColumnSpan = 3
-        Control = ListBoxErrors
+        Control = PanelInputGrid
         Row = 2
       end
       item
-        Column = 2
+        Column = 0
+        ColumnSpan = 3
+        Control = ListBoxErrors
+        Row = 3
+      end
+      item
+        Column = 0
         Control = ButtonNewLoadCase
         Row = 0
       end
       item
         Column = 0
         Control = LabelCurrentLoadCase
-        Row = 0
+        Row = 1
+      end
+      item
+        Column = 2
+        Control = ButtonDeleteLoadCase
+        Row = 1
       end>
     RowCollection = <
+      item
+        SizeStyle = ssAbsolute
+        Value = 35.000000000000000000
+      end
       item
         SizeStyle = ssAbsolute
         Value = 35.000000000000000000
@@ -168,8 +177,8 @@ object LoadCaseEditor: TLoadCaseEditor
     object ComboBoxLoadCase: TComboBox
       AlignWithMargins = True
       Left = 110
-      Top = 5
-      Width = 180
+      Top = 40
+      Width = 170
       Height = 23
       Margins.Left = 5
       Margins.Top = 5
@@ -179,15 +188,15 @@ object LoadCaseEditor: TLoadCaseEditor
       Style = csDropDownList
       TabOrder = 0
       OnChange = ComboBoxLoadCaseChange
-      ExplicitLeft = 105
-      ExplicitWidth = 185
+      ExplicitTop = 5
+      ExplicitWidth = 180
     end
     object PanelInputGrid: TPanel
       AlignWithMargins = True
       Left = 5
-      Top = 40
+      Top = 75
       Width = 385
-      Height = 531
+      Height = 496
       Margins.Left = 5
       Margins.Top = 5
       Margins.Right = 5
@@ -195,6 +204,8 @@ object LoadCaseEditor: TLoadCaseEditor
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
+      ExplicitTop = 40
+      ExplicitHeight = 531
       object LCInputGrid: TStringGrid
         Left = 0
         Top = 0
@@ -223,9 +234,9 @@ object LoadCaseEditor: TLoadCaseEditor
     end
     object ButtonNewLoadCase: TButton
       AlignWithMargins = True
-      Left = 300
+      Left = 5
       Top = 5
-      Width = 90
+      Width = 95
       Height = 25
       Margins.Left = 5
       Margins.Top = 5
@@ -235,11 +246,12 @@ object LoadCaseEditor: TLoadCaseEditor
       Caption = 'New Load Case'
       TabOrder = 3
       OnClick = ButtonNewLCClick
+      ExplicitWidth = 90
     end
     object LabelCurrentLoadCase: TLabel
       AlignWithMargins = True
       Left = 5
-      Top = 5
+      Top = 40
       Width = 100
       Height = 23
       Margins.Left = 5
@@ -250,7 +262,26 @@ object LoadCaseEditor: TLoadCaseEditor
       AutoSize = False
       Caption = 'Current Load Case'
       Layout = tlCenter
+      ExplicitTop = 5
       ExplicitWidth = 90
+    end
+    object ButtonDeleteLoadCase: TButton
+      AlignWithMargins = True
+      Left = 290
+      Top = 40
+      Width = 100
+      Height = 25
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
+      Align = alClient
+      Caption = 'Delete Load Case'
+      TabOrder = 4
+      OnClick = ButtonDeleteLoadCaseClick
+      ExplicitLeft = 216
+      ExplicitTop = 8
+      ExplicitWidth = 75
     end
   end
 end

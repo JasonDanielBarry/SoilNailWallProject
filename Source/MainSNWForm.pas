@@ -174,10 +174,8 @@ interface
             //ribbon
                 procedure PageControlRibbonChange(Sender: TObject);
             //update geometry
-                procedure SNWGraphicUpdateGeometry(ASender         : TObject;
-                                                            var AGeomDrawer : TGraphicDrawerObjectAdder);
-
-
+                procedure SNWGraphicUpdateGeometry( ASender         : TObject;
+                                                    var AGeomDrawer : TGraphicDrawerObjectAdder );
         private
             var
                 activeInputPage             : EInputPage;
@@ -492,8 +490,8 @@ implementation
                     end;
 
             //update geometry
-                procedure TSNWForm.SNWGraphicUpdateGeometry(   ASender         : TObject;
-                                                                        var AGeomDrawer : TGraphicDrawerObjectAdder );
+                procedure TSNWForm.SNWGraphicUpdateGeometry(ASender         : TObject;
+                                                            var AGeomDrawer : TGraphicDrawerObjectAdder );
                     begin
                         SoilNailWallDesign.updateSoilNailWallGeomtry( AGeomDrawer );
                     end;
