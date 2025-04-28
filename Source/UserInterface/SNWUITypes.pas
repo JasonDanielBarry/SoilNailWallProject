@@ -8,7 +8,7 @@ interface
 
     type
         EInputPage = (ipMaterials = 0, ipWallGeom = 1, ipNailProperties = 2, ipLoadCases = 3);
-        EComputationPage = (apAnalysis = 0, apDesign = 1);
+        EComputationPage = (cpAnalysis = 0, cpDesign = 1);
         ERibbonTab = (rtInput = 0, rtComputation = 1, rtOutput = 2);
         EUITheme = (uitLight = 0, uitDark = 1);
 

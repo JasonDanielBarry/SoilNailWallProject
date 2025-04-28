@@ -166,14 +166,6 @@ implementation
                     //get the load case map
                         loadCaseMap := soilNailWallDesign.getLoadCases();
 
-                    //size the grid
-                        totalCombinations := loadCaseMap.countTotalLoadCaseCombinations();
-
-                        loadInputGrid.RowCount := totalCombinations + 2;
-
-                        loadInputGrid.minSize();
-                        loadInputGrid.setBorderProperties( 1, clSilver );
-
                     //check if a load case has been deleted
                     //this is signified by loadInputGrid.cell[0, 1] being empty
                         firstLoadCaseDeleted := loadInputGrid.cellIsEmpty( NAME_COL, 1 );
@@ -186,6 +178,14 @@ implementation
                             end
                         else
                             localUpdateEmptyCells := False;
+
+                    //size the grid
+                        totalCombinations := loadCaseMap.countTotalLoadCaseCombinations();
+
+                        loadInputGrid.RowCount := totalCombinations + 2;
+
+                        loadInputGrid.minSize();
+                        loadInputGrid.setBorderProperties( 1, clSilver );
 
                     //write load cases
                         orderedKeys := loadCaseMap.getOrderedKeys();

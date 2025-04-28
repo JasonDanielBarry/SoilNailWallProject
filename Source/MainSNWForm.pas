@@ -122,6 +122,8 @@ interface
             PanelLCSeparator: TPanel;
             LabelLCOptions: TLabel;
             ActionLoadCaseEditor: TAction;
+    PageAnalysis: TTabSheet;
+    PageDesign: TTabSheet;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
@@ -201,7 +203,7 @@ interface
                     procedure sortRibbon();
                 //page management
                     procedure sortInputPage();
-//                    procedure sortComputationPage();
+                    procedure sortComputationPage();
                     procedure sortPage();
                     procedure PageControlProgammeFlowChanged();
                 //theme menu
@@ -529,7 +531,7 @@ implementation
                     ComboBoxThemeChange(nil);
 
                     activeInputPage         := EInputPage.ipMaterials;
-                    activeComputationPage   := EComputationPage.apAnalysis;
+                    activeComputationPage   := EComputationPage.cpAnalysis;
                     activeRibbonTab         := ERibbonTab.rtInput;
 
                     materialsInputManager := TMaterialParametersInputManager.create(
@@ -626,10 +628,10 @@ implementation
                 procedure TSNWForm.sortComputationRibbon();
                     begin
                         case (activeComputationPage) of
-                            EComputationPage.apAnalysis:
+                            EComputationPage.cpAnalysis:
                                 setSpeedButtonDown( 2, SpeedButtonAnalysis );
 
-                            EComputationPage.apDesign:
+                            EComputationPage.cpDesign:
                                 setSpeedButtonDown( 2, SpeedButtonDesign );
                         end;
                     end;
@@ -675,11 +677,25 @@ implementation
                         SNWGraphic.updateGeometry();
                     end;
 
+                procedure TSNWForm.sortComputationPage();
+                    begin
+                        case (activeComputationPage) of
+                            EComputationPage.cpAnalysis:
+                                PageControlProgrammeFlow.ActivePage := PageAnalysis;
+
+                            EComputationPage.cpDesign:
+                                PageControlProgrammeFlow.ActivePage := PageDesign;
+                        end;
+                    end;
+
                 procedure TSNWForm.sortPage();
                     begin
                         case (activeRibbonTab) of
                             ERibbonTab.rtInput:
                                 sortInputPage();
+
+                            ERibbonTab.rtComputation:
+                                sortComputationPage();
                         end;
 
                         PageControlProgammeFlowChanged();

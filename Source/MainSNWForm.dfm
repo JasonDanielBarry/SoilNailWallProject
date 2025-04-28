@@ -29,7 +29,7 @@ object SNWForm: TSNWForm
     Margins.Top = 2
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = PageInput
+    ActivePage = PageComputation
     Align = alTop
     DoubleBuffered = True
     ParentDoubleBuffered = False
@@ -700,12 +700,14 @@ object SNWForm: TSNWForm
         object LabelComputationType: TLabel
           Left = 0
           Top = 75
-          Width = 99
-          Height = 15
+          Width = 149
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'Computation Type'
           Layout = tlCenter
+          ExplicitWidth = 99
+          ExplicitHeight = 15
         end
         object PanelComputationTypeSeparator: TPanel
           Left = 149
@@ -728,13 +730,13 @@ object SNWForm: TSNWForm
   object PageControlProgrammeFlow: TPageControl
     Left = 0
     Top = 127
-    Width = 705
+    Width = 1257
     Height = 631
     Margins.Left = 0
     Margins.Top = 5
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = PageLoads
+    ActivePage = PageDesign
     Align = alLeft
     TabOrder = 1
     object PageMaterialParameters: TTabSheet
@@ -956,7 +958,7 @@ object SNWForm: TSNWForm
         AlignWithMargins = True
         Left = 5
         Top = 471
-        Width = 687
+        Width = 1239
         Height = 125
         Margins.Left = 5
         Margins.Top = 5
@@ -1023,7 +1025,7 @@ object SNWForm: TSNWForm
         AlignWithMargins = True
         Left = 5
         Top = 471
-        Width = 687
+        Width = 1239
         Height = 125
         Margins.Left = 5
         Margins.Top = 5
@@ -1084,7 +1086,7 @@ object SNWForm: TSNWForm
         AlignWithMargins = True
         Left = 5
         Top = 471
-        Width = 687
+        Width = 1239
         Height = 125
         Margins.Left = 5
         Margins.Top = 5
@@ -1115,7 +1117,7 @@ object SNWForm: TSNWForm
         AlignWithMargins = True
         Left = 5
         Top = 471
-        Width = 687
+        Width = 1239
         Height = 125
         Margins.Left = 5
         Margins.Top = 5
@@ -1125,6 +1127,14 @@ object SNWForm: TSNWForm
         ItemHeight = 15
         TabOrder = 1
       end
+    end
+    object PageAnalysis: TTabSheet
+      Caption = 'Analysis'
+      ImageIndex = 4
+    end
+    object PageDesign: TTabSheet
+      Caption = 'Design'
+      ImageIndex = 5
     end
   end
   object GridPanelTheme: TGridPanel
@@ -1194,9 +1204,9 @@ object SNWForm: TSNWForm
     end
   end
   object SNWGraphic: TJDBGraphic2D
-    Left = 705
+    Left = 1257
     Top = 127
-    Width = 1036
+    Width = 484
     Height = 631
     Align = alClient
     BevelEdges = []
