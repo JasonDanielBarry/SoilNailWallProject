@@ -174,14 +174,12 @@ object SNWForm: TSNWForm
         object LabelFactorOptions: TLabel
           Left = 0
           Top = 75
-          Width = 224
-          Height = 20
+          Width = 124
+          Height = 15
           Align = alClient
           Alignment = taCenter
           Caption = 'Material Factor Options'
           Layout = tlCenter
-          ExplicitWidth = 124
-          ExplicitHeight = 15
         end
       end
       object GridPanelInputType: TGridPanel
@@ -318,14 +316,12 @@ object SNWForm: TSNWForm
         object LabelInputType: TLabel
           Left = 0
           Top = 75
-          Width = 299
-          Height = 20
+          Width = 56
+          Height = 15
           Align = alClient
           Alignment = taCenter
           Caption = 'Input Type'
           Layout = tlCenter
-          ExplicitWidth = 56
-          ExplicitHeight = 15
         end
         object SpeedButtonLoadCases: TSpeedButton
           Left = 224
@@ -442,14 +438,12 @@ object SNWForm: TSNWForm
         object LabelNailLayoutOptions: TLabel
           Left = 0
           Top = 75
-          Width = 149
-          Height = 20
+          Width = 81
+          Height = 15
           Align = alClient
           Alignment = taCenter
           Caption = 'Layout Options'
           Layout = tlCenter
-          ExplicitWidth = 81
-          ExplicitHeight = 15
         end
       end
       object GridPanelExamples: TGridPanel
@@ -526,14 +520,12 @@ object SNWForm: TSNWForm
         object LabelExamples: TLabel
           Left = 0
           Top = 75
-          Width = 74
-          Height = 20
+          Width = 49
+          Height = 15
           Align = alClient
           Alignment = taCenter
           Caption = 'Examples'
           Layout = tlCenter
-          ExplicitWidth = 49
-          ExplicitHeight = 15
         end
       end
       object GridPanelLoadCaseOptions: TGridPanel
@@ -603,14 +595,12 @@ object SNWForm: TSNWForm
         object LabelLCOptions: TLabel
           Left = 0
           Top = 75
-          Width = 74
-          Height = 20
+          Width = 59
+          Height = 15
           Align = alClient
           Alignment = taCenter
           Caption = 'LC Options'
           Layout = tlCenter
-          ExplicitWidth = 59
-          ExplicitHeight = 15
         end
       end
     end
