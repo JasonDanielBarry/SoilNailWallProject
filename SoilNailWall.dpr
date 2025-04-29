@@ -6,7 +6,6 @@ uses
   SoilNailWallExampleMethods in 'Source\SoilNailWallExampleMethods.pas',
   SoilNailWallGeneralMethods in 'Source\SoilNailWallGeneralMethods.pas',
   SNWUITypes in 'Source\UserInterface\SNWUITypes.pas',
-  UISetupMethods in 'Source\UserInterface\UISetupMethods.pas',
   SoilNailWallTypes in 'Source\SoilNailWallTypes\SoilNailWallTypes.pas',
   SoilNailWallMasterClass in 'Source\SoilNailWallClass\SoilNailWallMasterClass.pas',
   SoilNailWallBaseClass in 'Source\SoilNailWallClass\Base\SoilNailWallBaseClass.pas',

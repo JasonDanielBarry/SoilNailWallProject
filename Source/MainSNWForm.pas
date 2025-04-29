@@ -15,23 +15,20 @@ interface
             Vcl.ExtDlgs,
         //custom
             GeneralComponentHelperMethods,
-            StringGridInterposerClass,
             PageControlHelperClass,
             SoilNailWallMasterClass,
-            UISetupMethods,
             SNWUITypes,
             InputManagerClass,
             MaterialParametersInputManagerClass, WallGeometryInputManagerClass, NailPropertiesInputManagerClass, LoadCasesInputManagerClass,
             SoilNailWallExampleMethods, CustomComponentPanelClass,
-            Graphic2DComponent, GraphicDrawerObjectAdderClass, SoilNailWallFileReaderWriterClass
+            Graphic2DComponent, GraphicDrawerObjectAdderClass, SoilNailWallFileReaderWriterClass,
+            CustomStringGridClass
             ;
 
     type
         TSNWForm = class(TForm)
             PageControlProgrammeFlow: TPageControl;
             PageWallGeometry: TTabSheet;
-            GridWallProperties: TStringGrid;
-            GridNailProperties: TStringGrid;
             PageNailProperties: TTabSheet;
             PageMaterialParameters: TTabSheet;
             GridPanelInputHeadings: TGridPanel;
@@ -41,9 +38,6 @@ interface
             LabelCauEst: TLabel;
             LabelParFac: TLabel;
             LabelDesVal: TLabel;
-            GridSoilParInput: TStringGrid;
-            GridSteelParInput: TStringGrid;
-            GridConcreteParInput: TStringGrid;
             PageControlRibbon: TPageControl;
             PageFile: TTabSheet;
             PageInput: TTabSheet;
@@ -54,13 +48,11 @@ interface
             GridPanelInputType: TGridPanel;
             PanelInputTypeSeparator: TPanel;
             SpeedButtonNailLayout: TSpeedButton;
-            GridNailLayout: TStringGrid;
             GridPanelInputParOptions: TGridPanel;
             SpeedButtonLimitStateFactors: TSpeedButton;
             SpeedButtonAverageValues: TSpeedButton;
             SpeedButtonClearFactors: TSpeedButton;
             PanelInputFactorSeparator: TPanel;
-            GridSlopeProperties: TStringGrid;
             GridPanelNailLayoutOptions: TGridPanel;
             SpeedButtonGenerateLayout: TSpeedButton;
             PanelNailLayoutSeparator: TPanel;
@@ -113,7 +105,6 @@ interface
             SaveFileDialog: TFileSaveDialog;
             SNWGraphic: TJDBGraphic2D;
             PageLoads: TTabSheet;
-            GridLoadCases: TStringGrid;
             SpeedButtonLoadCases: TSpeedButton;
             ActionLoads: TAction;
             ListBoxLoadCases: TListBox;
@@ -122,8 +113,16 @@ interface
             PanelLCSeparator: TPanel;
             LabelLCOptions: TLabel;
             ActionLoadCaseEditor: TAction;
-    PageAnalysis: TTabSheet;
-    PageDesign: TTabSheet;
+            PageAnalysis: TTabSheet;
+            PageDesign: TTabSheet;
+            GridSoilParInput: TJDBStringGrid;
+            GridSteelParInput: TJDBStringGrid;
+            GridConcreteParInput: TJDBStringGrid;
+            GridWallProperties: TJDBStringGrid;
+            GridSlopeProperties: TJDBStringGrid;
+            GridNailProperties: TJDBStringGrid;
+            GridNailLayout: TJDBStringGrid;
+            GridLoadCases: TJDBStringGrid;
         //main form
             //creation
                 procedure FormCreate(Sender: TObject);
@@ -163,11 +162,7 @@ interface
                 procedure GridMaterialInputSelectCell(  Sender          : TObject;
                                                         ACol, ARow      : Integer;
                                                         var CanSelect   : Boolean);
-                procedure GridInputKeyPress(Sender  : TObject;
-                                            var Key : Char  );
-                procedure GridInputSelectCell(  Sender          : TObject;
-                                                ACol, ARow      : Integer;
-                                                var CanSelect   : Boolean);
+                procedure GridInputCellChanged(Sender: TObject);
                 procedure GridLoadCasesSelectCell(  Sender          : TObject;
                                                     ACol, ARow      : LongInt;
                                                     var CanSelect   : Boolean   );
@@ -178,6 +173,7 @@ interface
             //update geometry
                 procedure SNWGraphicUpdateGeometry( ASender         : TObject;
                                                     var AGeomDrawer : TGraphicDrawerObjectAdder );
+
         private
             var
                 activeInputPage             : EInputPage;
@@ -430,16 +426,7 @@ implementation
                         readFromAndWriteToInputControls();
                     end;
 
-                procedure TSNWForm.GridInputKeyPress(   Sender  : TObject;
-                                                        var Key : Char      );
-                    begin
-                        if (ord(Key) in [VK_RETURN]) then
-                            gridCellEnterPressed();
-                    end;
-
-                procedure TSNWForm.GridInputSelectCell( Sender          : TObject;
-                                                        ACol, ARow      : Integer;
-                                                        var CanSelect   : Boolean);
+                procedure TSNWForm.GridInputCellChanged(Sender: TObject);
                     begin
                         readFromAndWriteToInputControls();
                     end;
@@ -703,7 +690,7 @@ implementation
 
                 procedure TSNWForm.PageControlProgammeFlowChanged();
                     procedure
-                        _calculatePageWidth(const widestStringGridIn : TStringGrid);
+                        _calculatePageWidth(const widestStringGridIn : TJDBStringGrid);
                             begin
                                 PageControlProgrammeFlow.Width := widestStringGridIn.Width + (4 * widestStringGridIn.Left);
                             end;

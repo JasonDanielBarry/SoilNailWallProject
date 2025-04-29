@@ -3,7 +3,7 @@ object SNWForm: TSNWForm
   Top = 0
   Caption = 'Soil Nail Wall'
   ClientHeight = 758
-  ClientWidth = 1741
+  ClientWidth = 1680
   Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -16,25 +16,26 @@ object SNWForm: TSNWForm
   OnCreate = FormCreate
   OnShow = FormShow
   DesignSize = (
-    1741
+    1680
     758)
   TextHeight = 15
   object PageControlRibbon: TPageControl
     AlignWithMargins = True
     Left = 0
     Top = 2
-    Width = 1741
+    Width = 1680
     Height = 125
     Margins.Left = 0
     Margins.Top = 2
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = PageComputation
+    ActivePage = PageInput
     Align = alTop
     DoubleBuffered = True
     ParentDoubleBuffered = False
     TabOrder = 0
     OnChange = PageControlRibbonChange
+    ExplicitWidth = 1741
     object PageFile: TTabSheet
       Caption = 'File'
       Enabled = False
@@ -174,12 +175,14 @@ object SNWForm: TSNWForm
         object LabelFactorOptions: TLabel
           Left = 0
           Top = 75
-          Width = 124
-          Height = 15
+          Width = 224
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'Material Factor Options'
           Layout = tlCenter
+          ExplicitWidth = 124
+          ExplicitHeight = 15
         end
       end
       object GridPanelInputType: TGridPanel
@@ -316,12 +319,14 @@ object SNWForm: TSNWForm
         object LabelInputType: TLabel
           Left = 0
           Top = 75
-          Width = 56
-          Height = 15
+          Width = 299
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'Input Type'
           Layout = tlCenter
+          ExplicitWidth = 56
+          ExplicitHeight = 15
         end
         object SpeedButtonLoadCases: TSpeedButton
           Left = 224
@@ -438,12 +443,14 @@ object SNWForm: TSNWForm
         object LabelNailLayoutOptions: TLabel
           Left = 0
           Top = 75
-          Width = 81
-          Height = 15
+          Width = 149
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'Layout Options'
           Layout = tlCenter
+          ExplicitWidth = 81
+          ExplicitHeight = 15
         end
       end
       object GridPanelExamples: TGridPanel
@@ -520,12 +527,14 @@ object SNWForm: TSNWForm
         object LabelExamples: TLabel
           Left = 0
           Top = 75
-          Width = 49
-          Height = 15
+          Width = 74
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'Examples'
           Layout = tlCenter
+          ExplicitWidth = 49
+          ExplicitHeight = 15
         end
       end
       object GridPanelLoadCaseOptions: TGridPanel
@@ -595,12 +604,14 @@ object SNWForm: TSNWForm
         object LabelLCOptions: TLabel
           Left = 0
           Top = 75
-          Width = 59
-          Height = 15
+          Width = 74
+          Height = 20
           Align = alClient
           Alignment = taCenter
           Caption = 'LC Options'
           Layout = tlCenter
+          ExplicitWidth = 59
+          ExplicitHeight = 15
         end
       end
     end
@@ -720,13 +731,13 @@ object SNWForm: TSNWForm
   object PageControlProgrammeFlow: TPageControl
     Left = 0
     Top = 127
-    Width = 1257
+    Width = 1017
     Height = 631
     Margins.Left = 0
     Margins.Top = 5
     Margins.Right = 0
     Margins.Bottom = 0
-    ActivePage = PageDesign
+    ActivePage = PageMaterialParameters
     Align = alLeft
     TabOrder = 1
     object PageMaterialParameters: TTabSheet
@@ -802,8 +813,8 @@ object SNWForm: TSNWForm
         object LabelAveVal: TLabel
           Left = 0
           Top = 0
-          Width = 43
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -813,12 +824,14 @@ object SNWForm: TSNWForm
           Caption = 'Average'#13#10'Value'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 43
+          ExplicitHeight = 30
         end
         object LabelVarCoef: TLabel
           Left = 75
           Top = 0
-          Width = 58
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -828,12 +841,14 @@ object SNWForm: TSNWForm
           Caption = 'Variation Coefficient'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 58
+          ExplicitHeight = 30
         end
         object LabelDowngFact: TLabel
           Left = 150
           Top = 0
-          Width = 64
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -843,12 +858,14 @@ object SNWForm: TSNWForm
           Caption = 'Downgrade Factor'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 64
+          ExplicitHeight = 30
         end
         object LabelCauEst: TLabel
           Left = 225
           Top = 0
-          Width = 50
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -858,12 +875,14 @@ object SNWForm: TSNWForm
           Caption = 'Cautious Estimate'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 50
+          ExplicitHeight = 30
         end
         object LabelParFac: TLabel
           Left = 300
           Top = 0
-          Width = 33
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -873,12 +892,14 @@ object SNWForm: TSNWForm
           Caption = 'Partial'#13#10'Factor'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 33
+          ExplicitHeight = 30
         end
         object LabelDesVal: TLabel
           Left = 375
           Top = 0
-          Width = 36
-          Height = 30
+          Width = 75
+          Height = 40
           Margins.Left = 5
           Margins.Top = 5
           Margins.Right = 5
@@ -888,67 +909,15 @@ object SNWForm: TSNWForm
           Caption = 'Design'#13#10'Value'
           Layout = tlCenter
           WordWrap = True
+          ExplicitWidth = 36
+          ExplicitHeight = 30
         end
-      end
-      object GridSoilParInput: TStringGrid
-        Left = 23
-        Top = 61
-        Width = 593
-        Height = 81
-        BevelInner = bvNone
-        BevelOuter = bvNone
-        ColCount = 7
-        DefaultColWidth = 74
-        DefaultRowHeight = 19
-        RowCount = 3
-        FixedRows = 0
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs, goFixedRowDefAlign]
-        ParentColor = True
-        TabOrder = 1
-        OnKeyPress = GridInputKeyPress
-        OnSelectCell = GridMaterialInputSelectCell
-      end
-      object GridSteelParInput: TStringGrid
-        Left = 23
-        Top = 201
-        Width = 593
-        Height = 62
-        BevelInner = bvNone
-        BevelOuter = bvNone
-        ColCount = 7
-        DefaultColWidth = 74
-        DefaultRowHeight = 19
-        RowCount = 2
-        FixedRows = 0
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs, goFixedRowDefAlign]
-        ParentColor = True
-        TabOrder = 2
-        OnKeyPress = GridInputKeyPress
-        OnSelectCell = GridMaterialInputSelectCell
-      end
-      object GridConcreteParInput: TStringGrid
-        Left = 23
-        Top = 345
-        Width = 593
-        Height = 57
-        BevelInner = bvNone
-        BevelOuter = bvNone
-        ColCount = 7
-        DefaultColWidth = 74
-        DefaultRowHeight = 19
-        RowCount = 2
-        FixedRows = 0
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goTabs, goFixedRowDefAlign]
-        ParentColor = True
-        TabOrder = 3
-        OnKeyPress = GridInputKeyPress
-        OnSelectCell = GridMaterialInputSelectCell
       end
       object ListBoxMaterialProperties: TListBox
         AlignWithMargins = True
         Left = 5
         Top = 471
-        Width = 1239
+        Width = 999
         Height = 125
         Margins.Left = 5
         Margins.Top = 5
@@ -958,64 +927,53 @@ object SNWForm: TSNWForm
         BevelInner = bvNone
         BevelOuter = bvNone
         ItemHeight = 15
+        TabOrder = 1
+        ExplicitWidth = 1239
+      end
+      object GridSoilParInput: TJDBStringGrid
+        Left = 32
+        Top = 48
+        Width = 673
+        Height = 65
+        RowCount = 2
+        FixedRows = 0
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goFixedRowDefAlign]
+        TabOrder = 2
+        OnSelectCell = GridMaterialInputSelectCell
+        OnCellChanged = GridInputCellChanged
+      end
+      object GridSteelParInput: TJDBStringGrid
+        Left = 32
+        Top = 119
+        Width = 673
+        Height = 58
+        RowCount = 2
+        FixedRows = 0
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goFixedRowDefAlign]
+        TabOrder = 3
+        OnSelectCell = GridMaterialInputSelectCell
+        OnCellChanged = GridInputCellChanged
+      end
+      object GridConcreteParInput: TJDBStringGrid
+        Left = 32
+        Top = 183
+        Width = 673
+        Height = 58
+        RowCount = 2
+        FixedRows = 0
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goFixedRowDefAlign]
         TabOrder = 4
+        OnSelectCell = GridMaterialInputSelectCell
+        OnCellChanged = GridInputCellChanged
       end
     end
     object PageWallGeometry: TTabSheet
       Caption = 'Wall Geometry'
-      object GridSlopeProperties: TStringGrid
-        Left = 7
-        Top = 146
-        Width = 250
-        Height = 89
-        Margins.Left = 0
-        Margins.Top = 5
-        Margins.Right = 5
-        Margins.Bottom = 5
-        BevelInner = bvNone
-        BevelOuter = bvNone
-        ColCount = 2
-        DefaultRowHeight = 19
-        RowCount = 2
-        FixedRows = 0
-        GradientEndColor = clDefault
-        GradientStartColor = clDefault
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goFixedRowDefAlign]
-        ParentColor = True
-        ScrollBars = ssNone
-        TabOrder = 0
-        OnKeyPress = GridInputKeyPress
-        OnSelectCell = GridInputSelectCell
-      end
-      object GridWallProperties: TStringGrid
-        Left = 7
-        Top = 30
-        Width = 250
-        Height = 89
-        Margins.Left = 0
-        Margins.Top = 5
-        Margins.Right = 5
-        Margins.Bottom = 5
-        BevelInner = bvNone
-        BevelOuter = bvNone
-        ColCount = 2
-        DefaultRowHeight = 19
-        RowCount = 2
-        FixedRows = 0
-        GradientEndColor = clDefault
-        GradientStartColor = clDefault
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goFixedRowDefAlign]
-        ParentColor = True
-        ScrollBars = ssNone
-        TabOrder = 1
-        OnKeyPress = GridInputKeyPress
-        OnSelectCell = GridInputSelectCell
-      end
       object ListBoxWallGeom: TListBox
         AlignWithMargins = True
         Left = 5
         Top = 471
-        Width = 1239
+        Width = 999
         Height = 125
         Margins.Left = 5
         Margins.Top = 5
@@ -1023,60 +981,40 @@ object SNWForm: TSNWForm
         Margins.Bottom = 5
         Align = alBottom
         ItemHeight = 15
+        TabOrder = 0
+        ExplicitWidth = 1239
+      end
+      object GridWallProperties: TJDBStringGrid
+        Left = 32
+        Top = 16
+        Width = 343
+        Height = 57
+        RowCount = 2
+        FixedRows = 0
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goFixedRowDefAlign]
+        TabOrder = 1
+        OnCellChanged = GridInputCellChanged
+      end
+      object GridSlopeProperties: TJDBStringGrid
+        Left = 32
+        Top = 79
+        Width = 343
+        Height = 57
+        RowCount = 2
+        FixedRows = 0
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goFixedRowDefAlign]
         TabOrder = 2
+        OnCellChanged = GridInputCellChanged
       end
     end
     object PageNailProperties: TTabSheet
       Caption = 'Nail Properties'
       ImageIndex = 1
-      object GridNailLayout: TStringGrid
-        AlignWithMargins = True
-        Left = 6
-        Top = 104
-        Width = 289
-        Height = 105
-        Margins.Left = 5
-        Margins.Top = 5
-        Margins.Right = 0
-        Margins.Bottom = 5
-        BevelInner = bvNone
-        BevelOuter = bvNone
-        ColCount = 4
-        FixedCols = 2
-        RowCount = 2
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goFixedRowDefAlign]
-        ParentColor = True
-        TabOrder = 0
-        OnKeyPress = GridInputKeyPress
-        OnSelectCell = GridInputSelectCell
-      end
-      object GridNailProperties: TStringGrid
-        Left = 7
-        Top = 32
-        Width = 250
-        Height = 21
-        Margins.Left = 0
-        Margins.Right = 5
-        BevelInner = bvNone
-        BevelOuter = bvNone
-        ColCount = 2
-        DefaultRowHeight = 19
-        RowCount = 1
-        FixedRows = 0
-        GradientEndColor = clDefault
-        GradientStartColor = clDefault
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goFixedRowDefAlign]
-        ParentColor = True
-        ScrollBars = ssNone
-        TabOrder = 1
-        OnKeyPress = GridInputKeyPress
-        OnSelectCell = GridInputSelectCell
-      end
       object ListBoxNailProperties: TListBox
         AlignWithMargins = True
         Left = 5
         Top = 471
-        Width = 1239
+        Width = 999
         Height = 125
         Margins.Left = 5
         Margins.Top = 5
@@ -1084,30 +1022,40 @@ object SNWForm: TSNWForm
         Margins.Bottom = 5
         Align = alBottom
         ItemHeight = 15
+        TabOrder = 0
+        ExplicitWidth = 1239
+      end
+      object GridNailProperties: TJDBStringGrid
+        Left = 120
+        Top = 64
+        Width = 337
+        Height = 57
+        RowCount = 2
+        FixedRows = 0
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goFixedRowDefAlign]
+        TabOrder = 1
+        OnCellChanged = GridInputCellChanged
+      end
+      object GridNailLayout: TJDBStringGrid
+        Left = 120
+        Top = 144
+        Width = 337
+        Height = 57
+        RowCount = 2
+        FixedRows = 0
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goFixedRowDefAlign]
         TabOrder = 2
+        OnCellChanged = GridInputCellChanged
       end
     end
     object PageLoads: TTabSheet
       Caption = 'Load Cases'
       ImageIndex = 3
-      object GridLoadCases: TStringGrid
-        Left = 35
-        Top = 40
-        Width = 320
-        Height = 120
-        ColCount = 3
-        RowCount = 2
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goFixedRowDefAlign]
-        ParentColor = True
-        TabOrder = 0
-        OnKeyPress = GridInputKeyPress
-        OnSelectCell = GridLoadCasesSelectCell
-      end
       object ListBoxLoadCases: TListBox
         AlignWithMargins = True
         Left = 5
         Top = 471
-        Width = 1239
+        Width = 999
         Height = 125
         Margins.Left = 5
         Margins.Top = 5
@@ -1115,7 +1063,19 @@ object SNWForm: TSNWForm
         Margins.Bottom = 5
         Align = alBottom
         ItemHeight = 15
+        TabOrder = 0
+        ExplicitWidth = 1239
+      end
+      object GridLoadCases: TJDBStringGrid
+        Left = 38
+        Top = 24
+        Width = 337
+        Height = 57
+        RowCount = 2
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goFixedRowDefAlign]
         TabOrder = 1
+        OnSelectCell = GridLoadCasesSelectCell
+        OnCellChanged = GridInputCellChanged
       end
     end
     object PageAnalysis: TTabSheet
@@ -1128,7 +1088,7 @@ object SNWForm: TSNWForm
     end
   end
   object GridPanelTheme: TGridPanel
-    Left = 1638
+    Left = 1577
     Top = 0
     Width = 95
     Height = 23
@@ -1159,6 +1119,7 @@ object SNWForm: TSNWForm
         Value = 100.000000000000000000
       end>
     TabOrder = 2
+    ExplicitLeft = 1638
     object LabelTheme: TLabel
       AlignWithMargins = True
       Left = 0
@@ -1194,9 +1155,9 @@ object SNWForm: TSNWForm
     end
   end
   object SNWGraphic: TJDBGraphic2D
-    Left = 1257
+    Left = 1017
     Top = 127
-    Width = 484
+    Width = 663
     Height = 631
     Align = alClient
     BevelEdges = []
@@ -1207,10 +1168,12 @@ object SNWForm: TSNWForm
     ShowHint = True
     TabOrder = 3
     OnUpdateGeometry = SNWGraphicUpdateGeometry
+    ExplicitLeft = 1257
+    ExplicitWidth = 484
   end
   object ActionManager1: TActionManager
-    Left = 992
-    Top = 138
+    Left = 1000
+    Top = 26
     StyleName = 'Platform Default'
     object ActionWallGeometry: TAction
       Category = 'Input'
@@ -1303,8 +1266,8 @@ object SNWForm: TSNWForm
     end
   end
   object PopupMenuFile: TPopupMenu
-    Left = 896
-    Top = 136
+    Left = 904
+    Top = 24
     object FMNew: TMenuItem
       Action = ActionNew
     end
@@ -1341,8 +1304,8 @@ object SNWForm: TSNWForm
         FileMask = '*.snw'
       end>
     Options = []
-    Left = 897
-    Top = 197
+    Left = 905
+    Top = 85
   end
   object SaveFileDialog: TFileSaveDialog
     FavoriteLinks = <>
@@ -1352,7 +1315,7 @@ object SNWForm: TSNWForm
         FileMask = '*.snw'
       end>
     Options = []
-    Left = 985
-    Top = 197
+    Left = 993
+    Top = 85
   end
 end

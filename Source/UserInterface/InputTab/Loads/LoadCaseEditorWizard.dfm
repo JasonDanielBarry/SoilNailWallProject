@@ -188,8 +188,6 @@ object LoadCaseEditor: TLoadCaseEditor
       Style = csDropDownList
       TabOrder = 0
       OnChange = ComboBoxLoadCaseChange
-      ExplicitTop = 5
-      ExplicitWidth = 180
     end
     object PanelInputGrid: TPanel
       AlignWithMargins = True
@@ -204,18 +202,14 @@ object LoadCaseEditor: TLoadCaseEditor
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitTop = 40
-      ExplicitHeight = 531
-      object LCInputGrid: TStringGrid
-        Left = 0
-        Top = 0
-        Width = 353
-        Height = 145
-        Margins.Bottom = 5
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goFixedRowDefAlign]
+      object LCInputGrid: TJDBStringGrid
+        Left = 16
+        Top = 40
+        Width = 337
+        Height = 137
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goEditing, goFixedRowDefAlign]
         TabOrder = 0
-        OnKeyPress = LCInputGridKeyPress
-        OnSelectCell = LCInputGridSelectCell
+        OnCellChanged = LCInputGridCellChanged
       end
     end
     object ListBoxErrors: TListBox
@@ -246,7 +240,6 @@ object LoadCaseEditor: TLoadCaseEditor
       Caption = 'New Load Case'
       TabOrder = 3
       OnClick = ButtonNewLCClick
-      ExplicitWidth = 90
     end
     object LabelCurrentLoadCase: TLabel
       AlignWithMargins = True
@@ -279,9 +272,6 @@ object LoadCaseEditor: TLoadCaseEditor
       Caption = 'Delete Load Case'
       TabOrder = 4
       OnClick = ButtonDeleteLoadCaseClick
-      ExplicitLeft = 216
-      ExplicitTop = 8
-      ExplicitWidth = 75
     end
   end
 end

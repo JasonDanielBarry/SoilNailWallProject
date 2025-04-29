@@ -5,7 +5,7 @@ interface
     uses
         system.SysUtils, system.Math, System.Classes, system.Generics.Collections, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-        StringGridInterposerClass,
+        CustomStringGridClass,
         InputManagerClass,
         SoilNailWallTypes,
         SoilNailWallMasterClass

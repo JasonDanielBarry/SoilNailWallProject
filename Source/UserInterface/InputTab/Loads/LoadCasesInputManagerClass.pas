@@ -5,7 +5,7 @@ interface
     uses
         system.SysUtils, system.Math, System.Classes, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-        StringGridInterposerClass,
+        CustomStringGridClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes, LoadCaseTypes,
         SoilNailWallMasterClass,
@@ -23,7 +23,7 @@ interface
                     LOAD_COL    : integer = 3;
                 var
                     loadCasesLabel  : TLabel;
-                    loadInputGrid   : TStringGrid;
+                    loadInputGrid   : TJDBStringGrid;
                 //read load case data from grid
                     function readLoadCases() : boolean;
                 //write load case data to grid
@@ -37,7 +37,7 @@ interface
             public
                 //constructor
                     constructor create( const errorListBoxIn        : TListBox;
-                                        const loadInputGridIn       : TStringGrid;
+                                        const loadInputGridIn       : TJDBStringGrid;
                                         const soilNailWallDesignIn  : TSoilNailWall );
                 //destructor
                     destructor destroy(); override;
@@ -279,7 +279,7 @@ implementation
     //public
         //constructor
             constructor TLoadCasesInputManager.create(  const errorListBoxIn        : TListBox;
-                                                        const loadInputGridIn       : TStringGrid;
+                                                        const loadInputGridIn       : TJDBStringGrid;
                                                         const soilNailWallDesignIn  : TSoilNailWall );
                 begin
                     loadInputGrid := loadInputGridIn;

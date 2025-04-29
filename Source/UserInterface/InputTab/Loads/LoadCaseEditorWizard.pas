@@ -7,9 +7,9 @@ interface
         Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,
         CustomComponentPanelClass, Graphic2DComponent, Vcl.StdCtrls, Vcl.Grids,
         Vcl.Buttons,
-        StringGridInterposerClass,
         GraphicDrawerObjectAdderClass,
-        SoilNailWallMasterClass, LoadCaseEditorInputManagerClass
+        SoilNailWallMasterClass, LoadCaseEditorInputManagerClass,
+  CustomStringGridClass
         ;
 
     type
@@ -20,19 +20,18 @@ interface
             ButtonOK: TButton;
             GridPanelControls: TGridPanel;
             ComboBoxLoadCase: TComboBox;
-            LCInputGrid: TStringGrid;
             PanelInputGrid: TPanel;
             ListBoxErrors: TListBox;
             ButtonNewLoadCase: TButton;
             LabelCurrentLoadCase: TLabel;
             ButtonDeleteLoadCase: TButton;
+            LCInputGrid: TJDBStringGrid;
             procedure JDBGraphic2DUpdateGeometry(   ASender: TObject;
                                                     var AGeomDrawer: TGraphicDrawerObjectAdder  );
             procedure ButtonNewLCClick(Sender: TObject);
             procedure ComboBoxLoadCaseChange(Sender: TObject);
-            procedure LCInputGridKeyPress(Sender: TObject; var Key: Char);
-            procedure LCInputGridSelectCell(Sender: TObject; ACol, ARow: LongInt; var CanSelect: Boolean);
             procedure ButtonDeleteLoadCaseClick(Sender: TObject);
+            procedure LCInputGridCellChanged(Sender: TObject);
             private
                 var
                     loadCaseEditorInputManager  : TLoadCaseEditorInputManager;
@@ -55,14 +54,7 @@ implementation
             soilNailWall.updateSoilNailWallGeomtry( AGeomDrawer );
         end;
 
-    procedure TLoadCaseEditor.LCInputGridKeyPress(  Sender: TObject;
-                                                    var Key: Char   );
-        begin
-            if (ord(Key) in [VK_RETURN]) then
-                readFromAndWriteToAllInputControls
-        end;
-
-    procedure TLoadCaseEditor.LCInputGridSelectCell(Sender: TObject; ACol, ARow: LongInt; var CanSelect: Boolean);
+    procedure TLoadCaseEditor.LCInputGridCellChanged(Sender: TObject);
         begin
             readFromAndWriteToAllInputControls();
         end;
@@ -91,6 +83,8 @@ implementation
                 loadCaseEditorInputManager.writeToInputControls( false );
 
                 JDBGraphic2D.updateGeometry();
+
+                ButtonOK.Enabled := ( loadCaseEditorInputManager.errorCount() = 0 );
             end;
 
     //public

@@ -5,7 +5,7 @@ interface
     uses
         system.SysUtils, system.Math, System.Classes, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-        StringGridInterposerClass,
+        CustomStringGridClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes,
         SoilNailWallMasterClass,
@@ -19,7 +19,7 @@ interface
                     nailPropertiesLabel,
                     nailLayoutLabel     : TLabel;
                     nailParametersGrid,
-                    nailLayoutGrid      : TStringGrid;
+                    nailLayoutGrid      : TJDBStringGrid;
                 //read from controls
                     //nail parameters
                         function readNailParameters() : boolean;
@@ -39,7 +39,7 @@ interface
                 //constructor
                     constructor create( const   errorListBoxIn          : TListBox;
                                         const   nailParametersGridIn,
-                                                nailLayoutGridIn        : TStringGrid;
+                                                nailLayoutGridIn        : TJDBStringGrid;
                                         const   soilNailWallDesignIn    : TSoilNailWall );
                 //destructor
                     destructor destroy(); override;
@@ -221,7 +221,7 @@ implementation
                     ctrlScaleFactor : double;
                     tempComponent   : Tcontrol;
                     tempLabel       : TLabel;
-                    tempGrid        : TStringGrid;
+                    tempGrid        : TJDBStringGrid;
                     controlParent   : TWinControl;
                 begin
                     inherited setupInputControls();
@@ -319,7 +319,7 @@ implementation
         //constructor
             constructor TNailPropertiesInputManager.create( const   errorListBoxIn          : TListBox;
                                                             const   nailParametersGridIn,
-                                                                    nailLayoutGridIn        : TStringGrid;
+                                                                    nailLayoutGridIn        : TJDBStringGrid;
                                                             const   soilNailWallDesignIn    : TSoilNailWall );
                 begin
                     nailParametersGrid  := nailParametersGridIn;

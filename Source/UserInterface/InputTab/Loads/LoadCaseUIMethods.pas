@@ -5,7 +5,7 @@ interface
     uses
         System.SysUtils, System.Math,
         Vcl.Grids,
-        StringGridInterposerClass,
+        CustomStringGridClass,
         LoadCaseTypes
         ;
 
@@ -18,26 +18,26 @@ interface
         function tryReadLoadCase(   const   startColIn,
                                             startRowIn,
                                             endRowIn    : integer;
-                                    const   gridIn      : TStringGrid;
-                                    out loadCaseInOut   : TLoadCase     ) : boolean;
+                                    const   gridIn      : TJDBStringGrid;
+                                    out loadCaseInOut   : TLoadCase         ) : boolean;
 
     //write load case data to grid
         procedure writeLoadCaseToGrid(  const updateEmptyCellsIn    : boolean;
                                         const startCol, startRowIn  : integer;
                                         out endRowOut               : integer;
                                         const loadCaseIn            : TLoadCase;
-                                        const gridIn                : TStringGrid   ); overload;
+                                        const gridIn                : TJDBStringGrid   ); overload;
 
         procedure writeLoadCaseToGrid(  const updateEmptyCellsIn    : boolean;
                                         const startCol, startRowIn  : integer;
                                         const loadCaseIn            : TLoadCase;
-                                        const gridIn                : TStringGrid   ); overload;
+                                        const gridIn                : TJDBStringGrid   ); overload;
 
 implementation
 
     //read load case data from grid
         function tryReadLoadCaseCombination(const startColIn, gridRowIn : integer;
-                                            const gridIn                : TStringGrid;
+                                            const gridIn                : TJDBStringGrid;
                                             var loadCaseInOut           : TLoadCase     ) : boolean;
             var
                 validCombination    : boolean;
@@ -64,8 +64,8 @@ implementation
         function tryReadLoadCase(   const   startColIn,
                                             startRowIn,
                                             endRowIn    : integer;
-                                    const   gridIn      : TStringGrid;
-                                    out loadCaseInOut   : TLoadCase     ) : boolean;
+                                    const   gridIn      : TJDBStringGrid;
+                                    out loadCaseInOut   : TLoadCase         ) : boolean;
             var
                 row : integer;
             begin
@@ -80,7 +80,7 @@ implementation
                                                     const   startColIn, gridRowIn,
                                                             arrayIndexIn            : integer;
                                                     const   loadCaseIn              : TLoadCase;
-                                                    const   gridIn                  : TStringGrid   );
+                                                    const   gridIn                  : TJDBStringGrid   );
             function _mustUpdateCell(const colIn : integer) : boolean;
                     var
                         cellIsEmptyAndMustBeUpdated,
@@ -106,7 +106,7 @@ implementation
                                         const startCol, startRowIn  : integer;
                                         out endRowOut               : integer;
                                         const loadCaseIn            : TLoadCase;
-                                        const gridIn                : TStringGrid   );
+                                        const gridIn                : TJDBStringGrid   );
             var
                 i, row, arrLen : integer;
             begin
@@ -130,7 +130,7 @@ implementation
         procedure writeLoadCaseToGrid(  const updateEmptyCellsIn    : boolean;
                                         const startCol, startRowIn  : integer;
                                         const loadCaseIn            : TLoadCase;
-                                        const gridIn                : TStringGrid   );
+                                        const gridIn                : TJDBStringGrid   );
             var
                 dummyInt : integer;
             begin

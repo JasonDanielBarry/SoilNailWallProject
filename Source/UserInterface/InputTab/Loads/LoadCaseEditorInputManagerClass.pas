@@ -5,7 +5,7 @@ interface
     uses
         system.SysUtils, system.Math, System.Classes, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.Dialogs,
-        StringGridInterposerClass,
+        CustomStringGridClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes,
         SoilNailWallMasterClass,
@@ -22,7 +22,7 @@ interface
                 var
                     controlGridPanel    : TGridPanel;
                     loadCaseComboBox    : TComboBox;
-                    loadCaseInputGrid   : TStringGrid;
+                    loadCaseInputGrid   : TJDBStringGrid;
                 //write load cases to combo box
                     procedure writeLoadCasesToComboBox();
                 //setup input controls
@@ -35,7 +35,7 @@ interface
                     constructor create( const errorListBoxIn        : TListBox;
                                         const controlGridPanelIn    : TGridPanel;
                                         const loadCaseComboBoxIn    : TComboBox;
-                                        const LCInputGridIn         : TStringGrid;
+                                        const LCInputGridIn         : TJDBStringGrid;
                                         const soilNailWallIn        : TSoilNailWall );
                 //destructor
                     destructor destroy(); override;
@@ -91,7 +91,6 @@ implementation
                         controlScaleFactor := controlGridPanel.ScaleFactor;
 
                     //position grid
-
                         loadCaseInputGrid.left  := 1;
                         loadCaseInputGrid.Top   := 1;
 
@@ -147,7 +146,7 @@ implementation
             constructor TLoadCaseEditorInputManager.create( const errorListBoxIn        : TListBox;
                                                             const controlGridPanelIn    : TGridPanel;
                                                             const loadCaseComboBoxIn    : TComboBox;
-                                                            const LCInputGridIn         : TStringGrid;
+                                                            const LCInputGridIn         : TJDBStringGrid;
                                                             const soilNailWallIn        : TSoilNailWall );
                 begin
                     controlGridPanel    := controlGridPanelIn;

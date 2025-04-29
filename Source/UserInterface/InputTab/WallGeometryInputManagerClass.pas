@@ -5,7 +5,7 @@ interface
     uses
         system.SysUtils, system.Math, System.Classes, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-        StringGridInterposerClass,
+        CustomStringGridClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes,
         SoilNailWallMasterClass
@@ -17,7 +17,7 @@ interface
                 var
                     wallLabel, slopeLabel   : TLabel;
                     wallParametersGrid,
-                    slopeParametersGrid     : TStringGrid;
+                    slopeParametersGrid     : TJDBStringGrid;
                 //read from controls
                     //wall
                         function readWallParameters() : boolean;
@@ -37,7 +37,7 @@ interface
                 //constructor
                     constructor create( const   errorListBoxIn          : TListBox;
                                         const   wallParametersGridIn,
-                                                slopeParametersGridIn   : TStringGrid;
+                                                slopeParametersGridIn   : TJDBStringGrid;
                                         const   soilNailWallDesignIn    : TSoilNailWall );
                 //destructor
                     destructor destroy(); override;
@@ -147,7 +147,7 @@ implementation
                     ctrlScaleFactor : double;
                     tempComponent   : Tcontrol;
                     tempLabel       : TLabel;
-                    tempGrid        : TStringGrid;
+                    tempGrid        : TJDBStringGrid;
                     controlParent   : TWinControl;
                 begin
                     inherited setupInputControls();
@@ -224,7 +224,7 @@ implementation
         //constructor
             constructor TWallGeometryInputManager.create(   const   errorListBoxIn          : TListBox;
                                                             const   wallParametersGridIn,
-                                                                    slopeParametersGridIn   : TStringGrid;
+                                                                    slopeParametersGridIn   : TJDBStringGrid;
                                                             const   soilNailWallDesignIn    : TSoilNailWall );
                 begin
                     //input grids

@@ -5,7 +5,7 @@ interface
     uses
         system.SysUtils, system.Math, System.Classes, System.UITypes,
         Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls, Vcl.Grids, Vcl.ComCtrls, Vcl.StdCtrls,
-        StringGridInterposerClass, LimitStateMaterialClass,
+        CustomStringGridClass, LimitStateMaterialClass,
         InputManagerClass, SoilNailWallInputManagerClass,
         SoilNailWallTypes,
         SoilNailWallMasterClass
@@ -19,7 +19,7 @@ interface
                     concreteLabel           : TLabel;
                     soilParametersGrid,
                     nailParametersGrid,
-                    concreteParametersGrid  : TStringGrid;
+                    concreteParametersGrid  : TJDBStringGrid;
                     gridPanelLabels         : TGridPanel;
                 //read from controls
                     //soil
@@ -45,7 +45,7 @@ interface
                     constructor create( const   errorListBoxIn              : TListBox;
                                         const   soilParametersGridIn,
                                                 nailParametersGridIn,
-                                                concreteParametersGridIn    : TStringGrid;
+                                                concreteParametersGridIn    : TJDBStringGrid;
                                         const   gridPanelLabelsIn           : TGridPanel;
                                         const   soilNailWallDesignIn        : TSoilNailWall );
                 //destructor
@@ -70,7 +70,7 @@ implementation
     //helper methods
         function tryGridToLimitStateMaterial(   const gridRowIn     : integer;
                                                 var materialInOut   : TLimitStateMaterial;
-                                                var readGridInOut   : TStringGrid           ) : boolean;
+                                                var readGridInOut   : TJDBStringGrid           ) : boolean;
             var
                 readSuccessful                                  : boolean;
                 averageVal, coefVar, downgradeFac, partialFac   : double;
@@ -88,7 +88,7 @@ implementation
         procedure limitStateMaterialToGrid( const updateEmptyCellsIn    : boolean;
                                             const gridRowIn             : integer;
                                             var materialInOut           : TLimitStateMaterial;
-                                            var writeGridInOut          : TStringGrid           );
+                                            var writeGridInOut          : TJDBStringGrid           );
                 var
                     mustUpdateCell,
                     validAverage, validCoefVar, validDownGrFac,
@@ -276,10 +276,11 @@ implementation
         //setup input controls
             procedure TMaterialParametersInputManager.setupInputControls();
                 var
+                    c               : integer;
                     ctrlScaleFactor : double;
                     tempComponent   : Tcontrol;
                     tempLabel       : TLabel;
-                    tempGrid        : TStringGrid;
+                    tempGrid        : TJDBStringGrid;
                     controlParent   : TWinControl;
                 begin
                     inherited setupInputControls();
@@ -309,6 +310,9 @@ implementation
 
                                 tempGrid.FixedCols := 1;
                                 tempGrid.FixedRows := 0;
+
+                                for c := 1 to (tempGrid.ColCount - 1) do
+                                    tempGrid.ColWidths[ c ] := round( 74 * ctrlScaleFactor );
                             end;
 
                         gridPanelLabels.top := round( 5 * ctrlScaleFactor );
@@ -394,7 +398,7 @@ implementation
             constructor TMaterialParametersInputManager.create( const   errorListBoxIn              : TListBox;
                                                                 const   soilParametersGridIn,
                                                                         nailParametersGridIn,
-                                                                        concreteParametersGridIn    : TStringGrid;
+                                                                        concreteParametersGridIn    : TJDBStringGrid;
                                                                 const   gridPanelLabelsIn           : TGridPanel;
                                                                 const   soilNailWallDesignIn        : TSoilNailWall );
                 begin
@@ -427,7 +431,7 @@ implementation
         //reset controls
             procedure TMaterialParametersInputManager.resetInputControls();
                 var
-                    tempGrid : TStringGrid;
+                    tempGrid : TJDBStringGrid;
                 begin
                     for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
                         tempGrid.clearColumns( 1 );
@@ -533,7 +537,7 @@ implementation
         //clear factors
             procedure TMaterialParametersInputManager.clearLimitStateFactors();
                 var
-                    tempGrid : TStringGrid;
+                    tempGrid : TJDBStringGrid;
                 begin
                     for tempGrid in [ soilParametersGrid, nailParametersGrid, concreteParametersGrid ] do
                         tempGrid.clearColumns( 2 );
