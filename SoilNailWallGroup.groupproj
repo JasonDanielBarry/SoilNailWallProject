@@ -12,6 +12,9 @@
         <Projects Include="..\JDBDelphiLibrary\Graphic2DTestProject.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\JDBDelphiLibrary\GraphXYTestProject.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="TestSoilNailWall.dproj">
             <Dependencies/>
         </Projects>
@@ -53,6 +56,15 @@
     <Target Name="Graphic2DTestProject:Make">
         <MSBuild Projects="..\JDBDelphiLibrary\Graphic2DTestProject.dproj" Targets="Make"/>
     </Target>
+    <Target Name="GraphXYTestProject">
+        <MSBuild Projects="..\JDBDelphiLibrary\GraphXYTestProject.dproj"/>
+    </Target>
+    <Target Name="GraphXYTestProject:Clean">
+        <MSBuild Projects="..\JDBDelphiLibrary\GraphXYTestProject.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="GraphXYTestProject:Make">
+        <MSBuild Projects="..\JDBDelphiLibrary\GraphXYTestProject.dproj" Targets="Make"/>
+    </Target>
     <Target Name="TestSoilNailWall">
         <MSBuild Projects="TestSoilNailWall.dproj"/>
     </Target>
@@ -72,13 +84,13 @@
         <MSBuild Projects="SoilNailWall.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="JDBDelphiPackage;JDBDelphiLibrary;Graphic2DTestProject;TestSoilNailWall;SoilNailWall"/>
+        <CallTarget Targets="JDBDelphiPackage;JDBDelphiLibrary;Graphic2DTestProject;GraphXYTestProject;TestSoilNailWall;SoilNailWall"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="JDBDelphiPackage:Clean;JDBDelphiLibrary:Clean;Graphic2DTestProject:Clean;TestSoilNailWall:Clean;SoilNailWall:Clean"/>
+        <CallTarget Targets="JDBDelphiPackage:Clean;JDBDelphiLibrary:Clean;Graphic2DTestProject:Clean;GraphXYTestProject:Clean;TestSoilNailWall:Clean;SoilNailWall:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="JDBDelphiPackage:Make;JDBDelphiLibrary:Make;Graphic2DTestProject:Make;TestSoilNailWall:Make;SoilNailWall:Make"/>
+        <CallTarget Targets="JDBDelphiPackage:Make;JDBDelphiLibrary:Make;Graphic2DTestProject:Make;GraphXYTestProject:Make;TestSoilNailWall:Make;SoilNailWall:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
