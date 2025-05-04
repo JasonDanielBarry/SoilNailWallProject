@@ -35,7 +35,6 @@ object SNWForm: TSNWForm
     ParentDoubleBuffered = False
     TabOrder = 0
     OnChange = PageControlRibbonChange
-    ExplicitWidth = 1741
     object PageFile: TTabSheet
       Caption = 'File'
       Enabled = False
@@ -928,7 +927,6 @@ object SNWForm: TSNWForm
         BevelOuter = bvNone
         ItemHeight = 15
         TabOrder = 1
-        ExplicitWidth = 1239
       end
       object GridSoilParInput: TJDBStringGrid
         Left = 32
@@ -982,7 +980,6 @@ object SNWForm: TSNWForm
         Align = alBottom
         ItemHeight = 15
         TabOrder = 0
-        ExplicitWidth = 1239
       end
       object GridWallProperties: TJDBStringGrid
         Left = 32
@@ -1023,7 +1020,6 @@ object SNWForm: TSNWForm
         Align = alBottom
         ItemHeight = 15
         TabOrder = 0
-        ExplicitWidth = 1239
       end
       object GridNailProperties: TJDBStringGrid
         Left = 120
@@ -1064,7 +1060,6 @@ object SNWForm: TSNWForm
         Align = alBottom
         ItemHeight = 15
         TabOrder = 0
-        ExplicitWidth = 1239
       end
       object GridLoadCases: TJDBStringGrid
         Left = 38
@@ -1119,7 +1114,6 @@ object SNWForm: TSNWForm
         Value = 100.000000000000000000
       end>
     TabOrder = 2
-    ExplicitLeft = 1638
     object LabelTheme: TLabel
       AlignWithMargins = True
       Left = 0
@@ -1168,8 +1162,6 @@ object SNWForm: TSNWForm
     ShowHint = True
     TabOrder = 3
     OnUpdateGeometry = SNWGraphicUpdateGeometry
-    ExplicitLeft = 1257
-    ExplicitWidth = 484
   end
   object ActionManager1: TActionManager
     Left = 1000
