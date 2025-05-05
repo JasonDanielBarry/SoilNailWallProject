@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<Root>
+  <LoadCases NodeDataType="TLoadCaseMap">
+    <LoadCaseNames ValueType="string_array">LC1;LC2;LC3</LoadCaseNames>
+    <LoadCase_LC1 NodeDataType="TLoadCase">
+      <Name ValueType="string">LC1</Name>
+      <Descriptions ValueType="string_array">C1;C2;C3</Descriptions>
+      <Factors ValueType="double_array">1.1;1.2;1.2</Factors>
+      <Loads ValueType="double_array">5;10;15</Loads>
+    </LoadCase_LC1>
+    <LoadCase_LC2 NodeDataType="TLoadCase">
+      <Name ValueType="string">LC2</Name>
+      <Descriptions ValueType="string_array">C1;C2;C3;C4;C5</Descriptions>
+      <Factors ValueType="double_array">1.3;1.1;1.5;1.6;1.2</Factors>
+      <Loads ValueType="double_array">20;25;0.5;1;0.75</Loads>
+    </LoadCase_LC2>
+    <LoadCase_LC3 NodeDataType="TLoadCase">
+      <Name ValueType="string">LC3</Name>
+      <Descriptions ValueType="string_array">C1;C2</Descriptions>
+      <Factors ValueType="double_array">1.5;1.25</Factors>
+      <Loads ValueType="double_array">3;6</Loads>
+    </LoadCase_LC3>
+  </LoadCases>
+  <SoilProperties NodeDataType="TSoil">
+    <SlopeAngle ValueType="double">0</SlopeAngle>
+    <SlopeMaxHeight ValueType="double">10</SlopeMaxHeight>
+    <SoilCohesion NodeDataType="TLimitStateMaterial">
+      <AverageValue ValueType="double">5</AverageValue>
+      <VariationCoefficient ValueType="double">0.4</VariationCoefficient>
+      <DowngradeFactor ValueType="double">1</DowngradeFactor>
+      <PartialFactor ValueType="double">1.4</PartialFactor>
+    </SoilCohesion>
+    <SoilFrictionAngle NodeDataType="TLimitStateMaterial">
+      <AverageValue ValueType="double">30</AverageValue>
+      <VariationCoefficient ValueType="double">0.1</VariationCoefficient>
+      <DowngradeFactor ValueType="double">1</DowngradeFactor>
+      <PartialFactor ValueType="double">1.25</PartialFactor>
+    </SoilFrictionAngle>
+    <SoilUnitWeight NodeDataType="TLimitStateMaterial">
+      <AverageValue ValueType="double">19</AverageValue>
+      <VariationCoefficient ValueType="double">0</VariationCoefficient>
+      <DowngradeFactor ValueType="double">0</DowngradeFactor>
+      <PartialFactor ValueType="double">1</PartialFactor>
+    </SoilUnitWeight>
+  </SoilProperties>
+  <SoilNailProperties NodeDataType="TSoilNails">
+    <GroutSoilInterfaceStrength NodeDataType="TLimitStateMaterial">
+      <AverageValue ValueType="double">150</AverageValue>
+      <VariationCoefficient ValueType="double">0.4</VariationCoefficient>
+      <DowngradeFactor ValueType="double">1</DowngradeFactor>
+      <PartialFactor ValueType="double">1.4</PartialFactor>
+    </GroutSoilInterfaceStrength>
+    <NailTensileStrength NodeDataType="TLimitStateMaterial">
+      <AverageValue ValueType="double">500</AverageValue>
+      <VariationCoefficient ValueType="double">0.05</VariationCoefficient>
+      <DowngradeFactor ValueType="double">1</DowngradeFactor>
+      <PartialFactor ValueType="double">1.8</PartialFactor>
+    </NailTensileStrength>
+    <GroutHoleDiameter ValueType="double">0.1</GroutHoleDiameter>
+    <NailDiameter ValueType="double">0</NailDiameter>
+    <NailHeights ValueType="double_array">9.5;8;6.5;5;3.5;2;0.5</NailHeights>
+    <NailLengths ValueType="double_array">20;18.33;16.67;15;13.33;11.67;10</NailLengths>
+    <NailAngle ValueType="double">10</NailAngle>
+    <NailHorizontalSpacing ValueType="double">1.5</NailHorizontalSpacing>
+  </SoilNailProperties>
+  <WallProperties NodeDataType="TWall">
+    <ConcreteCompressiveStrength NodeDataType="TLimitStateMaterial">
+      <AverageValue ValueType="double">30</AverageValue>
+      <VariationCoefficient ValueType="double">0.15</VariationCoefficient>
+      <DowngradeFactor ValueType="double">1</DowngradeFactor>
+      <PartialFactor ValueType="double">1.5</PartialFactor>
+    </ConcreteCompressiveStrength>
+    <ConcreteReinforcementStrength NodeDataType="TLimitStateMaterial">
+      <AverageValue ValueType="double">450</AverageValue>
+      <VariationCoefficient ValueType="double">0.05</VariationCoefficient>
+      <DowngradeFactor ValueType="double">1</DowngradeFactor>
+      <PartialFactor ValueType="double">1.15</PartialFactor>
+    </ConcreteReinforcementStrength>
+    <WallAngle ValueType="double">0</WallAngle>
+    <WallHeight ValueType="double">10</WallHeight>
+    <WallThickness ValueType="double">0.25</WallThickness>
+  </WallProperties>
+</Root>

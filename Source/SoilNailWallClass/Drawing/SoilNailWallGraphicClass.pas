@@ -98,7 +98,7 @@ implementation
 
                             textCentreX := loadLine.getDrawingPoints()[0].x;
 
-                            graphicDrawerInOut.addText( textCentreX, loadLine.getDrawingPoints()[0].y + 3, loadCaseText, 10 );
+                            graphicDrawerInOut.addText( textCentreX, loadLine.getDrawingPoints()[0].y + 3, loadCaseText, False, 10 );
 
                         FreeAndNil( loadLine );
                     end;
