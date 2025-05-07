@@ -67,7 +67,7 @@ implementation
                 begin
                     loadCases := soilNailWallDesign.getLoadCases();
 
-                    arrOrderedKeys := loadCases.getOrderedKeys();
+                    arrOrderedKeys := loadCases.Keys.ToArray();
 
                     loadCaseComboBox.Clear();
 

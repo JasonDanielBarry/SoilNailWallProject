@@ -47,7 +47,7 @@ interface
             end;
 
         //load case map
-            TLoadCaseMap = class(TDictionary<string, TLoadCase>)
+            TLoadCaseMap = class(TOrderedDictionary<string, TLoadCase>)
                 strict private
                     const
                         DT_LOAD_CASE_MAP    : string = 'TLoadCaseMap';
@@ -55,14 +55,11 @@ interface
                         LC_PREFIX           : string = 'LoadCase_';
                     var
                         activeLoadCaseKey   : string;
-                        orderedKeysList     : TList<string>;
                 public
                     //constructor
                         constructor create();
                     //destructor
                         destructor destroy(); override;
-                    //clear items
-                        procedure clear();
                     //add or set value
                         procedure AddOrSetValue(const KeyIn : string; const ValueIn : TLoadCase);
                     //make copy
@@ -80,8 +77,6 @@ interface
                     //critical load case
                         function getCriticalLoadCaseKey() : string;
                         function getCriticalLoadCase() : TLoadCase;
-                    //ordered keys
-                        function getOrderedKeys() : TArray<string>;
                     //count total load combinations
                         function countLoadCaseCombinations(const loadCaseKeyIn : string) : integer;
                         function countTotalLoadCaseCombinations() : integer;
@@ -266,24 +261,12 @@ implementation
                         inherited Create();
 
                         clearActiveLoadCaseKey();
-
-                        orderedKeysList := TList<string>.Create();
                     end;
 
             //destructor
                 destructor TLoadCaseMap.destroy();
                     begin
-                        FreeAndNil( orderedKeysList );
-
                         inherited destroy();
-                    end;
-
-            //clear items
-                procedure TLoadCaseMap.clear();
-                    begin
-                        orderedKeysList.Clear();
-
-                        inherited Clear();
                     end;
 
             //add or set value
@@ -298,9 +281,6 @@ implementation
                             localLoadCase.copyOther( ValueIn );
 
                         inherited AddOrSetValue( KeyIn, localLoadCase );
-
-                        if NOT( orderedKeysList.Contains( KeyIn ) ) then
-                            orderedKeysList.add( KeyIn );
                     end;
 
             //make copy
@@ -310,14 +290,11 @@ implementation
                         otherLoadCase   : TLoadCase;
                     begin
                         self.Clear();
-                        self.orderedKeysList.Clear();
 
-                        for itemKey in otherLoadCaseMapIn.orderedKeysList do
+                        for itemKey in otherLoadCaseMapIn.Keys do
                             begin
                                 if NOT( otherLoadCaseMapIn.TryGetValue( itemKey, otherLoadCase ) ) then
                                     Continue;
-
-                                self.orderedKeysList.Add( itemKey );
 
                                 self.AddOrSetValue( itemKey, otherLoadCase );
                             end;
@@ -339,7 +316,6 @@ implementation
                         self.clear();
 
                         //read ordered keys
-                            orderedKeysList.Clear();
 
                             readSuccessful := TryReadStringArrayFromXMLNode( loadCaseMapNode, LOAD_CASE_KEYS, arrOrderedKeys );
 
@@ -347,8 +323,6 @@ implementation
                             for LCName in arrOrderedKeys do
                                 begin
                                     var newLoadCase : TLoadCase;
-
-                                    orderedKeysList.Add( LCName );
 
                                     readSuccessful := readSuccessful AND newLoadCase.tryReadFromXMLNode( loadCaseMapNode, LC_PREFIX + LCName );
 
@@ -369,7 +343,7 @@ implementation
                             exit();
 
                         //write ordered keys
-                            arrOrderedKeys := orderedKeysList.ToArray();
+                            arrOrderedKeys := Keys.ToArray();
 
                             writeStringArrayToXMLNode( loadCaseMapNode, LOAD_CASE_KEYS, arrOrderedKeys );
 
@@ -395,10 +369,10 @@ implementation
 
                 function TLoadCaseMap.getActiveLoadCaseIndex() : integer;
                     begin
-                        if NOT( orderedKeysList.Contains( activeLoadCaseKey ) ) then
+                        if NOT( self.ContainsKey( activeLoadCaseKey ) ) then
                             exit( -1 );
 
-                        result := orderedKeysList.IndexOf( activeLoadCaseKey );
+                        result := IndexOf( activeLoadCaseKey );
                     end;
 
                 function TLoadCaseMap.getActiveLoadCaseName() : string;
@@ -422,8 +396,6 @@ implementation
                 procedure TLoadCaseMap.deleteActiveLoadCase();
                     begin
                         remove( activeLoadCaseKey );
-
-                        orderedKeysList.Remove( activeLoadCaseKey );
 
                         clearActiveLoadCaseKey();
                     end;
@@ -468,12 +440,6 @@ implementation
                         result := loadCaseOut;
                     end;
 
-                //ordered keys
-                    function TLoadCaseMap.getOrderedKeys() : TArray<string>;
-                        begin
-                            result := orderedKeysList.ToArray();
-                        end;
-
                 //count total load combinations
                     function TLoadCaseMap.countLoadCaseCombinations(const loadCaseKeyIn : string) : integer;
                         var
@@ -495,7 +461,7 @@ implementation
                         begin
                             totalCombinations := 0;
 
-                            for LCKey in orderedKeysList do
+                            for LCKey in Keys do
                                 begin
                                     loadCaseCombinations := countLoadCaseCombinations( LCKey );
 
@@ -515,7 +481,7 @@ implementation
                         begin
                             SetLength( arrErrors, 0 );
 
-                            for LCKey in orderedKeysList do
+                            for LCKey in Keys do
                                 begin
                                     if NOT( TryGetValue( LCKey, loadCase ) ) then
                                         Continue;

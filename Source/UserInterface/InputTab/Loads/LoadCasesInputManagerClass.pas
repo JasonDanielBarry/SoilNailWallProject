@@ -188,7 +188,7 @@ implementation
                         loadInputGrid.setBorderProperties( 1, clSilver );
 
                     //write load cases
-                        orderedKeys := loadCaseMap.getOrderedKeys();
+                        orderedKeys := loadCaseMap.keys.ToArray();
 
                         loadCaseStartRow := 1;
 
