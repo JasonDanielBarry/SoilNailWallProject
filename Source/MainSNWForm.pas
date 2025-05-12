@@ -210,6 +210,9 @@ interface
                 function readFromAllInputControls() : boolean;
                 procedure writeToAllInputControls(const updateEmptyCellsIn : boolean);
                 function readFromAndWriteToInputControls() : boolean;
+            //file management
+                procedure loadSNWFile(const SNWFileNameIn : string);
+                procedure saveSNWFile(SNWFileNameIn : string);
         protected
             procedure wndproc(var messageInOut : TMessage); override;
         public
@@ -229,10 +232,20 @@ implementation
         //main form
             //creation
                 procedure TSNWForm.FormCreate(Sender: TObject);
+                    var
+                        SNWFileName : string;
                     begin
                         setupForm();
 
                         self.Refresh();
+
+                        //open a *.snw file from the file explorer
+                            if ( ParamCount < 1 ) then
+                                exit();
+
+                            SNWFileName := ParamStr( 1 );
+
+                            LoadSNWFile( SNWFileName );
                     end;
 
             //destruction
@@ -268,51 +281,26 @@ implementation
 
                 procedure TSNWForm.ActionOpenExecute(Sender: TObject);
                     var
-                        readSuccessful  : boolean;
-                        openFileName    : string;
-                        fileReadWrite   : TSoilNailWallFileReaderWriter;
+                        openFileName : string;
                     begin
-                        if (NOT(OpenFileDialog.Execute())) then
+                        if NOT( OpenFileDialog.Execute() ) then
                             exit();
 
                         openFileName := OpenFileDialog.FileName;
 
-                        fileReadWrite := TSoilNailWallFileReaderWriter.create( openFileName );
-
-                        if ( fileReadWrite.loadFile() ) then
-                            begin
-                                readSuccessful := SoilNailWallDesign.readFromFile( fileReadWrite );
-
-                                writeToAllInputControls( True );
-
-                                SNWGraphic.zoomAll();
-                            end;
-
-                        FreeAndNil( fileReadWrite );
+                        LoadSNWFile( openFileName );
                     end;
 
                 procedure TSNWForm.ActionSaveAsExecute(Sender: TObject);
-                    const
-                        FILE_EXTENSION : string = '.snw';
                     var
-                        saveFileName    : string;
-                        fileReadWrite   : TSoilNailWallFileReaderWriter;
+                        saveFileName : string;
                     begin
-                        if (NOT(SaveFileDialog.Execute())) then
+                        if NOT( SaveFileDialog.Execute() ) then
                             exit();
 
                         saveFileName := SaveFileDialog.FileName;
 
-                        if (NOT( Pos( FILE_EXTENSION, saveFileName ) > 0 )) then
-                            saveFileName := saveFileName + FILE_EXTENSION;
-
-                        fileReadWrite := TSoilNailWallFileReaderWriter.create( saveFileName );
-
-                        SoilNailWallDesign.writeToFile( fileReadWrite );
-
-                        fileReadWrite.saveFile();
-
-                        FreeAndNil( fileReadWrite );
+                        saveSNWFile( saveFileName );
                     end;
 
             //input tab
@@ -787,10 +775,54 @@ implementation
                     result := inputIsPopulated;
                 end;
 
+        //file management
+            procedure TSNWForm.loadSNWFile(const SNWFileNameIn : string);
+                var
+                    readSuccessful  : Boolean;
+                    fileReadWrite   : TSoilNailWallFileReaderWriter;
+
+                begin
+                    fileReadWrite := TSoilNailWallFileReaderWriter.create( SNWFileNameIn );
+
+                    if NOT( fileReadWrite.loadFile() ) then
+                        begin
+                            FreeAndNil( fileReadWrite );
+                            exit();
+                        end;
+
+                    readSuccessful := SoilNailWallDesign.readFromFile( fileReadWrite );
+
+                    writeToAllInputControls(True);
+
+                    SNWGraphic.zoomAll();
+
+                    FreeAndNil( fileReadWrite );
+                end;
+
+            procedure TSNWForm.saveSNWFile(SNWFileNameIn : string);
+                const
+                    FILE_EXTENSION : string = '.snw';
+                var
+                    fileReadWrite : TSoilNailWallFileReaderWriter;
+                begin
+                    if (NOT( Pos( FILE_EXTENSION, SNWFileNameIn ) > 0 )) then
+                        SNWFileNameIn := SNWFileNameIn + FILE_EXTENSION;
+
+                    fileReadWrite := TSoilNailWallFileReaderWriter.create( SNWFileNameIn );
+
+                    SoilNailWallDesign.writeToFile( fileReadWrite );
+
+                    fileReadWrite.saveFile();
+
+                    FreeAndNil( fileReadWrite );
+                end;
+
     //protected
         procedure TSNWForm.wndproc(var messageInOut : TMessage);
             begin
                 inherited wndProc(messageInOut);
             end;
+
+
 
 end.

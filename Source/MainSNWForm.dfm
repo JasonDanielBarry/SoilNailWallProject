@@ -700,14 +700,12 @@ object SNWForm: TSNWForm
         object LabelComputationType: TLabel
           Left = 0
           Top = 75
-          Width = 149
-          Height = 20
+          Width = 99
+          Height = 15
           Align = alClient
           Alignment = taCenter
           Caption = 'Computation Type'
           Layout = tlCenter
-          ExplicitWidth = 99
-          ExplicitHeight = 15
         end
         object PanelComputationTypeSeparator: TPanel
           Left = 149

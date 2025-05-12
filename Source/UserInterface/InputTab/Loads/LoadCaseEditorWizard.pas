@@ -83,8 +83,6 @@ implementation
                 loadCaseEditorInputManager.writeToInputControls( false );
 
                 JDBGraphic2D.updateGeometry();
-
-                ButtonOK.Enabled := ( loadCaseEditorInputManager.errorCount() = 0 );
             end;
 
     //public
@@ -100,7 +98,7 @@ implementation
                     soilNailWall.setLoadsVisible( True );
 
                 //input manager
-                    loadCaseEditorInputManager := TLoadCaseEditorInputManager.create( ListBoxErrors, GridPanelControls, ComboBoxLoadCase, LCInputGrid, soilNailWall );
+                    loadCaseEditorInputManager := TLoadCaseEditorInputManager.create( ListBoxErrors, ButtonOK, GridPanelControls, ComboBoxLoadCase, LCInputGrid, soilNailWall );
 
                     loadCaseEditorInputManager.writeToInputControls( True );
 

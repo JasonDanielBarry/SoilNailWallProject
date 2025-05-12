@@ -21,6 +21,7 @@ interface
                     NailSpacingComboBox,
                     topLengthComboBox,
                     bottomLengthComboBox            : TComboBox;
+                    OKButton                        : TButton;
                 //setup input controls
                     procedure setupInputControls(); override;
             protected
@@ -33,6 +34,7 @@ interface
                                                 NailSpacingComboBoxIn,
                                                 topLengthComboBoxIn,
                                                 bottomLengthComboBoxIn  : TComboBox;
+                                        const   OKButtonIn              : TButton;
                                         const   soilNailWallDesignIn    : TSoilNailWall );
                 //destructor
                     destructor destroy(); override;
@@ -90,12 +92,14 @@ implementation
                                                                         NailSpacingComboBoxIn,
                                                                         topLengthComboBoxIn,
                                                                         bottomLengthComboBoxIn  : TComboBox;
+                                                                const   OKButtonIn              : TButton;
                                                                 const   soilNailWallDesignIn    : TSoilNailWall);
                 begin
                     topSpaceComboBox        := topSpaceComboBoxIn;
                     NailSpacingComboBox     := NailSpacingComboBoxIn;
                     topLengthComboBox       := topLengthComboBoxIn;
                     bottomLengthComboBox    := bottomLengthComboBoxIn;
+                    OKButton                := OKButtonIn;
 
                     inherited create( errorListBoxIn, soilNailWallDesignIn );
 
@@ -132,6 +136,8 @@ implementation
 
             //write to input controls
                 procedure TNailLayoutGeneratorInputManager.writeToInputControls(const updateEmptyControlsIn : boolean = False);
+                    var
+                        noErrorsPresent : boolean;
                     begin
                         inherited writeToInputControls( updateEmptyControlsIn );
 
@@ -143,7 +149,11 @@ implementation
                                 bottomLengthComboBox.Text   := FloatToStrF( bottomLength,           ffFixed, 5, 2 );
                             end;
 
-                        if ( errorCount() = 0 ) then
+                        noErrorsPresent := errorCount() = 0;
+
+                        OKButton.Enabled := noErrorsPresent;
+
+                        if ( noErrorsPresent ) then
                             soilNailWallDesign.generateSoilNailLayout( topSpace, verticalNailSpacing, topLength, bottomLength )
                         else
                             soilNailWallDesign.generateSoilNailLayout( 0, 1, 0, 0 )

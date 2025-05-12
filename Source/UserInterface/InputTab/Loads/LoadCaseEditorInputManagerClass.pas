@@ -20,6 +20,7 @@ interface
                     FACT_COL    : integer = 1;
                     LOAD_COL    : integer = 2;
                 var
+                    OKButton            : Tbutton;
                     controlGridPanel    : TGridPanel;
                     loadCaseComboBox    : TComboBox;
                     loadCaseInputGrid   : TJDBStringGrid;
@@ -33,6 +34,7 @@ interface
             public
                 //constructor
                     constructor create( const errorListBoxIn        : TListBox;
+                                        const OKButtonIn            : TButton;
                                         const controlGridPanelIn    : TGridPanel;
                                         const loadCaseComboBoxIn    : TComboBox;
                                         const LCInputGridIn         : TJDBStringGrid;
@@ -144,11 +146,13 @@ implementation
     //public
         //constructor
             constructor TLoadCaseEditorInputManager.create( const errorListBoxIn        : TListBox;
+                                                            const OKButtonIn            : TButton;
                                                             const controlGridPanelIn    : TGridPanel;
                                                             const loadCaseComboBoxIn    : TComboBox;
                                                             const LCInputGridIn         : TJDBStringGrid;
                                                             const soilNailWallIn        : TSoilNailWall );
                 begin
+                    OKButton            := OKButtonIn;
                     controlGridPanel    := controlGridPanelIn;
                     loadCaseComboBox    := loadCaseComboBoxIn;
                     loadCaseInputGrid   := LCInputGridIn;
@@ -242,6 +246,9 @@ implementation
                                     writeLoadCasesToComboBox();
 
                             controlGridPanel.UnlockDrawing();
+
+                        //set OK button on/off
+                            OKButton.Enabled := errorCount() < 1;
                     end;
 
         //combo box changed
