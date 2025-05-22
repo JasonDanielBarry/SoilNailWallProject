@@ -3,16 +3,22 @@
         <ProjectGuid>{4EF989DC-9BA7-4169-91DF-D2A937FC44A8}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="..\JDBDelphiLibrary\JDBDelphiPackage.dproj">
+        <Projects Include="..\JDB_DelphiGeneral\JDB_DelphiGeneral.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\JDBDelphiLibrary\JDBDelphiLibrary.dproj">
+        <Projects Include="..\JDB_Mathematics\JDB_Mathematics.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\JDBDelphiLibrary\Graphic2DTestProject.dproj">
+        <Projects Include="..\JDB_Graphics\JDB_Graphics.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\JDBDelphiLibrary\GraphXYTestProject.dproj">
+        <Projects Include="..\JDB_DelphiVCL\JDB_DelphiVCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\JDB_DelphiVCL\TestGraphic2D.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\JDB_DelphiVCL\TestGraphXY.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="TestSoilNailWall.dproj">
@@ -29,41 +35,59 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="JDBDelphiPackage">
-        <MSBuild Projects="..\JDBDelphiLibrary\JDBDelphiPackage.dproj"/>
+    <Target Name="JDB_DelphiGeneral">
+        <MSBuild Projects="..\JDB_DelphiGeneral\JDB_DelphiGeneral.dproj"/>
     </Target>
-    <Target Name="JDBDelphiPackage:Clean">
-        <MSBuild Projects="..\JDBDelphiLibrary\JDBDelphiPackage.dproj" Targets="Clean"/>
+    <Target Name="JDB_DelphiGeneral:Clean">
+        <MSBuild Projects="..\JDB_DelphiGeneral\JDB_DelphiGeneral.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="JDBDelphiPackage:Make">
-        <MSBuild Projects="..\JDBDelphiLibrary\JDBDelphiPackage.dproj" Targets="Make"/>
+    <Target Name="JDB_DelphiGeneral:Make">
+        <MSBuild Projects="..\JDB_DelphiGeneral\JDB_DelphiGeneral.dproj" Targets="Make"/>
     </Target>
-    <Target Name="JDBDelphiLibrary">
-        <MSBuild Projects="..\JDBDelphiLibrary\JDBDelphiLibrary.dproj"/>
+    <Target Name="JDB_Mathematics">
+        <MSBuild Projects="..\JDB_Mathematics\JDB_Mathematics.dproj"/>
     </Target>
-    <Target Name="JDBDelphiLibrary:Clean">
-        <MSBuild Projects="..\JDBDelphiLibrary\JDBDelphiLibrary.dproj" Targets="Clean"/>
+    <Target Name="JDB_Mathematics:Clean">
+        <MSBuild Projects="..\JDB_Mathematics\JDB_Mathematics.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="JDBDelphiLibrary:Make">
-        <MSBuild Projects="..\JDBDelphiLibrary\JDBDelphiLibrary.dproj" Targets="Make"/>
+    <Target Name="JDB_Mathematics:Make">
+        <MSBuild Projects="..\JDB_Mathematics\JDB_Mathematics.dproj" Targets="Make"/>
     </Target>
-    <Target Name="Graphic2DTestProject">
-        <MSBuild Projects="..\JDBDelphiLibrary\Graphic2DTestProject.dproj"/>
+    <Target Name="JDB_Graphics">
+        <MSBuild Projects="..\JDB_Graphics\JDB_Graphics.dproj"/>
     </Target>
-    <Target Name="Graphic2DTestProject:Clean">
-        <MSBuild Projects="..\JDBDelphiLibrary\Graphic2DTestProject.dproj" Targets="Clean"/>
+    <Target Name="JDB_Graphics:Clean">
+        <MSBuild Projects="..\JDB_Graphics\JDB_Graphics.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="Graphic2DTestProject:Make">
-        <MSBuild Projects="..\JDBDelphiLibrary\Graphic2DTestProject.dproj" Targets="Make"/>
+    <Target Name="JDB_Graphics:Make">
+        <MSBuild Projects="..\JDB_Graphics\JDB_Graphics.dproj" Targets="Make"/>
     </Target>
-    <Target Name="GraphXYTestProject">
-        <MSBuild Projects="..\JDBDelphiLibrary\GraphXYTestProject.dproj"/>
+    <Target Name="JDB_DelphiVCL">
+        <MSBuild Projects="..\JDB_DelphiVCL\JDB_DelphiVCL.dproj"/>
     </Target>
-    <Target Name="GraphXYTestProject:Clean">
-        <MSBuild Projects="..\JDBDelphiLibrary\GraphXYTestProject.dproj" Targets="Clean"/>
+    <Target Name="JDB_DelphiVCL:Clean">
+        <MSBuild Projects="..\JDB_DelphiVCL\JDB_DelphiVCL.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="GraphXYTestProject:Make">
-        <MSBuild Projects="..\JDBDelphiLibrary\GraphXYTestProject.dproj" Targets="Make"/>
+    <Target Name="JDB_DelphiVCL:Make">
+        <MSBuild Projects="..\JDB_DelphiVCL\JDB_DelphiVCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestGraphic2D">
+        <MSBuild Projects="..\JDB_DelphiVCL\TestGraphic2D.dproj"/>
+    </Target>
+    <Target Name="TestGraphic2D:Clean">
+        <MSBuild Projects="..\JDB_DelphiVCL\TestGraphic2D.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestGraphic2D:Make">
+        <MSBuild Projects="..\JDB_DelphiVCL\TestGraphic2D.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestGraphXY">
+        <MSBuild Projects="..\JDB_DelphiVCL\TestGraphXY.dproj"/>
+    </Target>
+    <Target Name="TestGraphXY:Clean">
+        <MSBuild Projects="..\JDB_DelphiVCL\TestGraphXY.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestGraphXY:Make">
+        <MSBuild Projects="..\JDB_DelphiVCL\TestGraphXY.dproj" Targets="Make"/>
     </Target>
     <Target Name="TestSoilNailWall">
         <MSBuild Projects="TestSoilNailWall.dproj"/>
@@ -84,13 +108,13 @@
         <MSBuild Projects="SoilNailWall.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="JDBDelphiPackage;JDBDelphiLibrary;Graphic2DTestProject;GraphXYTestProject;TestSoilNailWall;SoilNailWall"/>
+        <CallTarget Targets="JDB_DelphiGeneral;JDB_Mathematics;JDB_Graphics;JDB_DelphiVCL;TestGraphic2D;TestGraphXY;TestSoilNailWall;SoilNailWall"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="JDBDelphiPackage:Clean;JDBDelphiLibrary:Clean;Graphic2DTestProject:Clean;GraphXYTestProject:Clean;TestSoilNailWall:Clean;SoilNailWall:Clean"/>
+        <CallTarget Targets="JDB_DelphiGeneral:Clean;JDB_Mathematics:Clean;JDB_Graphics:Clean;JDB_DelphiVCL:Clean;TestGraphic2D:Clean;TestGraphXY:Clean;TestSoilNailWall:Clean;SoilNailWall:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="JDBDelphiPackage:Make;JDBDelphiLibrary:Make;Graphic2DTestProject:Make;GraphXYTestProject:Make;TestSoilNailWall:Make;SoilNailWall:Make"/>
+        <CallTarget Targets="JDB_DelphiGeneral:Make;JDB_Mathematics:Make;JDB_Graphics:Make;JDB_DelphiVCL:Make;TestGraphic2D:Make;TestGraphXY:Make;TestSoilNailWall:Make;SoilNailWall:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
