@@ -96,9 +96,9 @@ implementation
                             loadCaseText :=     'Load Case: ' + activeLoadCase.LCName
                                             +   ', Resultant = ' + FloatToStrF( load, ffFixed, 5, 2 ) + ' kN/m';
 
-                            textCentreX := loadLine.getDrawingPoints()[0].x;
+                            textCentreX := loadLine.getArrGeomPoints()[0].x;
 
-                            graphicDrawerInOut.addText( textCentreX, loadLine.getDrawingPoints()[0].y + 3, loadCaseText, False, 10 );
+                            graphicDrawerInOut.addText( textCentreX, loadLine.getArrGeomPoints()[0].y + 3, loadCaseText, False, 10 );
 
                         FreeAndNil( loadLine );
                     end;
