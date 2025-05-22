@@ -260,7 +260,7 @@ object NailLayoutGenForm: TNailLayoutGenForm
       ShowCaption = False
       ShowHint = True
       TabOrder = 1
-      OnUpdateGeometry = JDBGraphic2DDrawingUpdateGeometry
+      OnUpdateGraphics = JDBGraphic2DDrawingUpdateGraphics
     end
     object GridPanelCancelOK: TGridPanel
       Left = 250

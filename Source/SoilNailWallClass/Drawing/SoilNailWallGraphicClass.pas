@@ -10,7 +10,7 @@ interface
             GeometryTypes, GeomBox, GeomLineClass, GeomPolyLineClass, GeomPolygonClass,
             SoilNailWallTypes, LoadCaseTypes,
             SoilNailWallAnalysisClass,
-            GraphicDrawerObjectAdderClass,
+            Graphic2DListClass,
             GraphicDrawingTypes;
 
     type
@@ -20,20 +20,20 @@ interface
                     loadsVisible, slipWedgeVisible : boolean;
                 //drawing methods
                     //load cases
-                        procedure updateLoadCase(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                        procedure updateLoadCase(var graphicDrawerInOut : TGraphic2DList);
                     //nails
                         procedure updateNailGeometry(   const nailColourIn      : TAlphaColor;
                                                         var arrNailGeomInOut    : TArray<TGeomLine>;
-                                                        var graphicDrawerInOut  : TGraphicDrawerObjectAdder );
-                        procedure updateNails(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
-                        procedure updateAnchoredNails(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                                                        var graphicDrawerInOut  : TGraphic2DList );
+                        procedure updateNails(var graphicDrawerInOut : TGraphic2DList);
+                        procedure updateAnchoredNails(var graphicDrawerInOut : TGraphic2DList);
                     //slip wedge
-                        procedure updateSlipWedge(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
-                        procedure updateSlipLine(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                        procedure updateSlipWedge(var graphicDrawerInOut : TGraphic2DList);
+                        procedure updateSlipLine(var graphicDrawerInOut : TGraphic2DList);
                     //soil
-                        procedure updateSoil(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                        procedure updateSoil(var graphicDrawerInOut : TGraphic2DList);
                     //wall
-                        procedure updateWall(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                        procedure updateWall(var graphicDrawerInOut : TGraphic2DList);
             public
                 //constructor
                     constructor create();
@@ -45,7 +45,7 @@ interface
                     procedure setLoadsVisible(const visibleIn : boolean);
                     procedure setSlipWedgeVisible(const visibleIn : boolean);
                 //drawing
-                    procedure updateSoilNailWallGeomtry(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                    procedure updateSoilNailWallGeomtry(var graphicDrawerInOut : TGraphic2DList);
         end;
 
 implementation
@@ -61,7 +61,7 @@ implementation
     //private
         //drawing methods
             //load cases
-                procedure TSoilNailWallGraphic.updateLoadCase(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                procedure TSoilNailWallGraphic.updateLoadCase(var graphicDrawerInOut : TGraphic2DList);
                     var
                         load,
                         textCentreX     : double;
@@ -106,7 +106,7 @@ implementation
             //nails
                 procedure TSoilNailWallGraphic.updateNailGeometry(  const nailColourIn      : TAlphaColor;
                                                                     var arrNailGeomInOut    : TArray<TGeomLine>;
-                                                                    var graphicDrawerInOut  : TGraphicDrawerObjectAdder );
+                                                                    var graphicDrawerInOut  : TGraphic2DList );
                     var
                         i, nailCount : integer;
                     begin
@@ -122,7 +122,7 @@ implementation
                         freeNailGeometry( arrNailGeomInOut );
                     end;
 
-                procedure TSoilNailWallGraphic.updateNails(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                procedure TSoilNailWallGraphic.updateNails(var graphicDrawerInOut : TGraphic2DList);
                     var
                         arrNailGeom : TArray<TGeomLine>;
                     begin
@@ -133,7 +133,7 @@ implementation
                         updateNailGeometry( TColors.Grey, arrNailGeom, graphicDrawerInOut );
                     end;
 
-                procedure TSoilNailWallGraphic.updateAnchoredNails(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                procedure TSoilNailWallGraphic.updateAnchoredNails(var graphicDrawerInOut : TGraphic2DList);
                     var
                         arrAnchoredNailGeom : TArray<TGeomLine>;
                     begin
@@ -148,7 +148,7 @@ implementation
                     end;
 
             //slip wedge
-                procedure TSoilNailWallGraphic.updateSlipWedge(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                procedure TSoilNailWallGraphic.updateSlipWedge(var graphicDrawerInOut : TGraphic2DList);
                     var
                         slipWedgePolygon : TGeomPolygon;
                     begin
@@ -167,7 +167,7 @@ implementation
                         FreeAndNil( slipWedgePolygon );
                     end;
 
-                procedure TSoilNailWallGraphic.updateSlipLine(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                procedure TSoilNailWallGraphic.updateSlipLine(var graphicDrawerInOut : TGraphic2DList);
                     var
                         slipLine : TGeomLine;
                     begin
@@ -186,7 +186,7 @@ implementation
                     end;
 
             //soil
-                procedure TSoilNailWallGraphic.updateSoil(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                procedure TSoilNailWallGraphic.updateSoil(var graphicDrawerInOut : TGraphic2DList);
                     var
                         soilPolygon : TGeomPolygon;
                     begin
@@ -204,7 +204,7 @@ implementation
                     end;
 
             //wall
-                procedure TSoilNailWallGraphic.updateWall(var graphicDrawerInOut : TGraphicDrawerObjectAdder);
+                procedure TSoilNailWallGraphic.updateWall(var graphicDrawerInOut : TGraphic2DList);
                     var
                         wallPolygon : TGeomPolygon;
                     begin
@@ -257,7 +257,7 @@ implementation
                 end;
 
         //drawing
-            procedure TSoilNailWallGraphic.updateSoilNailWallGeomtry(var graphicDrawerInOut: TGraphicDrawerObjectAdder);
+            procedure TSoilNailWallGraphic.updateSoilNailWallGeomtry(var graphicDrawerInOut: TGraphic2DList);
                 begin
                     //for now set a value to the wedge angle for testing
                         setSlipWedgeAngle(35);

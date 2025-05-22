@@ -1159,7 +1159,7 @@ object SNWForm: TSNWForm
     ShowCaption = False
     ShowHint = True
     TabOrder = 3
-    OnUpdateGeometry = SNWGraphicUpdateGeometry
+    OnUpdateGraphics = SNWGraphicUpdateGraphics
   end
   object ActionManager1: TActionManager
     Left = 1000

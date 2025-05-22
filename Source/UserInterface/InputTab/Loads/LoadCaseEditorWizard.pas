@@ -7,7 +7,7 @@ interface
         Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls,
         CustomComponentPanelClass, Graphic2DComponent, Vcl.StdCtrls, Vcl.Grids,
         Vcl.Buttons,
-        GraphicDrawerObjectAdderClass,
+        Graphic2DListClass,
         SoilNailWallMasterClass, LoadCaseEditorInputManagerClass,
   CustomStringGridClass
         ;
@@ -26,12 +26,12 @@ interface
             LabelCurrentLoadCase: TLabel;
             ButtonDeleteLoadCase: TButton;
             LCInputGrid: TJDBStringGrid;
-            procedure JDBGraphic2DUpdateGeometry(   ASender: TObject;
-                                                    var AGeomDrawer: TGraphicDrawerObjectAdder  );
             procedure ButtonNewLCClick(Sender: TObject);
             procedure ComboBoxLoadCaseChange(Sender: TObject);
             procedure ButtonDeleteLoadCaseClick(Sender: TObject);
             procedure LCInputGridCellChanged(Sender: TObject);
+    procedure JDBGraphic2DUpdateGraphics(ASender: TObject;
+      var AGraphic2DList: TGraphic2DList);
             private
                 var
                     loadCaseEditorInputManager  : TLoadCaseEditorInputManager;
@@ -48,10 +48,9 @@ implementation
 
 {$R *.dfm}
 
-    procedure TLoadCaseEditor.JDBGraphic2DUpdateGeometry(   ASender: TObject;
-                                                            var AGeomDrawer: TGraphicDrawerObjectAdder  );
+    procedure TLoadCaseEditor.JDBGraphic2DUpdateGraphics(ASender: TObject; var AGraphic2DList: TGraphic2DList);
         begin
-            soilNailWall.updateSoilNailWallGeomtry( AGeomDrawer );
+            soilNailWall.updateSoilNailWallGeomtry( AGraphic2DList );
         end;
 
     procedure TLoadCaseEditor.LCInputGridCellChanged(Sender: TObject);
@@ -73,7 +72,7 @@ implementation
         begin
             loadCaseEditorInputManager.loadCaseComboBoxChanged();
 
-            JDBGraphic2D.updateGeometry;
+            JDBGraphic2D.updateGraphics;
         end;
 
     //private
@@ -82,7 +81,7 @@ implementation
                 loadCaseEditorInputManager.readFromInputControls();
                 loadCaseEditorInputManager.writeToInputControls( false );
 
-                JDBGraphic2D.updateGeometry();
+                JDBGraphic2D.updateGraphics();
             end;
 
     //public
@@ -103,7 +102,7 @@ implementation
                     loadCaseEditorInputManager.writeToInputControls( True );
 
                 //draw graphic
-                    JDBGraphic2D.updateGeometry();
+                    JDBGraphic2D.updateGraphics();
                     JDBGraphic2D.zoomAll();
             end;
 

@@ -71,7 +71,7 @@ object LoadCaseEditor: TLoadCaseEditor
       ShowCaption = False
       ShowHint = True
       TabOrder = 0
-      OnUpdateGeometry = JDBGraphic2DUpdateGeometry
+      OnUpdateGraphics = JDBGraphic2DUpdateGraphics
     end
     object ButtonCancel: TButton
       AlignWithMargins = True

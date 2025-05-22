@@ -9,7 +9,7 @@ interface
         Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
         System.Skia, Vcl.Skia,
         SoilNailWallMasterClass, CustomComponentPanelClass,
-        Graphic2DComponent, GraphicDrawerObjectAdderClass,
+        Graphic2DComponent, Graphic2DListClass,
         NailLayoutGeneratorInputManagerClass
         ;
 
@@ -32,8 +32,8 @@ interface
         ListBoxErrors: TListBox;
         GridPanelMain: TGridPanel;
         procedure ComboBoxChange(Sender: TObject);
-        procedure JDBGraphic2DDrawingUpdateGeometry(ASender         : TObject;
-                                                    var AGeomDrawer : TGraphicDrawerObjectAdder);
+    procedure JDBGraphic2DDrawingUpdateGraphics(ASender: TObject;
+      var AGraphic2DList: TGraphic2DList);
       private
         { Private declarations }
         var
@@ -55,19 +55,18 @@ implementation
             generateLayout();
         end;
 
-    procedure TNailLayoutGenForm.JDBGraphic2DDrawingUpdateGeometry( ASender         : TObject;
-                                                                    var AGeomDrawer : TGraphicDrawerObjectAdder );
+    procedure TNailLayoutGenForm.JDBGraphic2DDrawingUpdateGraphics(ASender: TObject; var AGraphic2DList: TGraphic2DList);
         begin
-            soilNailWallDesign.updateSoilNailWallGeomtry( AGeomDrawer );
+            soilNailWallDesign.updateSoilNailWallGeomtry( AGraphic2DList );
         end;
 
-    //private
+//private
         procedure TNailLayoutGenForm.generateLayout();
             begin
                 nailLayoutInputManager.readFromInputControls();
                 nailLayoutInputManager.writeToInputControls( False );
 
-                JDBGraphic2DDrawing.updateGeometry();
+                JDBGraphic2DDrawing.updateGraphics();
             end;
 
     //public
@@ -90,7 +89,7 @@ implementation
                     nailLayoutInputManager.writeToInputControls( True );
 
                 //draw wall
-                    JDBGraphic2DDrawing.updateGeometry();
+                    JDBGraphic2DDrawing.updateGraphics();
                     JDBGraphic2DDrawing.zoomAll();
             end;
 

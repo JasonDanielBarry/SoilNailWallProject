@@ -21,7 +21,7 @@ interface
             InputManagerClass,
             MaterialParametersInputManagerClass, WallGeometryInputManagerClass, NailPropertiesInputManagerClass, LoadCasesInputManagerClass,
             SoilNailWallExampleMethods, CustomComponentPanelClass,
-            Graphic2DComponent, GraphicDrawerObjectAdderClass, SoilNailWallFileReaderWriterClass,
+            Graphic2DComponent, Graphic2DListClass, SoilNailWallFileReaderWriterClass,
             CustomStringGridClass
             ;
 
@@ -170,9 +170,8 @@ interface
                 procedure ComboBoxThemeChange(Sender: TObject);
             //ribbon
                 procedure PageControlRibbonChange(Sender: TObject);
-            //update geometry
-                procedure SNWGraphicUpdateGeometry( ASender         : TObject;
-                                                    var AGeomDrawer : TGraphicDrawerObjectAdder );
+            //update graphics
+                procedure SNWGraphicUpdateGraphics(ASender: TObject; var AGraphic2DList: TGraphic2DList);
 
         private
             var
@@ -274,7 +273,7 @@ implementation
 
                         TInputManager.resetAllInputControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager, loadCasesInputManager ] );
 
-                        SNWGraphic.updateGeometry();
+                        SNWGraphic.updateGraphics();
 
                         writeToAllInputControls( False );
                     end;
@@ -466,11 +465,10 @@ implementation
                         sortUI();
                     end;
 
-            //update geometry
-                procedure TSNWForm.SNWGraphicUpdateGeometry(ASender         : TObject;
-                                                            var AGeomDrawer : TGraphicDrawerObjectAdder );
+            //update graphics
+                procedure TSNWForm.SNWGraphicUpdateGraphics(ASender: TObject; var AGraphic2DList: TGraphic2DList);
                     begin
-                        SoilNailWallDesign.updateSoilNailWallGeomtry( AGeomDrawer );
+                        SoilNailWallDesign.updateSoilNailWallGeomtry( AGraphic2DList );
                     end;
 
     //private
@@ -649,7 +647,7 @@ implementation
                         end;
 
                         SoilNailWallDesign.setLoadsVisible( activeInputPage = EInputPage.ipLoadCases );
-                        SNWGraphic.updateGeometry();
+                        SNWGraphic.updateGraphics();
                     end;
 
                 procedure TSNWForm.sortComputationPage();
@@ -748,7 +746,7 @@ implementation
                 begin
                     TInputManager.writeToAllControls( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager, loadCasesInputManager ], updateEmptyCellsIn );
 
-                    SNWGraphic.updateGeometry();
+                    SNWGraphic.updateGraphics();
 
                     inputErrorCount := TInputManager.countInputErrors( [ materialsInputManager, wallGeometryInputManager, nailPropertiesInputManager, loadCasesInputManager ] );
 
