@@ -339,7 +339,7 @@ implementation
                             nailParametersGrid.minSize();
 
                         //concrete input
-                            concreteLabel.Caption   := 'Nail Parameters';
+                            concreteLabel.Caption   := 'Concrete Parameters';
                             concreteLabel.top       := nailParametersGrid.top + nailParametersGrid.Height + round( CATEGORY_SPACE * ctrlScaleFactor );
 
                             concreteParametersGrid.top      := concreteLabel.Top + round( 1.25 * concreteLabel.Height );

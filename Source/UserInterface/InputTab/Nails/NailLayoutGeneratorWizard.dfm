@@ -11,6 +11,7 @@ object NailLayoutGenForm: TNailLayoutGenForm
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  FormStyle = fsStayOnTop
   Position = poMainFormCenter
   TextHeight = 15
   object GridPanelMain: TGridPanel
@@ -148,41 +149,53 @@ object NailLayoutGenForm: TNailLayoutGenForm
           Left = 0
           Top = 0
           Width = 110
-          Height = 38
-          Align = alClient
+          Height = 23
+          Margins.Left = 0
+          Margins.Top = 0
+          Margins.Right = 0
+          Margins.Bottom = 15
+          Align = alTop
           Caption = 'Top Space (m)'
-          ExplicitWidth = 76
-          ExplicitHeight = 15
+          Layout = tlCenter
         end
         object LabelNailSpacing: TLabel
           Left = 0
           Top = 38
           Width = 110
-          Height = 37
-          Align = alClient
+          Height = 23
+          Margins.Left = 0
+          Margins.Top = 0
+          Margins.Right = 0
+          Margins.Bottom = 15
+          Align = alTop
           Caption = 'Nail Spacing (m)'
-          ExplicitWidth = 88
-          ExplicitHeight = 15
+          Layout = tlCenter
         end
         object LabelTopLength: TLabel
           Left = 0
           Top = 75
           Width = 110
-          Height = 38
-          Align = alClient
+          Height = 23
+          Margins.Left = 0
+          Margins.Top = 0
+          Margins.Right = 0
+          Margins.Bottom = 15
+          Align = alTop
           Caption = 'Top Length (m)'
-          ExplicitWidth = 82
-          ExplicitHeight = 15
+          Layout = tlCenter
         end
         object LabelBottomLength: TLabel
           Left = 0
           Top = 113
           Width = 110
-          Height = 37
-          Align = alClient
+          Height = 23
+          Margins.Left = 0
+          Margins.Top = 0
+          Margins.Right = 0
+          Margins.Bottom = 15
+          Align = alTop
           Caption = 'Bottom Length (m)'
-          ExplicitWidth = 102
-          ExplicitHeight = 15
+          Layout = tlCenter
         end
         object ComboBoxTopSpace: TComboBox
           Left = 110
